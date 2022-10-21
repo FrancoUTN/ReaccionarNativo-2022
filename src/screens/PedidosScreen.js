@@ -14,7 +14,7 @@ export default function PedidosScreen() {
 
     useEffect(() => {
         const q = query(collection(db, 'pedidos'));
-        onSnapshot(q, qs => {
+        return onSnapshot(q, qs => {
             const pedidosTraidos = [];
             qs.forEach(qds => {
                 const pedidoTraido = {
@@ -31,8 +31,6 @@ export default function PedidosScreen() {
         id,
         estado,
         contenido,
-        demoraEstimadaPlatos,
-        demoraEstimadaBebidas,
         demoraEstimada
     ) {
         const docRef = doc(db, 'pedidos', id);
@@ -54,11 +52,11 @@ export default function PedidosScreen() {
                     nuevoEstado = 'listo';
                 break;
             case 'platos listos':
-                if (demoraEstimadaBebidas)
+                if (!demoraEstimada)
                     nuevoEstado = 'listo';
                 break;
             case 'bebidas listas':
-                if (demoraEstimadaPlatos)
+                if (!demoraEstimada)
                     nuevoEstado = 'listo';
                 break;
             // case 'listo':
@@ -92,7 +90,7 @@ export default function PedidosScreen() {
         if (miPerfil == 'mozo') {
             return <PedidoMozo item={item} onPress={onPedidoPressHandler} />
         }
-        else {
+        else if (item.estado != 'a confirmar') {
             return <PedidoPreparador item={item} onPress={onPedidoPressHandler} />
         }
     }

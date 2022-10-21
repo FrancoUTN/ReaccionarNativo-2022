@@ -13,10 +13,17 @@ export default function PedidoMozo({ item, onPress }) {
             textoBoton = 'Confirmar';
             botonApretable = true;
             break;
-        case 'confirmado':
+        case 'pendiente':
             textoBoton = 'Confirmado';
             botonApretable = false;
             break;
+        case 'en preparación':
+            textoBoton = 'Finalizar';
+            botonApretable = true;
+            break;
+        default:
+            textoBoton = 'Finalizado';
+            botonApretable = false;
     }
 
     return (

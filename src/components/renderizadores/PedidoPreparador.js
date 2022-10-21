@@ -11,6 +11,18 @@ export default function PedidoPreparador({ item, onPress }) {
     const [cargandoImagen, setCargandoImagen] = useState(true);
     const [demoraEstimada, setDemoraEstimada] = useState('');
 
+    let yaTomeElPedido = false;
+    if (miPerfil == 'cocinero') {
+        if (item.demoraEstimadaPlatos) {
+            yaTomeElPedido = true;
+        }
+    }
+    else {
+        if (item.demoraEstimadaBebidas) {
+            yaTomeElPedido = true;
+        }
+    }
+
     let textoBoton = '';
     let botonApretable = false;
     switch(item.estado) {
@@ -19,9 +31,32 @@ export default function PedidoPreparador({ item, onPress }) {
             botonApretable = true;
             break;
         case 'en preparación':
-            textoBoton = 'Finalizar';
+            textoBoton = yaTomeElPedido ? 'Finalizar' : 'Tomar pedido';
             botonApretable = true;
             break;
+        case 'platos listos':
+            if (miPerfil == 'cocinero') {
+                textoBoton = 'Finalizado';
+                botonApretable = false;
+            }
+            else {
+                textoBoton = yaTomeElPedido ? 'Finalizar' : 'Tomar pedido';    
+                botonApretable = true;            
+            }
+            break;
+        case 'bebidas listas':
+            if (miPerfil == 'bartender') {                
+                textoBoton = 'Finalizado';
+                botonApretable = false;
+            }
+            else {
+                textoBoton = yaTomeElPedido ? 'Finalizar' : 'Tomar pedido';
+                botonApretable = true;
+            }
+            break;
+        default:
+            textoBoton = 'Finalizado';
+            botonApretable = false;
     }
 
     let renderizar = false;
@@ -70,6 +105,18 @@ export default function PedidoPreparador({ item, onPress }) {
                 </View>
             </View>
             {
+                yaTomeElPedido
+                ||
+                <View style={styles.viewInput}>
+                    <Input
+                        label="Demora estimada de elaboración:"
+                        onUpdateValue={setDemoraEstimada}
+                        value={demoraEstimada}
+                        keyboardType="numeric"
+                    />
+                </View>
+            }
+            {
                 botonApretable ?
                 <Pressable
                     style={ ({pressed}) => [styles.pressable, pressed && {opacity: 0.7}] }
@@ -77,8 +124,6 @@ export default function PedidoPreparador({ item, onPress }) {
                         item.id,
                         item.estado,
                         item.contenido,
-                        item.demoraEstimadaPlatos,
-                        item.demoraEstimadaBebidas,
                         demoraEstimada
                     )}
                 >
@@ -95,12 +140,6 @@ export default function PedidoPreparador({ item, onPress }) {
                     </Text>
                 </Pressable>
             }
-            <Input
-                label="Demora estimada de elaboración:"
-                onUpdateValue={setDemoraEstimada}
-                value={demoraEstimada}
-                keyboardType="numeric"
-            />
         </View>
     );
 }
@@ -166,4 +205,7 @@ const styles = StyleSheet.create({
         top: '30%',
         left: '30%'
     },
+    viewInput: {
+        padding: 10
+    }
 });
