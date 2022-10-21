@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from "react";
+import { useContext } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Audio } from "expo-av";
@@ -25,7 +25,6 @@ import AltaProductoScreen from "../screens/AltaProductoScreen";
 import MenuScreen from "../screens/MenuScreen";
 import PedidoAgregadoScreen from "../screens/PedidoAgregadoScreen";
 import PedidosScreen from "../screens/PedidosScreen";
-import LoadingScreen from "../screens/LoadingScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -89,22 +88,15 @@ function AuthStack() {
 
 function AuthenticatedStack() {
   /* HERIK CHANGE  */
-  const [sound, setSound] = useState(false);
   async function playSound() {
     const { sound } = await Audio.Sound.createAsync(
       require("../../assets/sounds/logout.mp3")
     );
-    setSound(sound);
     await sound.playAsync();
+    setTimeout(() => {
+      sound.unloadAsync();
+    }, 2500);
   }
-
-  useEffect(() => {
-    return sound
-      ? () => {
-          sound.unloadAsync();
-        }
-      : undefined;
-  }, [sound]);
   /******** */
   const authCtx = useContext(AuthContext);
   const logoutIcon = (
