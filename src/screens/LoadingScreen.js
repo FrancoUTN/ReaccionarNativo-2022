@@ -1,10 +1,11 @@
 import { useCallback, useEffect } from "react";
 import { View, Text, Image, Animated, Easing } from "react-native";
-import { Colors } from "../../constants/styles";
-import Sizes_ from "../../util/Sizes";
-
-function LoadingOverlay({ message }) {
+import { Colors } from "../constants/styles";
+import Sizes_ from "../util/Sizes";
+const LoadingScreen = (props) => {
+  const { text = "Cargando ... " } = props;
   useEffect(() => {
+    console.log(text, "texto");
     startImageRotateFunction();
   });
 
@@ -49,7 +50,7 @@ function LoadingOverlay({ message }) {
           }}
         >
           <Animated.Image
-            source={require("../../../assets/icon2.png")}
+            source={require("../../assets/icon2.png")}
             style={{
               width: "100%",
               height: "100%",
@@ -59,11 +60,10 @@ function LoadingOverlay({ message }) {
           />
         </View>
         <View style={{ width: "100%", alignItems: "center" }}>
-          <Text style={{ fontSize: Sizes_.normal }}>{message}</Text>
+          <Text style={{ fontSize: Sizes_.normal }}>{text}</Text>
         </View>
       </View>
     </View>
   );
-}
-
-export default LoadingOverlay;
+};
+export default LoadingScreen;

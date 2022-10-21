@@ -1,31 +1,27 @@
-import { useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
-
-import Button from '../ui/Button';
-import FlatButton from '../ui/FlatButton';
-import Input from './Input';
+import { useEffect, useState } from "react";
+import { StyleSheet, View } from "react-native";
+import Button from "../ui/Button";
+import FlatButton from "../ui/FlatButton";
+import Input from "./Input";
 
 function AuthForm({ onSubmit, credentialsInvalid, correo, clave }) {
-  const [enteredEmail, setEnteredEmail] = useState('');
-  const [enteredPassword, setEnteredPassword] = useState('');
-  const {
-    email: emailIsInvalid,
-    password: passwordIsInvalid
-  } = credentialsInvalid;
+  const [enteredEmail, setEnteredEmail] = useState("");
+  const [enteredPassword, setEnteredPassword] = useState("");
 
-  useEffect(
-    () => {
-      setEnteredEmail(correo);
-      setEnteredPassword(clave);
-    }, [correo, clave]
-  );
+  const { email: emailIsInvalid, password: passwordIsInvalid } =
+    credentialsInvalid;
+
+  useEffect(() => {
+    setEnteredEmail(correo);
+    setEnteredPassword(clave);
+  }, [correo, clave]);
 
   function updateInputValueHandler(inputType, enteredValue) {
     switch (inputType) {
-      case 'email':
+      case "email":
         setEnteredEmail(enteredValue);
         break;
-      case 'password':
+      case "password":
         setEnteredPassword(enteredValue);
         break;
     }
@@ -34,7 +30,7 @@ function AuthForm({ onSubmit, credentialsInvalid, correo, clave }) {
   function submitHandler() {
     onSubmit({
       email: enteredEmail,
-      password: enteredPassword
+      password: enteredPassword,
     });
   }
 
@@ -43,22 +39,20 @@ function AuthForm({ onSubmit, credentialsInvalid, correo, clave }) {
       <View>
         <Input
           label="Correo electrónico"
-          onUpdateValue={updateInputValueHandler.bind(this, 'email')}
+          onUpdateValue={updateInputValueHandler.bind(this, "email")}
           value={enteredEmail}
           keyboardType="email-address"
           isInvalid={emailIsInvalid}
         />
         <Input
           label="Contraseña"
-          onUpdateValue={updateInputValueHandler.bind(this, 'password')}
+          onUpdateValue={updateInputValueHandler.bind(this, "password")}
           secure
           value={enteredPassword}
           isInvalid={passwordIsInvalid}
         />
         <View style={styles.buttons}>
-          <Button onPress={submitHandler}>
-            Ingresar
-          </Button>
+          <Button onPress={submitHandler}>Ingresar</Button>
         </View>
       </View>
     </View>
