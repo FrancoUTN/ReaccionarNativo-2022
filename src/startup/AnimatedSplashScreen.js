@@ -1,37 +1,73 @@
-import { useCallback, useEffect } from "react";
+import { useCallback, useMemo } from "react";
 import { View, Text, Image, Animated, Easing } from "react-native";
 import * as SplashScreen from "expo-splash-screen";
+import {
+  useFonts,
+  Montserrat_100Thin,
+  Montserrat_100Thin_Italic,
+  Montserrat_200ExtraLight,
+  Montserrat_200ExtraLight_Italic,
+  Montserrat_300Light,
+  Montserrat_300Light_Italic,
+  Montserrat_400Regular,
+  Montserrat_400Regular_Italic,
+  Montserrat_500Medium,
+  Montserrat_500Medium_Italic,
+  Montserrat_600SemiBold,
+  Montserrat_600SemiBold_Italic,
+  Montserrat_700Bold,
+  Montserrat_700Bold_Italic,
+  Montserrat_800ExtraBold,
+  Montserrat_800ExtraBold_Italic,
+  Montserrat_900Black,
+  Montserrat_900Black_Italic,
+} from '@expo-google-fonts/montserrat';
+
 import { Colors } from "../constants/styles";
+
 
 SplashScreen.preventAutoHideAsync().catch(() => {});
 
 export default function AnimatedSplashScreen({ onFinish }) {
-  useEffect(() => {
-    onImageLoaded();
-    animate();
-    setTimeout(() => {
-      onFinish();
-    }, 3000);
-  }, []);
-
+  let [fontsLoaded] = useFonts({
+      Montserrat_100Thin,
+      Montserrat_100Thin_Italic,
+      Montserrat_200ExtraLight,
+      Montserrat_200ExtraLight_Italic,
+      Montserrat_300Light,
+      Montserrat_300Light_Italic,
+      Montserrat_400Regular,
+      Montserrat_400Regular_Italic,
+      Montserrat_500Medium,
+      Montserrat_500Medium_Italic,
+      Montserrat_600SemiBold,
+      Montserrat_600SemiBold_Italic,
+      Montserrat_700Bold,
+      Montserrat_700Bold_Italic,
+      Montserrat_800ExtraBold,
+      Montserrat_800ExtraBold_Italic,
+      Montserrat_900Black,
+      Montserrat_900Black_Italic,
+  });
+  
   const onImageLoaded = useCallback(async () => {
     try {
-      await SplashScreen.hideAsync();
+        await SplashScreen.hideAsync();
     } catch (e) {
-      console.log(e);
+        console.log(e); // Útil
+    } finally {
+        animate();
     }
   }, []);
 
-  let scaleValue = new Animated.Value(0);
+  const scaleValue = useMemo(() => new Animated.Value(0), []);
   const animate = () => {
-    scaleValue.setValue(0);
-
     Animated.timing(scaleValue, {
       toValue: 1,
       duration: 3000,
       easing: Easing.linear,
       useNativeDriver: true,
-    }).start(() => {});
+    }).start(() => onFinish());
   };
 
   const cardScale = scaleValue.interpolate({
@@ -41,6 +77,9 @@ export default function AnimatedSplashScreen({ onFinish }) {
 
   return (
     <View style={{ flex: 1, backgroundColor: Colors.primary100 }}>
+    {
+      fontsLoaded
+      &&
       <Animated.View
         style={{
           flex: 1,
@@ -70,6 +109,7 @@ export default function AnimatedSplashScreen({ onFinish }) {
           <Image
             source={require("../../assets/icon2.png")}
             style={{ width: "100%", height: "100%", resizeMode: "contain" }}
+            onLoadEnd={onImageLoaded}
           />
         </View>
         <View
@@ -130,6 +170,7 @@ export default function AnimatedSplashScreen({ onFinish }) {
           </View>
         </View>
       </Animated.View>
+    }
     </View>
   );
 }
