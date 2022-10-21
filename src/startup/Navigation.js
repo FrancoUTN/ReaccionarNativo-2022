@@ -25,6 +25,7 @@ import AltaProductoScreen from "../screens/AltaProductoScreen";
 import MenuScreen from "../screens/MenuScreen";
 import PedidoAgregadoScreen from "../screens/PedidoAgregadoScreen";
 import PedidosScreen from "../screens/PedidosScreen";
+import LoadingScreen from "../screens/LoadingScreen";
 
 const Stack = createNativeStackNavigator();
 

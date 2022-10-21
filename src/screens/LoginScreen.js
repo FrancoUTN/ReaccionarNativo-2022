@@ -5,9 +5,11 @@ import AuthContent from "../components/Auth/AuthContent";
 import LoadingOverlay from "../components/ui/LoadingOverlay";
 import { AuthContext } from "../store/auth-context";
 import { login } from "../util/authentication";
+import LoadingScreen from "./LoadingScreen";
 
 function LoginScreen({ navigation }) {
   const [isAuthenticating, setIsAuthenticating] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const authCtx = useContext(AuthContext);
   /* HERIK CHANGE  */

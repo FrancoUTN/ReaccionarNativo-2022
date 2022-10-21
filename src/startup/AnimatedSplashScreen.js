@@ -1,13 +1,11 @@
-import { useCallback, useMemo, useEffect, useState } from "react";
-import { StyleSheet, View, Text, Image, Animated, Easing } from "react-native";
+import { useCallback, useEffect } from "react";
+import { View, Text, Image, Animated, Easing } from "react-native";
 import * as SplashScreen from "expo-splash-screen";
 import { Colors } from "../constants/styles";
 
 SplashScreen.preventAutoHideAsync().catch(() => {});
 
 export default function AnimatedSplashScreen({ onFinish }) {
-  const [loadAnimated, setLoadAnimated] = useState(false);
-
   useEffect(() => {
     onImageLoaded();
     animate();
@@ -24,10 +22,10 @@ export default function AnimatedSplashScreen({ onFinish }) {
     }
   }, []);
 
-  /* HERIK CHANGE  */
   let scaleValue = new Animated.Value(0);
   const animate = () => {
     scaleValue.setValue(0);
+
     Animated.timing(scaleValue, {
       toValue: 1,
       duration: 3000,
@@ -35,12 +33,12 @@ export default function AnimatedSplashScreen({ onFinish }) {
       useNativeDriver: true,
     }).start(() => {});
   };
+
   const cardScale = scaleValue.interpolate({
     inputRange: [0, 0.5, 1],
     outputRange: [0, 0.5, 1],
   });
 
-  /**************+++ */
   return (
     <View style={{ flex: 1, backgroundColor: Colors.primary100 }}>
       <Animated.View
@@ -85,9 +83,51 @@ export default function AnimatedSplashScreen({ onFinish }) {
             alignItems: "center",
           }}
         >
-          <Text style={{ marginVertical: 2 }}>- Herik Arismendy </Text>
-          <Text style={{ marginVertical: 2 }}>- Agustin Cantero </Text>
-          <Text style={{ marginVertical: 2 }}>- Franco Catania </Text>
+          <View
+            style={{
+              width: "100%",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Text
+              style={{
+                marginVertical: 2,
+              }}
+            >
+              Herik Arismendy{" "}
+            </Text>
+          </View>
+          <View
+            style={{
+              width: "100%",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Text
+              style={{
+                marginVertical: 2,
+              }}
+            >
+              Agustin Cantero{" "}
+            </Text>
+          </View>
+          <View
+            style={{
+              width: "100%",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Text
+              style={{
+                marginVertical: 2,
+              }}
+            >
+              Franco Catania{" "}
+            </Text>
+          </View>
         </View>
       </Animated.View>
     </View>
