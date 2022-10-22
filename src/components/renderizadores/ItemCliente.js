@@ -2,22 +2,28 @@ import { useState } from "react";
 import { ActivityIndicator, Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
 import { doc, getFirestore, updateDoc } from "firebase/firestore";
+import sendCustomEmail from '../../functions/sendCustomEmail';
 
 import { Colors } from "../../constants/styles";
 
 export default function ItemCliente({ item }) {
     const [cargandoImagen, setCargandoImagen] = useState(true);
+    const subject = 'Solicitud de registro - Restaurant Reaccionar Nativo'
+    const messageConfirm = 'Su solicitud fue aceptada, gracias por elegirnos!!!'
+    const messageRejected = 'Lamentamos informarle que su solicitud fue rechazada, por favor contacte a un administrador.'
 
     function aceptar() {
         const db = getFirestore();
         const docRef = doc(db, 'usuarios', item.id);
-        updateDoc(docRef, { perfil: 'registrado' });
+        updateDoc(docRef, { perfil: 'aceptado' });
+        sendCustomEmail(item.correo, subject, messageConfirm)
     }
-    
+
     function rechazar() {
         const db = getFirestore();
         const docRef = doc(db, 'usuarios', item.id);
-        updateDoc(docRef, { perfil: 'rechazado' });        
+        updateDoc(docRef, { perfil: 'rechazado' });
+        sendCustomEmail(item.correo, subject, messageRejected)
     }
 
     return (
@@ -35,7 +41,7 @@ export default function ItemCliente({ item }) {
             }
             <View style={styles.textoEIconosContainer}>
                 <Text style={styles.itemTexto}>
-                    { item.nombre }
+                    {item.nombre}
                 </Text>
                 <View style={styles.iconosContainer}>
                     <Pressable
