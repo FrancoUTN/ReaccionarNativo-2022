@@ -15,7 +15,7 @@ export default function ItemCliente({ item }) {
     function aceptar() {
         const db = getFirestore();
         const docRef = doc(db, 'usuarios', item.id);
-        updateDoc(docRef, { perfil: 'aceptado' });
+        updateDoc(docRef, { perfil: 'registrado' });
         sendCustomEmail(item.correo, subject, messageConfirm)
     }
 
