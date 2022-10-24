@@ -8,22 +8,24 @@ import { Colors } from "../../constants/styles";
 
 export default function ItemCliente({ item }) {
     const [cargandoImagen, setCargandoImagen] = useState(true);
-    const subject = 'Solicitud de registro - Restaurant Reaccionar Nativo'
+    //const subject = 'Solicitud de registro - Restaurant Reaccionar Nativo'
     const messageConfirm = 'Su solicitud fue aceptada, gracias por elegirnos!!!'
     const messageRejected = 'Lamentamos informarle que su solicitud fue rechazada, por favor contacte a un administrador.'
+    const templateAccepted = 'accepted'
+    const templateRejected = 'rejected'
 
     function aceptar() {
         const db = getFirestore();
         const docRef = doc(db, 'usuarios', item.id);
         updateDoc(docRef, { perfil: 'registrado' });
-        sendCustomEmail(item.correo, subject, messageConfirm)
+        sendCustomEmail(item.correo, item.nombre, messageConfirm, templateAccepted)
     }
 
     function rechazar() {
         const db = getFirestore();
         const docRef = doc(db, 'usuarios', item.id);
         updateDoc(docRef, { perfil: 'rechazado' });
-        sendCustomEmail(item.correo, subject, messageRejected)
+        sendCustomEmail(item.correo, item.nombre, messageRejected, templateRejected)
     }
 
     return (
