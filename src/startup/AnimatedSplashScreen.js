@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from "react";
-import { View, Text, Image, Animated, Easing } from "react-native";
+import { View, Text, Image, Animated, Easing, StyleSheet } from "react-native";
 import * as SplashScreen from "expo-splash-screen";
 import {
   useFonts,
@@ -123,48 +123,18 @@ export default function AnimatedSplashScreen({ onFinish }) {
             alignItems: "center",
           }}
         >
-          <View
-            style={{
-              width: "100%",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Text
-              style={{
-                marginVertical: 2,
-              }}
-            >
+          <View style={styles.viewAlumno}>
+            <Text style={styles.textAlumno}>
               Herik Arismendy{" "}
             </Text>
           </View>
-          <View
-            style={{
-              width: "100%",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Text
-              style={{
-                marginVertical: 2,
-              }}
-            >
-              Agustin Cantero{" "}
+          <View style={styles.viewAlumno}>
+            <Text style={styles.textAlumno}>
+              Agustín Cantero{" "}
             </Text>
           </View>
-          <View
-            style={{
-              width: "100%",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Text
-              style={{
-                marginVertical: 2,
-              }}
-            >
+          <View style={styles.viewAlumno}>
+            <Text style={styles.textAlumno}>
               Franco Catania{" "}
             </Text>
           </View>
@@ -174,3 +144,14 @@ export default function AnimatedSplashScreen({ onFinish }) {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  viewAlumno: {
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  textAlumno: {
+    marginVertical: 2,
+  },
+});

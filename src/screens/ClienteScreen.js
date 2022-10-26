@@ -26,9 +26,38 @@ export default function ClienteScreen({ navigation }) {
 			<Apretable
 				onPress={onConsultaAlMozoPressHandler}
 			>
-				Consulta al mozo
+				Consultar al mozo
+			</Apretable>
+			{/* <Apretable
+				onPress={onPressHandler}
+			>
+				Juegos
+			</Apretable> */}
+			<Apretable
+				onPress={onPressHandler}
+				desactivado={true}
+			>
+				Responder encuesta
 			</Apretable>
 			<Apretable
+				onPress={onPressHandler}
+				desactivado={true}
+			>
+				Ver encuestas
+			</Apretable>
+			<Apretable
+				onPress={onPressHandler}
+				desactivado={true}
+			>
+				Estado de mi pedido
+			</Apretable>
+			<Apretable
+				onPress={onPressHandler}
+				desactivado={true}
+			>
+				Pedir la cuenta
+			</Apretable>
+			{/* <Apretable
 				onPress={onPressHandler}
 			>
 				Reservar
@@ -37,7 +66,7 @@ export default function ClienteScreen({ navigation }) {
 				onPress={onPressHandler}
 			>
 				Pedir por Delivery
-			</Apretable>
+			</Apretable> */}
 		</View>
 	);
 }

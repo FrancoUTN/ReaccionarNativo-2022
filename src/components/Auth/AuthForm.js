@@ -1,15 +1,14 @@
 import { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
+
 import Button from "../ui/Button";
-import FlatButton from "../ui/FlatButton";
 import Input from "./Input";
+
 
 function AuthForm({ onSubmit, credentialsInvalid, correo, clave }) {
   const [enteredEmail, setEnteredEmail] = useState("");
   const [enteredPassword, setEnteredPassword] = useState("");
-
-  const { email: emailIsInvalid, password: passwordIsInvalid } =
-    credentialsInvalid;
+  const { email: emailIsInvalid, password: passwordIsInvalid } = credentialsInvalid;
 
   useEffect(() => {
     setEnteredEmail(correo);

@@ -121,12 +121,11 @@ export default function RegistroScreen({ navigation }) {
 	function fotoTomadaHandler(objetoFoto) {    
 		setTomarFoto(false);
 		setFoto(objetoFoto);
-		
+
 		setCredentialsInvalid(
 			credenciales => ({...credenciales, foto: false})
 		);
 	}
-
     
     function updateInputValueHandler(inputType, enteredValue) {
         switch (inputType) {
@@ -260,22 +259,6 @@ const styles = StyleSheet.create({
 	},
 	buttons: {
 		marginTop: 8,
-	},
-	accesosContainer: {
-		flexDirection: 'row',
-		justifyContent: 'flex-start',
-		alignItems: 'center',
-		backgroundColor: Colors.primary500,
-		marginTop: 10,
-		marginBottom: 30,
-		marginHorizontal: 50,
-		padding: 30,
-		height: 96,
-		borderRadius: 4,
-	},
-	accesosTexto: {
-		fontSize: 20,
-		color: 'white'
 	},
 	registrateContainer: {
 		margin: 20,

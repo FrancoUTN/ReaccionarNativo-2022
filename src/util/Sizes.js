@@ -1,12 +1,4 @@
-import React, { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Image,
-  Dimensions,
-} from "react-native";
+import { Dimensions } from "react-native";
 
 let { width, height } = Dimensions.get("screen");
 width = width / 1.2;

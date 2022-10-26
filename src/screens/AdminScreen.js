@@ -1,42 +1,63 @@
 import { StyleSheet, View } from "react-native";
-import { useState } from "react";
-import LoadingScreen from "./LoadingScreen";
+
 import Apretable from "../components/shared/Apretable";
 
+
 export default function AdminScreen({ navigation }) {
-  const [loading, setLoading] = useState();
+	function onClientesPressHandler() {
+		navigation.navigate({ name: "ListadoClientes" });
+	}
 
-  function onClientesPressHandler() {
-    navigation.navigate({ name: "ListadoClientes" });
-  }
+	function onAgregarMesaPressHandler() {
+		navigation.navigate({ name: "AltaMesa" });
+	}
 
-  function onAgregarMesaPressHandler() {
-    navigation.navigate({ name: "AltaMesa" });
-  }
+	function onAgregarEmpleadoPressHandler() {
+		navigation.navigate({ name: "AltaEmpleado" });
+	}
 
-  function onAgregarEmpleadoPressHandler() {
-    navigation.navigate({ name: "AltaEmpleado" });
-  }
+	// Temporal
+	function onPressHandler() {
+		console.log("Apretado.");
+	}
 
-  function onPressHandler() {
-    // Temporal
-    console.log("Apretado.");
-  }
-
-  return loading ? (
-    <LoadingScreen text="Admin ...." />
-  ) : (
-    <View style={styles.container}>
-      <Apretable onPress={onPressHandler}>Agregar administrador</Apretable>
-      <Apretable onPress={onAgregarEmpleadoPressHandler}>
-        Agregar empleado
-      </Apretable>
-      <Apretable onPress={onAgregarMesaPressHandler}>Agregar mesa</Apretable>
-      <Apretable onPress={onClientesPressHandler}>Clientes</Apretable>
-      <Apretable onPress={onPressHandler}>Reservas</Apretable>
-      <Apretable onPress={onPressHandler}>Delivery</Apretable>
-    </View>
-  );
+	return (
+		<View style={styles.container}>
+			{/* <Apretable
+				onPress={onPressHandler}
+				desactivado={true}
+			>
+				Agregar administrador
+			</Apretable> */}
+			<Apretable
+				onPress={onAgregarEmpleadoPressHandler}
+			>
+				Agregar empleado
+			</Apretable>
+			<Apretable
+				onPress={onAgregarMesaPressHandler}
+			>
+				Agregar mesa
+			</Apretable>
+			<Apretable
+				onPress={onClientesPressHandler}
+			>
+				Clientes
+			</Apretable>
+			{/* <Apretable
+				onPress={onPressHandler}
+				desactivado={true}
+			>
+				Reservas
+			</Apretable>
+			<Apretable
+				onPress={onPressHandler}
+				desactivado={true}
+			>
+				Delivery
+			</Apretable> */}
+		</View>
+	);
 }
 
 const styles = StyleSheet.create({

@@ -1,5 +1,5 @@
-import { useCallback, useEffect } from "react";
-import { View, Text, Image, Animated, Easing } from "react-native";
+import { useEffect } from "react";
+import { View, Text, Animated, Easing } from "react-native";
 import { Colors } from "../constants/styles";
 import Sizes_ from "../util/Sizes";
 const LoadingScreen = (props) => {

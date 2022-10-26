@@ -125,27 +125,42 @@ function AuthenticatedStack() {
           <Stack.Screen
             name="Admin"
             component={AdminScreen}
-            options={opcionesTipicas}
+            options={{
+              ...opcionesTipicas,
+              title: 'Adminstrador'
+            }}
           />
           <Stack.Screen
             name="ListadoClientes"
             component={ListadoClientesScreen}
-            options={opcionesTipicas}
+            options={{
+              ...opcionesTipicas,
+              title: 'Clientes'
+            }}
           />
           <Stack.Screen
             name="AltaMesa"
             component={AltaMesaScreen}
-            options={opcionesTipicas}
+            options={{
+              ...opcionesTipicas,
+              title: 'Alta de mesa'
+            }}
           />
           <Stack.Screen
             name="MesaAgregada"
             component={MesaAgregadaScreen}
-            options={opcionesTipicas}
+            options={{
+              ...opcionesTipicas,
+              title: 'Mesa agregada'
+            }}
           />
           <Stack.Screen
             name="AltaEmpleado"
             component={AltaEmpleadoScreen}
-            options={opcionesTipicas}
+            options={{
+              ...opcionesTipicas,
+              title: 'Alta de empleado'
+            }}
           />
         </>
       );
@@ -195,7 +210,10 @@ function AuthenticatedStack() {
           <Stack.Screen
             name="AltaProducto"
             component={AltaProductoScreen}
-            options={opcionesTipicas}
+            options={{
+              ...opcionesTipicas,
+              title: 'Alta de producto'
+            }}
           />
           <Stack.Screen
             name="Pedidos"
@@ -211,12 +229,18 @@ function AuthenticatedStack() {
           <Stack.Screen
             name="Anonimo"
             component={AnonimoScreen}
-            options={opcionesTipicas}
+            options={{
+              ...opcionesTipicas,
+              title: 'Ingreso anónimo'
+            }}
           />
           <Stack.Screen
             name="BotonEscanear"
             component={BotonEscanearScreen}
-            options={opcionesTipicas}
+            options={{
+              ...opcionesTipicas,
+              title: 'Escáner'
+            }}
           />
           <Stack.Screen
             name="Cliente"
@@ -226,12 +250,18 @@ function AuthenticatedStack() {
           <Stack.Screen
             name="Menu"
             component={MenuScreen}
-            options={opcionesTipicas}
+            options={{
+              ...opcionesTipicas,
+              title: 'Menú'
+            }}
           />
           <Stack.Screen
             name="PedidoAgregado"
             component={PedidoAgregadoScreen}
-            options={opcionesTipicas}
+            options={{
+              ...opcionesTipicas,
+              title: 'Pedido realizado'
+            }}
           />
           <Stack.Screen
             name="Chat"
@@ -247,7 +277,10 @@ function AuthenticatedStack() {
           <Stack.Screen
             name="BotonEscanear"
             component={BotonEscanearScreen}
-            options={opcionesTipicas}
+            options={{
+              ...opcionesTipicas,
+              title: 'Escáner'
+            }}
           />
           <Stack.Screen
             name="Cliente"
@@ -257,12 +290,18 @@ function AuthenticatedStack() {
           <Stack.Screen
             name="Menu"
             component={MenuScreen}
-            options={opcionesTipicas}
+            options={{
+              ...opcionesTipicas,
+              title: 'Menú'
+            }}
           />
           <Stack.Screen
             name="PedidoAgregado"
             component={PedidoAgregadoScreen}
-            options={opcionesTipicas}
+            options={{
+              ...opcionesTipicas,
+              title: 'Pedido realizado'
+            }}
           />
           <Stack.Screen
             name="Chat"

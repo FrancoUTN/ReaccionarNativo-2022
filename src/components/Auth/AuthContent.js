@@ -89,34 +89,28 @@ function AuthContent({ isLogin, onAuthenticate }) {
   }
 
   function onPressItemHandler(name) {
+    setClave("123123");    
     switch (name) {
       case "admin":
         setCorreo("admin@rnativo.com");
-        setClave("123123");
         break;
       case "registrado":
         setCorreo("registrado@rnativo.com");
-        setClave("123123");
         break;
       case "anonimo":
         setCorreo("anonimo@rnativo.com");
-        setClave("123123");
         break;
       case "metre":
         setCorreo("metre@rnativo.com");
-        setClave("123123");
         break;
       case "mozo":
         setCorreo("mozo@rnativo.com");
-        setClave("123123");
         break;
       case "cocinero":
         setCorreo("cocinero@rnativo.com");
-        setClave("123123");
         break;
       case "bartender":
         setCorreo("bartender@rnativo.com");
-        setClave("123123");
         break;
     }
   }
@@ -169,9 +163,6 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 1, height: 1 },
     shadowOpacity: 0.35,
     shadowRadius: 4,
-  },
-  buttons: {
-    marginTop: 8,
   },
   accesosContainer: {
     flexDirection: "row",
