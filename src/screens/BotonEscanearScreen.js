@@ -16,16 +16,28 @@ export default function BotonEscanearScreen({ navigation }) {
 	const [escanear, setEscanear] = useState(false);
 	const [cargando, setCargando] = useState(false);
 	const [mensajeError, setMensajeError] = useState('');
+	const [mensajeOk, setMensajeOk] = useState('');
     
-	function onEscaneadoHandler({ data }) {
+	async function onEscaneadoHandler({ data }) {
 		setEscanear(false);
-
+		const userSnap = await getDoc(userRef);
+		const miEstado = userSnap.data().estado;
 		if (data == 'ingreso') {
-			actualizarEstado();
+			if (miEstado == 'libre') {
+				await actualizarEstado();
+				setMensajeOk('¡Ahora estás en la lista de espera!');
+			}
+			else {
+				setMensajeError('Usted ya está ' + miEstado + ".");
+			}
 		}
 		else if (data.includes('mesa')) {
-			escaneoMesa(data);
+			await escaneoMesa(data, miEstado);
 		}
+	}
+
+	function onCancelarHandler() {
+		setEscanear(false);
 	}
 
 	async function actualizarEstado() {
@@ -36,50 +48,45 @@ export default function BotonEscanearScreen({ navigation }) {
 		return;
 	}
 	
-	async function escaneoMesa(mesa) {
+	async function escaneoMesa(mesa, miEstado) {
 		setCargando(true);
-		const userSnap = await getDoc(userRef);
-		if (!userSnap.exists()) {
-			setMensajeError('Usuario inexistente.');
+		
+		if (miEstado == 'libre') {
+			setMensajeError('Debe anotarse a la lista de espera.');
+		}
+		else if (miEstado == 'en espera') {
+			setMensajeError('Aún no ha sido asignado a una mesa.');
 		}
 		else {
-			const miEstado = userSnap.data().estado;
-			if (miEstado == 'libre') {
-				setMensajeError('Debe anotarse a la lista de espera.');
+			const mesaRef = doc(db, 'mesas/' + mesa);
+			const mesaSnap = await getDoc(mesaRef);
+			const clienteAsociado = mesaSnap.data().cliente;
+			if (clienteAsociado == uid) {
+				navigation.navigate({
+					name: 'Cliente'
+				});
 			}
-			else if (miEstado == 'en espera') {
-				setMensajeError('Aún no ha sido asignado a una mesa.');
+			else if (miEstado == 'vinculado') {
+				setMensajeError('Usted ya está en otra mesa.');
+			}
+			else if (!!clienteAsociado) {
+				setMensajeError('Mesa ocupada.');
 			}
 			else {
-				const mesaRef = doc(db, 'mesas/' + mesa);
-				const mesaSnap = await getDoc(mesaRef);
-				const clienteAsociado = mesaSnap.data().cliente;
-				if (clienteAsociado == uid) {
-					setMensajeError('');
-					navigation.navigate({
-						name: 'Cliente'
-					});
-				}	
-				else if (!!clienteAsociado) {
-					setMensajeError('Mesa ocupada.');
-				}
-				else {
-					await updateDoc(
-						userRef,
-						{
-							mesa,
-							estado: 'vinculado'
-						}
-					);
-					await updateDoc(
-						mesaRef,
-						{ cliente: uid }
-					);
-					setMensajeError('');
-					navigation.navigate({
-						name: 'Cliente'
-					});
-				}
+				await updateDoc(
+					userRef,
+					{
+						mesa,
+						estado: 'vinculado'
+					}
+				);
+				await updateDoc(
+					mesaRef,
+					{ cliente: uid }
+				);
+				navigation.navigate({
+					name: 'Cliente'
+				});
 			}
 		}
 		setCargando(false);
@@ -92,6 +99,7 @@ export default function BotonEscanearScreen({ navigation }) {
 		return (
             <Escaner
                 onEscaneado={onEscaneadoHandler}
+                onCancelar={onCancelarHandler}
             />
 		);
 	}
@@ -99,7 +107,11 @@ export default function BotonEscanearScreen({ navigation }) {
 		<View style={styles.container}>
             <Pressable
                 style={({ pressed }) => [styles.boton, pressed && styles.apretado]}
-                onPress={() => setEscanear(true)}
+                onPress={() => {
+					setEscanear(true);
+					setMensajeError('');
+					setMensajeOk('');
+				}}
             >
                 <Text style={styles.textoBoton}>
                 	Escanear QR
@@ -109,6 +121,12 @@ export default function BotonEscanearScreen({ navigation }) {
 				!!mensajeError &&
 				<Text style={styles.textoError}>
 					Error: { mensajeError }
+				</Text>
+			}
+			{
+				!!mensajeOk &&
+				<Text style={styles.textoOk}>
+					{ mensajeOk }
 				</Text>
 			}
 		</View>
@@ -139,6 +157,12 @@ const styles = StyleSheet.create({
 	},
 	textoError: {
 		color: Colors.error500,
+		fontSize: 20,
+		fontFamily: 'Montserrat_400Regular',
+		textAlign: 'center'
+	},	
+	textoOk: {
+		color: Colors.success,
 		fontSize: 20,
 		fontFamily: 'Montserrat_400Regular',
 		textAlign: 'center'

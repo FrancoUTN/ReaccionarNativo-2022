@@ -25,6 +25,7 @@ import AltaProductoScreen from "../screens/AltaProductoScreen";
 import MenuScreen from "../screens/MenuScreen";
 import PedidoAgregadoScreen from "../screens/PedidoAgregadoScreen";
 import PedidosScreen from "../screens/PedidosScreen";
+import PreRegistroScreen from "../screens/PreRegistroScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -307,6 +308,18 @@ function AuthenticatedStack() {
             name="Chat"
             component={ChatScreen}
             options={opcionesTipicas}
+          />
+        </>
+      );
+      break;
+    case "pendiente":
+    case "rechazado":
+      retorno = (
+        <>
+          <Stack.Screen
+            name="PreRegistro"
+            component={PreRegistroScreen}
+            options={{ title: "Error" }}
           />
         </>
       );

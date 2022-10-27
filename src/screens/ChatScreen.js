@@ -126,7 +126,7 @@ export default function ChatScreen({ route }) {
   }
 
   if (cargando) {
-    return <LoadingOverlay message={'Cargando los mensajes...'} />
+    return <LoadingOverlay message={'Cargando mensajes...'} />
   }
 
   return (

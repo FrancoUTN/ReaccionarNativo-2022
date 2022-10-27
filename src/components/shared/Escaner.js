@@ -3,9 +3,10 @@ import { Text, View, StyleSheet, Pressable } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 
 import LoadingOverlay from '../ui/LoadingOverlay';
+import { Colors } from '../../constants/styles';
 
 
-export default function Escaner({ onEscaneado }) {
+export default function Escaner({ onEscaneado, onCancelar }) {
     const [hasPermission, setHasPermission] = useState(null);
 
     useEffect(() => {
@@ -19,19 +20,17 @@ export default function Escaner({ onEscaneado }) {
         return <LoadingOverlay>Verificando permisos...</LoadingOverlay>;
     }
     if (hasPermission === false) {
-        return <Text>Sin acceso a la cámara.</Text>;
+        return <View> <Text>Sin acceso a la cámara.</Text> </View> ;
     }
     return (
         <View style={styles.container}>
             <BarCodeScanner
-                // onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
                 onBarCodeScanned={onEscaneado}
                 style={StyleSheet.absoluteFillObject}
-                // style={styles.escaner}
             />
-            {/* <View style={styles.botonEscanerContainer}>
+            <View style={styles.botonEscanerContainer}>
                 <Pressable
-                    onPress={cancelarEscanearPressHandler}
+                    onPress={onCancelar}
                     style={
                         ({pressed}) => {
                             return [styles.botonEscanerPressable , pressed && { opacity: 0.7 }]
@@ -42,58 +41,30 @@ export default function Escaner({ onEscaneado }) {
                         Cancelar
                     </Text>
                 </Pressable>
-            </View>       */}
+            </View>      
         </View>
     );
 }
 
 const styles = StyleSheet.create({
-    escanerContainer: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        bottom: 0,
-        right: 0,
-
-        backgroundColor: 'black',
-    },
-    escaner: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        bottom: 0,
-        right: 0,
-
-        zIndex: 1,
-    },
-    botonEscanerContainer: {
+    container: {
         flex: 1,
         justifyContent: 'flex-end',
     },
+    botonEscanerContainer: {
+        flex: 0.25,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
     botonEscanerPressable: {
-        flex: 1,
-        zIndex: 2,
-        // backgroundColor: Colors.primary500,
+        backgroundColor: Colors.error500,
+        paddingHorizontal: 20,
+        paddingVertical: 10,
+        borderRadius: 4,
     },
     botonEscaner: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        bottom: 0,
-        right: 0,
-
-        fontFamily: 'Monda_400Regular',
-        zIndex: 3,
         color: 'white',
-        textAlign: 'center',
-        fontSize: 22
+        fontFamily: 'Montserrat_400Regular',
+        fontSize: 18,
     },
-    container: {
-        flex: 1,
-        justifyContent: 'space-around',
-        // padding: 30
-    },
-    scannerContainer: {
-        flex: 0.5
-    }
 }); 

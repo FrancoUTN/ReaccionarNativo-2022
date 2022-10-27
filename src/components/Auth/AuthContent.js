@@ -19,45 +19,51 @@ function AuthContent({ isLogin, onAuthenticate }) {
   const [clave, setClave] = useState("");
 
   const valoresAccion = {
-    icon: require("../../../assets/arrow.png"),
     color: Colors.terciary,
     textColor: Colors.terciary,
   };
 
   const acciones = [
     {
-      text: "Administrador",
-      name: "admin",
-      ...valoresAccion,
-    },
-    {
-      text: "Registrado",
-      name: "registrado",
-      ...valoresAccion,
-    },
-    {
-      text: "Anónimo",
-      name: "anonimo",
-      ...valoresAccion,
-    },
-    {
-      text: "Metre",
-      name: "metre",
-      ...valoresAccion,
-    },
-    {
-      text: "Mozo",
-      name: "mozo",
-      ...valoresAccion,
-    },
-    {
       text: "Cocinero",
       name: "cocinero",
+      icon: require("../../../assets/perfiles/cocinero.png"),
       ...valoresAccion,
     },
     {
       text: "Bartender",
       name: "bartender",
+      icon: require("../../../assets/perfiles/bartender.png"),
+      ...valoresAccion,
+    },
+    {
+      text: "Metre",
+      name: "metre",
+      icon: require("../../../assets/perfiles/metre.png"),
+      ...valoresAccion,
+    },
+    {
+      text: "Administrador",
+      name: "admin",
+      icon: require("../../../assets/perfiles/administrador.png"),
+      ...valoresAccion,
+    },
+    {
+      text: "Mozo",
+      name: "mozo",
+      icon: require("../../../assets/perfiles/mozo.png"),
+      ...valoresAccion,
+    },
+    {
+      text: "Anónimo",
+      name: "anonimo",
+      icon: require("../../../assets/perfiles/anonimo.png"),
+      ...valoresAccion,
+    },
+    {
+      text: "Registrado",
+      name: "registrado",
+      icon: require("../../../assets/perfiles/registrado.png"),
       ...valoresAccion,
     },
   ];
