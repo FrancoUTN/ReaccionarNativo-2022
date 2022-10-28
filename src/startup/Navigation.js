@@ -26,6 +26,7 @@ import MenuScreen from "../screens/MenuScreen";
 import PedidoAgregadoScreen from "../screens/PedidoAgregadoScreen";
 import PedidosScreen from "../screens/PedidosScreen";
 import PreRegistroScreen from "../screens/PreRegistroScreen";
+import Encuestas from "../screens/Encuestas";
 
 const Stack = createNativeStackNavigator();
 
@@ -49,6 +50,13 @@ function AuthStack() {
         contentStyle: { backgroundColor: Colors.primary100 },
       }}
     >
+      <Stack.Screen
+        name="Encuestas"
+        component={Encuestas}
+        options={{
+          headerShown: false,
+        }}
+      />
       <Stack.Screen
         name="Login"
         component={LoginScreen}
@@ -88,7 +96,6 @@ function AuthStack() {
 }
 
 function AuthenticatedStack() {
-  /* HERIK CHANGE  */
   async function playSound() {
     const { sound } = await Audio.Sound.createAsync(
       require("../../assets/sounds/logout.mp3")
@@ -98,7 +105,7 @@ function AuthenticatedStack() {
       sound.unloadAsync();
     }, 2500);
   }
-  /******** */
+
   const authCtx = useContext(AuthContext);
   const logoutIcon = (
     <IconButton
@@ -128,7 +135,7 @@ function AuthenticatedStack() {
             component={AdminScreen}
             options={{
               ...opcionesTipicas,
-              title: 'Adminstrador'
+              title: "Adminstrador",
             }}
           />
           <Stack.Screen
@@ -136,7 +143,7 @@ function AuthenticatedStack() {
             component={ListadoClientesScreen}
             options={{
               ...opcionesTipicas,
-              title: 'Clientes'
+              title: "Clientes",
             }}
           />
           <Stack.Screen
@@ -144,7 +151,7 @@ function AuthenticatedStack() {
             component={AltaMesaScreen}
             options={{
               ...opcionesTipicas,
-              title: 'Alta de mesa'
+              title: "Alta de mesa",
             }}
           />
           <Stack.Screen
@@ -152,7 +159,7 @@ function AuthenticatedStack() {
             component={MesaAgregadaScreen}
             options={{
               ...opcionesTipicas,
-              title: 'Mesa agregada'
+              title: "Mesa agregada",
             }}
           />
           <Stack.Screen
@@ -160,7 +167,7 @@ function AuthenticatedStack() {
             component={AltaEmpleadoScreen}
             options={{
               ...opcionesTipicas,
-              title: 'Alta de empleado'
+              title: "Alta de empleado",
             }}
           />
         </>
@@ -213,7 +220,7 @@ function AuthenticatedStack() {
             component={AltaProductoScreen}
             options={{
               ...opcionesTipicas,
-              title: 'Alta de producto'
+              title: "Alta de producto",
             }}
           />
           <Stack.Screen
@@ -232,7 +239,7 @@ function AuthenticatedStack() {
             component={AnonimoScreen}
             options={{
               ...opcionesTipicas,
-              title: 'Ingreso anónimo'
+              title: "Ingreso anónimo",
             }}
           />
           <Stack.Screen
@@ -240,7 +247,7 @@ function AuthenticatedStack() {
             component={BotonEscanearScreen}
             options={{
               ...opcionesTipicas,
-              title: 'Escáner'
+              title: "Escáner",
             }}
           />
           <Stack.Screen
@@ -253,7 +260,7 @@ function AuthenticatedStack() {
             component={MenuScreen}
             options={{
               ...opcionesTipicas,
-              title: 'Menú'
+              title: "Menú",
             }}
           />
           <Stack.Screen
@@ -261,7 +268,7 @@ function AuthenticatedStack() {
             component={PedidoAgregadoScreen}
             options={{
               ...opcionesTipicas,
-              title: 'Pedido realizado'
+              title: "Pedido realizado",
             }}
           />
           <Stack.Screen
@@ -280,7 +287,7 @@ function AuthenticatedStack() {
             component={BotonEscanearScreen}
             options={{
               ...opcionesTipicas,
-              title: 'Escáner'
+              title: "Escáner",
             }}
           />
           <Stack.Screen
@@ -293,7 +300,7 @@ function AuthenticatedStack() {
             component={MenuScreen}
             options={{
               ...opcionesTipicas,
-              title: 'Menú'
+              title: "Menú",
             }}
           />
           <Stack.Screen
@@ -301,7 +308,7 @@ function AuthenticatedStack() {
             component={PedidoAgregadoScreen}
             options={{
               ...opcionesTipicas,
-              title: 'Pedido realizado'
+              title: "Pedido realizado",
             }}
           />
           <Stack.Screen
