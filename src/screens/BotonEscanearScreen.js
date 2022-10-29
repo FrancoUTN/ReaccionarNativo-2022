@@ -19,6 +19,7 @@ export default function BotonEscanearScreen({ navigation }) {
 	const [mensajeOk, setMensajeOk] = useState('');
     
 	async function onEscaneadoHandler({ data }) {
+		setEscanear(false);
 		const userSnap = await getDoc(userRef);
 		const miEstado = userSnap.data().estado;
 		if (data == 'ingreso') {
@@ -29,14 +30,12 @@ export default function BotonEscanearScreen({ navigation }) {
 			else {
 				setMensajeError('Usted ya está ' + miEstado + ".");
 			}
-			setEscanear(false);
 		}
 		else if (data.includes('mesa')) {
 			await escaneoMesa(data, miEstado);
 		}
 		else {
 			setMensajeError('Qr inválido.');
-			setEscanear(false);
 		}
 	}
 
@@ -94,7 +93,6 @@ export default function BotonEscanearScreen({ navigation }) {
 			}
 		}
 		setCargando(false);
-		setEscanear(false);
 	}
 
 	if (cargando) {
