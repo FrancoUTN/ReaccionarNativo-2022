@@ -1,11 +1,10 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
 
 import './src/util/auth' // Inicializa App y Auth
 import AuthContextProvider from './src/store/auth-context';
 import AnimatedSplashScreen from "./src/startup/AnimatedSplashScreen";
 import Navigation from "./src/startup/Navigation";
-
 
 export default function App() {
 	const [appLoading, setAppLoading] = useState(true);
@@ -16,19 +15,19 @@ export default function App() {
 
 	return (
 		<>
-		{
-			appLoading ?
-				<AnimatedSplashScreen
-					onFinish={onFinishHandler}
-				/>
-			:
-			<>
-				<StatusBar style="light" />
-				<AuthContextProvider>
-					<Navigation />
-				</AuthContextProvider>
-			</>
-		}
+			{
+				appLoading ?
+					<AnimatedSplashScreen
+						onFinish={onFinishHandler}
+					/>
+					:
+					<>
+						<StatusBar style="light" />
+						<AuthContextProvider>
+							<Navigation />
+						</AuthContextProvider>
+					</>
+			}
 		</>
 	);
 }

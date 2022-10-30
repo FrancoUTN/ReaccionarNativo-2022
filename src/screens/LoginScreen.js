@@ -32,7 +32,7 @@ function LoginScreen({ navigation }) {
 
       if (docSnap.exists()) {
         playSound();
-        authCtx.authenticate(usuario.email, docSnap.data().perfil);
+        authCtx.authenticate(usuario.email, docSnap.data().perfil, usuario.uid);
       } else {
         console.log("Error en Login: No existe el documento.");
       }

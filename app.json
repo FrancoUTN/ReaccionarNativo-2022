@@ -11,12 +11,20 @@
       "resizeMode": "contain",
       "backgroundColor": "#F5D0C5"
     },
+    "plugins": [
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/adaptive-icon.png",
+          "color": "#ffffff",
+          "sounds": ["./assets/sounds/smile-ringtone.mp3"]
+        }
+      ]
+    ],
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
