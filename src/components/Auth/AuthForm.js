@@ -4,7 +4,6 @@ import { StyleSheet, View } from "react-native";
 import Button from "../ui/Button";
 import Input from "./Input";
 
-
 function AuthForm({ onSubmit, credentialsInvalid, correo, clave }) {
   const [enteredEmail, setEnteredEmail] = useState("");
   const [enteredPassword, setEnteredPassword] = useState("");

@@ -7,6 +7,8 @@ import { Colors } from "../../constants/styles";
 import { useNavigation } from "@react-navigation/native";
 import Button from "../ui/Button";
 
+import packageJson from '../../../package.json';
+
 function AuthContent({ isLogin, onAuthenticate }) {
   const navigation = useNavigation();
 
@@ -95,7 +97,7 @@ function AuthContent({ isLogin, onAuthenticate }) {
   }
 
   function onPressItemHandler(name) {
-    setClave("123123");    
+    setClave("123123");
     switch (name) {
       case "admin":
         setCorreo("admin@rnativo.com");
@@ -151,6 +153,7 @@ function AuthContent({ isLogin, onAuthenticate }) {
           onPressItem={(name) => onPressItemHandler(name)}
         />
       </View>
+      <Text style={styles.version}>version: {packageJson.version}</Text>
     </>
   );
 }
@@ -193,4 +196,9 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingHorizontal: 50,
   },
+  version: {
+    fontSize: 8,
+    marginTop: 120,
+    marginLeft: 5
+  }
 });
