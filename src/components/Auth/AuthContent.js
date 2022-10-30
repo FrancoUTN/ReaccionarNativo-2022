@@ -199,6 +199,9 @@ const styles = StyleSheet.create({
   version: {
     fontSize: 8,
     marginTop: 120,
-    marginLeft: 5
+    marginLeft: 5,
+    backgroundColor: "white",
+    height: 100,
+    width: 100
   }
 });

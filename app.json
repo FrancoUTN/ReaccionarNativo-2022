@@ -2,7 +2,7 @@
   "expo": {
     "name": "comanda",
     "slug": "comanda",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -17,7 +17,7 @@
         {
           "icon": "./assets/adaptive-icon.png",
           "color": "#ffffff",
-          "sounds": ["./assets/sounds/smile-ringtone.mp3"]
+          "sounds": ["./assets/sounds/smileringtone.mp3"]
         }
       ]
     ],
