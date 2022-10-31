@@ -7,7 +7,7 @@ import Camara from '../../components/altas/Camara';
 import Button from '../../components/ui/Button';
 import LoadingOverlay from '../../components/ui/LoadingOverlay';
 import { Colors } from '../../constants/styles';
-import Input from '../../components/auth/Input';
+import Input from '../../components/Auth/Input';
 import QrBase64 from '../../components/shared/QrBase64';
 
 
@@ -26,33 +26,33 @@ export default function AltaMesaScreen({ navigation }) {
 	});
 	const [isAuthenticating, setIsAuthenticating] = useState(false);
 
-    async function agregar() {
+	async function agregar() {
 		const nombreEnStorage = `mesas/mesa${numero}.jpg`;
-        const storageRef = ref(getStorage(), nombreEnStorage);
+		const storageRef = ref(getStorage(), nombreEnStorage);
 
-        const blob = await new Promise((resolve, reject) => {
-            const xhr = new XMLHttpRequest();
-            xhr.onload = function () {
-                resolve(xhr.response);
-            };
-            xhr.onerror = function (e) {
-                console.log(e);
-                reject(new TypeError("Petición de red fallida."));
-            };
-            xhr.responseType = "blob";
-            xhr.open("GET", foto.uri, true);
-            xhr.send(null);
-        });
-        await uploadBytes(storageRef, blob);
-        const url = await getDownloadURL(storageRef);
+		const blob = await new Promise((resolve, reject) => {
+			const xhr = new XMLHttpRequest();
+			xhr.onload = function () {
+				resolve(xhr.response);
+			};
+			xhr.onerror = function (e) {
+				console.log(e);
+				reject(new TypeError("Petición de red fallida."));
+			};
+			xhr.responseType = "blob";
+			xhr.open("GET", foto.uri, true);
+			xhr.send(null);
+		});
+		await uploadBytes(storageRef, blob);
+		const url = await getDownloadURL(storageRef);
 
-        const mesa = {
+		const mesa = {
 			tipo,
 			cantidadComensales,
 			// numero,
 			foto: url,
 			qrEnBase64
-        }
+		}
 
 		const docRef = doc(getFirestore(), 'mesas', 'mesa' + numero);
 		await setDoc(docRef, mesa);
@@ -62,7 +62,7 @@ export default function AltaMesaScreen({ navigation }) {
 			params: { qrEnBase64 }
 		});
 		return;
-    }
+	}
 
 	async function onSubmitHandler() {
 		const tipoIsValid = tipo.trim().length >= 1;
@@ -76,13 +76,13 @@ export default function AltaMesaScreen({ navigation }) {
 			!numeroIsValid ||
 			!fotoIsValid
 		) {
-		  setCredentialsInvalid({
-		    tipo: !tipoIsValid,
-		    cantidadComensales: !cantidadComensalesIsValid,
-			numero: !numeroIsValid,
-			foto: !fotoIsValid
-		  });
-		  return;
+			setCredentialsInvalid({
+				tipo: !tipoIsValid,
+				cantidadComensales: !cantidadComensalesIsValid,
+				numero: !numeroIsValid,
+				foto: !fotoIsValid
+			});
+			return;
 		}
 
 		setIsAuthenticating(true);
@@ -93,35 +93,35 @@ export default function AltaMesaScreen({ navigation }) {
 			console.log(error);
 			navigation.navigate({
 				name: 'Modal',
-				params: { mensajeError: 'Falló el registro. Intenta nuevamente'}
+				params: { mensajeError: 'Falló el registro. Intenta nuevamente' }
 			});
 			setIsAuthenticating(false);
 		}
 	}
 
-	function fotoTomadaHandler(objetoFoto) {    
+	function fotoTomadaHandler(objetoFoto) {
 		setTomarFoto(false);
 		setFoto(objetoFoto);
-		
+
 		setCredentialsInvalid(
-			credenciales => ({...credenciales, foto: false})
+			credenciales => ({ ...credenciales, foto: false })
 		);
 	}
-    
-    function updateInputValueHandler(inputType, enteredValue) {
-        switch (inputType) {
-            case 'tipo':
-                setTipo(enteredValue);
-                break;
-            case 'cantidadComensales':
-                setCantidadComensales(enteredValue);
-                break;
-            case 'numero':
-                setNumero(enteredValue);
-                break;
-        }
-    }
-  
+
+	function updateInputValueHandler(inputType, enteredValue) {
+		switch (inputType) {
+			case 'tipo':
+				setTipo(enteredValue);
+				break;
+			case 'cantidadComensales':
+				setCantidadComensales(enteredValue);
+				break;
+			case 'numero':
+				setNumero(enteredValue);
+				break;
+		}
+	}
+
 	const formulario = (
 		<View style={styles.form}>
 			<View>
@@ -156,9 +156,9 @@ export default function AltaMesaScreen({ navigation }) {
 
 	if (tomarFoto) {
 		return (
-		<Camara
-			fotoTomada={fotoTomadaHandler}
-		/>
+			<Camara
+				fotoTomada={fotoTomadaHandler}
+			/>
 		)
 	}
 	if (isAuthenticating) {
@@ -167,18 +167,18 @@ export default function AltaMesaScreen({ navigation }) {
 	return (
 		<ScrollView>
 			<View style={styles.fotoContainer}>
-			{
-				credentialsInvalid.foto ?
-				<Text style={styles.fotoErrorText}>
-					¡Foto requerida!
-				</Text>
-				:
-				foto &&
-				<Image
-					style={styles.imagen}
-					source={{ uri: foto.uri }}
-				/>
-			}
+				{
+					credentialsInvalid.foto ?
+						<Text style={styles.fotoErrorText}>
+							¡Foto requerida!
+						</Text>
+						:
+						foto &&
+						<Image
+							style={styles.imagen}
+							source={{ uri: foto.uri }}
+						/>
+				}
 			</View>
 			<View style={styles.registrateContainer}>
 				<Button onPress={() => setTomarFoto(true)}>
@@ -192,9 +192,9 @@ export default function AltaMesaScreen({ navigation }) {
 				/>
 			</View>
 			<View style={styles.authContent}>
-			{
-				formulario 
-			}
+				{
+					formulario
+				}
 			</View>
 		</ScrollView>
 	);

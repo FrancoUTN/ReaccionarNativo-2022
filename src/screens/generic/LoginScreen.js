@@ -1,7 +1,7 @@
 import { doc, getDoc, getFirestore } from "firebase/firestore";
 import { useContext, useState } from "react";
 import { Audio } from "expo-av";
-import AuthContent from "../../components/auth/AuthContent";
+import AuthContent from "../../components/Auth/AuthContent";
 import LoadingOverlay from "../../components/ui/LoadingOverlay";
 import { AuthContext } from "../../store/auth-context";
 import { login } from "../../util/authentication";

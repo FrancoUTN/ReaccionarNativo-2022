@@ -9,7 +9,7 @@ import Button from '../../components/ui/Button';
 import LoadingOverlay from '../../components/ui/LoadingOverlay';
 import { Colors } from '../../constants/styles';
 import { signUp, logOut } from '../../util/authentication';
-import Input from '../../components/auth/Input';
+import Input from '../../components/Auth/Input';
 
 
 export default function RegistroScreen({ navigation }) {
@@ -17,6 +17,7 @@ export default function RegistroScreen({ navigation }) {
 	const [tomarFoto, setTomarFoto] = useState(false);
 	const [correo, setCorreo] = useState('');
 	const [clave, setClave] = useState('');
+	const [repetirClave, setRepetirClave] = useState('');
 	const [nombre, setNombre] = useState('');
 	const [apellido, setApellido] = useState('');
 	const [dni, setDni] = useState('');
@@ -24,6 +25,7 @@ export default function RegistroScreen({ navigation }) {
 	const [credentialsInvalid, setCredentialsInvalid] = useState({
 		correo: false,
 		clave: false,
+		repetirClave: false,
 		nombre: false,
 		apellido: false,
 		dni: false,
@@ -33,7 +35,7 @@ export default function RegistroScreen({ navigation }) {
 
 	async function agregarUsuario(user) {
 		const nombreEnStorage = `usuarios/${user.email}.jpg`;
-        const storageRef = ref(getStorage(), nombreEnStorage);
+		const storageRef = ref(getStorage(), nombreEnStorage);
 
 		const blob = await new Promise((resolve, reject) => {
 			const xhr = new XMLHttpRequest();
@@ -75,6 +77,7 @@ export default function RegistroScreen({ navigation }) {
 	async function onSubmitHandler() {
 		const correoIsValid = correo.trim().includes('@');
 		const claveIsValid = clave.trim().length >= 6;
+		const repetirClaveIsValid = clave === repetirClave;
 		const nombreIsValid = nombre.length >= 1;
 		const apellidoIsValid = apellido.length >= 1;
 		const dniIsValid = dni.trim().length >= 7; // ?
@@ -83,6 +86,7 @@ export default function RegistroScreen({ navigation }) {
 		if (
 			!correoIsValid ||
 			!claveIsValid ||
+			!repetirClaveIsValid ||
 			!nombreIsValid ||
 			!apellidoIsValid ||
 			!dniIsValid ||
@@ -91,6 +95,7 @@ export default function RegistroScreen({ navigation }) {
 			setCredentialsInvalid({
 				correo: !correoIsValid,
 				clave: !claveIsValid,
+				repetirClave: !repetirClaveIsValid,
 				nombre: !nombreIsValid,
 				apellido: !apellidoIsValid,
 				dni: !dniIsValid,
@@ -142,6 +147,9 @@ export default function RegistroScreen({ navigation }) {
 			case 'clave':
 				setClave(enteredValue);
 				break;
+			case 'repetirClave':
+				setRepetirClave(enteredValue);
+				break;
 			case 'nombre':
 				setNombre(enteredValue);
 				break;
@@ -170,6 +178,13 @@ export default function RegistroScreen({ navigation }) {
 					secure
 					value={clave}
 					isInvalid={credentialsInvalid.clave}
+				/>
+				<Input
+					label="Repetir contraseña"
+					onUpdateValue={updateInputValueHandler.bind(this, 'repetirClave')}
+					secure
+					value={repetirClave}
+					isInvalid={credentialsInvalid.repetirClave}
 				/>
 				<Input
 					label="Nombre"

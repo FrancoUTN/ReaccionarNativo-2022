@@ -3,10 +3,10 @@ import { ActivityIndicator, Image, Pressable, StyleSheet, Text, View } from "rea
 
 import { Colors } from "../../constants/styles";
 import { AuthContext } from "../../store/auth-context";
-import Input from "../auth/Input";
+import Input from "../Auth/Input";
 
 export default function PedidoPreparador({ item, onPress }) {
-	const miPerfil = useContext(AuthContext).perfil;
+    const miPerfil = useContext(AuthContext).perfil;
     const miTipo = miPerfil == 'cocinero' ? 'plato' : 'bebida';
     const [cargandoImagen, setCargandoImagen] = useState(true);
     const [demoraEstimada, setDemoraEstimada] = useState('');
@@ -25,7 +25,7 @@ export default function PedidoPreparador({ item, onPress }) {
 
     let textoBoton = '';
     let botonApretable = false;
-    switch(item.estado) {
+    switch (item.estado) {
         case 'pendiente':
             textoBoton = 'Tomar pedido';
             botonApretable = true;
@@ -40,12 +40,12 @@ export default function PedidoPreparador({ item, onPress }) {
                 botonApretable = false;
             }
             else {
-                textoBoton = yaTomeElPedido ? 'Finalizar' : 'Tomar pedido';    
-                botonApretable = true;            
+                textoBoton = yaTomeElPedido ? 'Finalizar' : 'Tomar pedido';
+                botonApretable = true;
             }
             break;
         case 'bebidas listas':
-            if (miPerfil == 'bartender') {                
+            if (miPerfil == 'bartender') {
                 textoBoton = 'Finalizado';
                 botonApretable = false;
             }
@@ -66,7 +66,7 @@ export default function PedidoPreparador({ item, onPress }) {
                 renderizar = true;
                 return (
                     <Text key={index} style={styles.textDetallesContenido}>
-                        { producto.cantidad }x { producto.producto.nombre }
+                        {producto.cantidad}x {producto.producto.nombre}
                     </Text>
                 );
             }
@@ -82,17 +82,17 @@ export default function PedidoPreparador({ item, onPress }) {
                 <View>
                     <Image
                         style={styles.imageMesa}
-                        source={ {uri: item.fotoMesa }}
-                        onLoadEnd={ () => setCargandoImagen(false) }
+                        source={{ uri: item.fotoMesa }}
+                        onLoadEnd={() => setCargandoImagen(false)}
                     />
-                    {                        
+                    {
                         cargandoImagen &&
                         <View style={styles.absoluto}>
                             <ActivityIndicator size="large" color="white" />
                         </View>
                     }
                     <Text style={styles.textMesa}>
-                        { item.idMesa }
+                        {item.idMesa}
                     </Text>
                 </View>
                 <View style={styles.viewDerecho}>
@@ -118,27 +118,27 @@ export default function PedidoPreparador({ item, onPress }) {
             }
             {
                 botonApretable ?
-                <Pressable
-                    style={ ({pressed}) => [styles.pressable, pressed && {opacity: 0.7}] }
-                    onPress={() => onPress(
-                        item.id,
-                        item.estado,
-                        item.contenido,
-                        demoraEstimada
-                    )}
-                >
-                    <Text style={styles.textPressable}>
-                        { textoBoton }
-                    </Text>
-                </Pressable>
-                :
-                <Pressable
-                    style={ [styles.pressable, {opacity: 0.6}] }
-                >
-                    <Text style={styles.textPressable}>
-                        { textoBoton }
-                    </Text>
-                </Pressable>
+                    <Pressable
+                        style={({ pressed }) => [styles.pressable, pressed && { opacity: 0.7 }]}
+                        onPress={() => onPress(
+                            item.id,
+                            item.estado,
+                            item.contenido,
+                            demoraEstimada
+                        )}
+                    >
+                        <Text style={styles.textPressable}>
+                            {textoBoton}
+                        </Text>
+                    </Pressable>
+                    :
+                    <Pressable
+                        style={[styles.pressable, { opacity: 0.6 }]}
+                    >
+                        <Text style={styles.textPressable}>
+                            {textoBoton}
+                        </Text>
+                    </Pressable>
             }
         </View>
     );

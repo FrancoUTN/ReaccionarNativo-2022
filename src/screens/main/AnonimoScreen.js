@@ -7,7 +7,7 @@ import Camara from '../../components/altas/Camara';
 import Button from '../../components/ui/Button';
 import LoadingOverlay from '../../components/ui/LoadingOverlay';
 import { Colors } from '../../constants/styles';
-import Input from '../../components/auth/Input';
+import Input from '../../components/Auth/Input';
 import { getAuth } from 'firebase/auth';
 
 
@@ -21,35 +21,35 @@ export default function AnonimoScreen({ navigation }) {
 	});
 	const [isAuthenticating, setIsAuthenticating] = useState(false);
 
-    async function modificarUsuario(user) {
+	async function modificarUsuario(user) {
 		const nombreEnStorage = `usuarios/${user.email}.jpg`;
-        const storageRef = ref(getStorage(), nombreEnStorage);
+		const storageRef = ref(getStorage(), nombreEnStorage);
 
-        const blob = await new Promise((resolve, reject) => {
-            const xhr = new XMLHttpRequest();
-            xhr.onload = function () {
-                resolve(xhr.response);
-            };
-            xhr.onerror = function (e) {
-                console.log(e);
-                reject(new TypeError("Petición de red fallida."));
-            };
-            xhr.responseType = "blob";
-            xhr.open("GET", foto.uri, true);
-            xhr.send(null);
-        });
-        await uploadBytes(storageRef, blob);
-        const url = await getDownloadURL(storageRef);
+		const blob = await new Promise((resolve, reject) => {
+			const xhr = new XMLHttpRequest();
+			xhr.onload = function () {
+				resolve(xhr.response);
+			};
+			xhr.onerror = function (e) {
+				console.log(e);
+				reject(new TypeError("Petición de red fallida."));
+			};
+			xhr.responseType = "blob";
+			xhr.open("GET", foto.uri, true);
+			xhr.send(null);
+		});
+		await uploadBytes(storageRef, blob);
+		const url = await getDownloadURL(storageRef);
 
-        const usuario = {
+		const usuario = {
 			nombre,
 			foto: url
-        }
+		}
 
 		await updateDoc(doc(getFirestore(), 'usuarios', user.uid), usuario);
 		setIsAuthenticating(false);
 		return;
-    }
+	}
 
 	async function onSubmitHandler() {
 		const nombreIsValid = nombre.length >= 1;
@@ -59,11 +59,11 @@ export default function AnonimoScreen({ navigation }) {
 			!nombreIsValid ||
 			!fotoIsValid
 		) {
-		  setCredentialsInvalid({
-		    nombre: !nombreIsValid,
-			foto: !fotoIsValid
-		  });
-		  return;
+			setCredentialsInvalid({
+				nombre: !nombreIsValid,
+				foto: !fotoIsValid
+			});
+			return;
 		}
 
 		setIsAuthenticating(true);
@@ -78,26 +78,26 @@ export default function AnonimoScreen({ navigation }) {
 			console.log(error);
 			navigation.navigate({
 				name: 'Modal',
-				params: { mensajeError: 'Falló el registro. Intenta nuevamente'}
+				params: { mensajeError: 'Falló el registro. Intenta nuevamente' }
 			});
 			setIsAuthenticating(false);
 		}
 	}
 
-	function fotoTomadaHandler(objetoFoto) {    
+	function fotoTomadaHandler(objetoFoto) {
 		setTomarFoto(false);
 		setFoto(objetoFoto);
-		
+
 		setCredentialsInvalid(
-			credenciales => ({...credenciales, foto: false})
+			credenciales => ({ ...credenciales, foto: false })
 		);
 	}
 
-    
-    function updateInputValueHandler(inputType, enteredValue) {
-        setNombre(enteredValue);
-    }
-  
+
+	function updateInputValueHandler(inputType, enteredValue) {
+		setNombre(enteredValue);
+	}
+
 	const ClienteForm = (
 		<View style={styles.form}>
 			<View>
@@ -117,9 +117,9 @@ export default function AnonimoScreen({ navigation }) {
 	);
 	if (tomarFoto) {
 		return (
-		<Camara
-			fotoTomada={fotoTomadaHandler}
-		/>
+			<Camara
+				fotoTomada={fotoTomadaHandler}
+			/>
 		)
 	}
 	if (isAuthenticating) {
@@ -128,18 +128,18 @@ export default function AnonimoScreen({ navigation }) {
 	return (
 		<ScrollView>
 			<View style={styles.fotoContainer}>
-			{
-				credentialsInvalid.foto ?
-				<Text style={styles.fotoErrorText}>
-					¡Foto requerida!
-				</Text>
-				:
-				foto &&
-				<Image
-					style={styles.imagen}
-					source={{ uri: foto.uri }}
-				/>
-			}
+				{
+					credentialsInvalid.foto ?
+						<Text style={styles.fotoErrorText}>
+							¡Foto requerida!
+						</Text>
+						:
+						foto &&
+						<Image
+							style={styles.imagen}
+							source={{ uri: foto.uri }}
+						/>
+				}
 			</View>
 			<View style={styles.registrateContainer}>
 				<Button onPress={() => setTomarFoto(true)}>
@@ -147,9 +147,9 @@ export default function AnonimoScreen({ navigation }) {
 				</Button>
 			</View>
 			<View style={styles.authContent}>
-			{
-				ClienteForm
-			}
+				{
+					ClienteForm
+				}
 			</View>
 		</ScrollView>
 	);

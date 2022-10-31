@@ -7,7 +7,7 @@ import Camara from '../../components/altas/Camara';
 import Button from '../../components/ui/Button';
 import LoadingOverlay from '../../components/ui/LoadingOverlay';
 import { Colors } from '../../constants/styles';
-import Input from '../../components/auth/Input';
+import Input from '../../components/Auth/Input';
 import QrBase64 from '../../components/shared/QrBase64';
 import Apretable from '../../components/shared/Apretable';
 
@@ -42,7 +42,7 @@ export default function AltaProductoScreen({ navigation, route }) {
 		})();
 	}, [qrEnBase64]);
 
-    async function agregar() {
+	async function agregar() {
 		const arrayDeFotos = [];
 
 		for (const [indice, foto] of fotos.entries()) {
@@ -65,22 +65,22 @@ export default function AltaProductoScreen({ navigation, route }) {
 			const url = await getDownloadURL(storageRef);
 			arrayDeFotos.push(url);
 		}
-		
-        const producto = {
+
+		const producto = {
 			nombre,
 			descripcion,
 			tipo: esBebida ? 'bebida' : 'plato',
 			precio: Number(precio),
 			tiempoPromedio: Number(tiempoPromedio),
 			fotos: arrayDeFotos
-        };
+		};
 
 		const colRef = collection(getFirestore(), 'productos');
 		const docRef = await addDoc(colRef, producto);
 		setDocReference(docRef);
 		setIdProducto(docRef.id);
 		return;
-    }
+	}
 
 	async function onSubmitHandler() {
 		const nombreIsValid = nombre.trim().length >= 1;
@@ -95,14 +95,14 @@ export default function AltaProductoScreen({ navigation, route }) {
 			!tiempoPromedioIsValid ||
 			!fotosIsValid
 		) {
-		  setCredentialsInvalid({
-		    nombre: !nombreIsValid,
-		    descripcion: !descripcionIsValid,
-		    precio: !precioIsValid,
-			tiempoPromedio: !tiempoPromedioIsValid,
-			fotos: !fotosIsValid
-		  });
-		  return;
+			setCredentialsInvalid({
+				nombre: !nombreIsValid,
+				descripcion: !descripcionIsValid,
+				precio: !precioIsValid,
+				tiempoPromedio: !tiempoPromedioIsValid,
+				fotos: !fotosIsValid
+			});
+			return;
 		}
 		setIsAuthenticating(true);
 		try {
@@ -112,40 +112,40 @@ export default function AltaProductoScreen({ navigation, route }) {
 			console.log(error);
 			navigation.navigate({
 				name: 'Modal',
-				params: { mensajeError: 'Falló el registro. Intenta nuevamente'}
+				params: { mensajeError: 'Falló el registro. Intenta nuevamente' }
 			});
 			setIsAuthenticating(false);
 		}
 	}
 
-	function fotoTomadaHandler(objetoFoto) {    
+	function fotoTomadaHandler(objetoFoto) {
 		setTomarFoto(false);
 		setFotos(
 			fotosPrevias => [...fotosPrevias, objetoFoto]
 		);
 	}
-    
-    function updateInputValueHandler(inputType, enteredValue) {
-        switch (inputType) {
-            case 'nombre':
-                setNombre(enteredValue);
-                break;
+
+	function updateInputValueHandler(inputType, enteredValue) {
+		switch (inputType) {
+			case 'nombre':
+				setNombre(enteredValue);
+				break;
 			case 'descripcion':
 				setDescripcion(enteredValue);
 				break;
-            case 'precio':
-                setPrecio(enteredValue);
-                break;
-            case 'tiempoPromedio':
-                setTiempoPromedio(enteredValue);
-                break;
-        }
-    }
+			case 'precio':
+				setPrecio(enteredValue);
+				break;
+			case 'tiempoPromedio':
+				setTiempoPromedio(enteredValue);
+				break;
+		}
+	}
 
 	function volverHandler() {
 		navigation.goBack();
 	}
-  
+
 	const formulario = (
 		<View style={styles.form}>
 			<View>
@@ -186,13 +186,13 @@ export default function AltaProductoScreen({ navigation, route }) {
 
 	if (tomarFoto) {
 		return (
-		<Camara
-			fotoTomada={fotoTomadaHandler}
-		/>
+			<Camara
+				fotoTomada={fotoTomadaHandler}
+			/>
 		)
 	}
 	if (idProducto) {
-		return (		
+		return (
 			<View style={styles.container}>
 				<View style={styles.mesaContainer}>
 					<Text style={styles.textoMesa}>
@@ -222,49 +222,49 @@ export default function AltaProductoScreen({ navigation, route }) {
 		>
 			<View style={styles.fotoContainer}>
 				<View style={styles.fotosContainer}>
-				{
-					fotos[0] &&
-					<Image
-						style={styles.imagen}
-						source={{ uri: fotos[0].uri }}
-					/>
-				}
-				{
-					fotos[1] &&
-					<Image
-						style={styles.imagen}
-						source={{ uri: fotos[1].uri }}
-					/>
-				}
-				{
-					fotos[2] &&
-					<Image
-						style={styles.imagen}
-						source={{ uri: fotos[2].uri }}
-					/>
-				}
+					{
+						fotos[0] &&
+						<Image
+							style={styles.imagen}
+							source={{ uri: fotos[0].uri }}
+						/>
+					}
+					{
+						fotos[1] &&
+						<Image
+							style={styles.imagen}
+							source={{ uri: fotos[1].uri }}
+						/>
+					}
+					{
+						fotos[2] &&
+						<Image
+							style={styles.imagen}
+							source={{ uri: fotos[2].uri }}
+						/>
+					}
 				</View>
-			{
-				credentialsInvalid.fotos &&
-				<Text style={styles.fotoErrorText}>
-					¡3 fotos requeridas!
-				</Text>
-			}
+				{
+					credentialsInvalid.fotos &&
+					<Text style={styles.fotoErrorText}>
+						¡3 fotos requeridas!
+					</Text>
+				}
 			</View>
 			<View style={styles.registrateContainer}>
 				<Button onPress={() => setTomarFoto(true)}>
 					{
 						fotos[0] ?
-						'Tomar otra foto'
-						:
-						'Tomar foto'
+							'Tomar otra foto'
+							:
+							'Tomar foto'
 					}
 				</Button>
 			</View>
 			<View style={styles.authContent}>
-			{
-				formulario 
-			}
+				{
+					formulario
+				}
 			</View>
 		</ScrollView>
 	);
@@ -324,22 +324,22 @@ const styles = StyleSheet.create({
 		marginVertical: 20,
 		padding: 20,
 		borderRadius: 10,
-	},	
+	},
 	container: {
 		flex: 1,
 		padding: 50,
 	},
-    mesaContainer: {
-        flex: 4,
-        justifyContent: 'space-evenly',
-        alignItems: 'center',
-        backgroundColor: Colors.primary500,
-        borderRadius: 10,
-        marginVertical: 50
-    },
-    textoMesa: {
-        fontSize: 24,
-        color: 'white',
-        textAlign: 'center'
-    }
+	mesaContainer: {
+		flex: 4,
+		justifyContent: 'space-evenly',
+		alignItems: 'center',
+		backgroundColor: Colors.primary500,
+		borderRadius: 10,
+		marginVertical: 50
+	},
+	textoMesa: {
+		fontSize: 24,
+		color: 'white',
+		textAlign: 'center'
+	}
 });
