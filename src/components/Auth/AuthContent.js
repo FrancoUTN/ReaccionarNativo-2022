@@ -198,9 +198,8 @@ const styles = StyleSheet.create({
   },
   version: {
     fontSize: 8,
-    marginTop: 120,
-    marginLeft: 5,
-    height: 100,
-    width: 100
+    bottom: 10,
+    left: 10,
+    position: 'absolute'
   }
 });
