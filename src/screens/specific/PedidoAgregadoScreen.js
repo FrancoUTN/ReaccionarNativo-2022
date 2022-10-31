@@ -1,28 +1,20 @@
 import { Image, StyleSheet, Text, View} from 'react-native';
 
-import Apretable from '../components/shared/Apretable';
-import { Colors } from '../constants/styles';
+import Apretable from '../../components/shared/Apretable';
+import { Colors } from '../../constants/styles';
 
 
-export default function MesaAgregadaScreen({ navigation, route }) {
-	const qrEnBase64 = route.params.qrEnBase64;
-
+export default function PedidoAgregadoScreen({ navigation, route }) {
     function onPressHandler() {
-		navigation.navigate({ name: 'Admin' });
+		navigation.navigate({ name: 'Cliente' });
 	}
 
 	return (
 		<View style={styles.container}>
             <View style={styles.mesaContainer}>
                 <Text style={styles.textoMesa}>
-                    ¡Mesa agregada con éxito!
-                </Text>
-                <Image
-                    style={styles.imagen}
-                    source={{
-                    uri: 'data:image/png;base64,' + qrEnBase64,
-                    }}
-                />                
+                    Pedido solicitado con éxito.
+                </Text>           
             </View>
 			<Apretable
 				onPress={onPressHandler}

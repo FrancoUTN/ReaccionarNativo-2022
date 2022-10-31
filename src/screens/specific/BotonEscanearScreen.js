@@ -2,10 +2,10 @@ import { getAuth } from 'firebase/auth';
 import { doc, getDoc, getFirestore, updateDoc } from 'firebase/firestore';
 import { useState } from 'react';
 import { StyleSheet, View, Text, Pressable } from 'react-native';
-import Escaner from '../components/shared/Escaner';
-import LoadingOverlay from '../components/ui/LoadingOverlay';
+import Escaner from '../../components/shared/Escaner';
+import LoadingOverlay from '../../components/ui/LoadingOverlay';
 
-import { Colors } from '../constants/styles';
+import { Colors } from '../../constants/styles';
 
 
 export default function BotonEscanearScreen({ navigation }) {

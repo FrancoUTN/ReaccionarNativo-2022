@@ -1,6 +1,6 @@
 import { StyleSheet, View } from "react-native";
 import { useState, useRef, useEffect } from 'react';
-import Apretable from "../components/shared/Apretable";
+import Apretable from "../../components/shared/Apretable";
 import * as Notifications from 'expo-notifications';
 
 Notifications.setNotificationHandler({

@@ -3,11 +3,11 @@ import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { doc, getFirestore, updateDoc } from 'firebase/firestore';
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 
-import Camara from '../components/altas/Camara';
-import Button from '../components/ui/Button';
-import LoadingOverlay from '../components/ui/LoadingOverlay';
-import { Colors } from '../constants/styles';
-import Input from '../components/Auth/Input';
+import Camara from '../../components/altas/Camara';
+import Button from '../../components/ui/Button';
+import LoadingOverlay from '../../components/ui/LoadingOverlay';
+import { Colors } from '../../constants/styles';
+import Input from '../../components/auth/Input';
 import { getAuth } from 'firebase/auth';
 
 
@@ -22,7 +22,8 @@ export default function AnonimoScreen({ navigation }) {
 	const [isAuthenticating, setIsAuthenticating] = useState(false);
 
     async function modificarUsuario(user) {
-        const storageRef = ref(getStorage(), new Date().toISOString());
+		const nombreEnStorage = `usuarios/${user.email}.jpg`;
+        const storageRef = ref(getStorage(), nombreEnStorage);
 
         const blob = await new Promise((resolve, reject) => {
             const xhr = new XMLHttpRequest();

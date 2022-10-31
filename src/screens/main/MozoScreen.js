@@ -1,6 +1,6 @@
 import { StyleSheet, View} from 'react-native';
 
-import Apretable from '../components/shared/Apretable';
+import Apretable from '../../components/shared/Apretable';
 
 
 export default function MozoScreen({ navigation }) {

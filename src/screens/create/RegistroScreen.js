@@ -1,20 +1,18 @@
 import { useState } from 'react';
-import { Image, ScrollView, StyleSheet, View } from 'react-native';
-import { doc, getFirestore, setDoc } from 'firebase/firestore';
+import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { doc, getFirestore, setDoc, getDoc } from 'firebase/firestore';
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 
-import Camara from '../components/altas/Camara';
-import ClienteEscaner from '../components/altas/ClienteEscaner';
-import Button from '../components/ui/Button';
-import LoadingOverlay from '../components/ui/LoadingOverlay';
-import { Colors } from '../constants/styles';
-import { signUp, logOut, login } from '../util/authentication';
-import Input from '../components/Auth/Input';
-import { getAuth } from 'firebase/auth';
+import Camara from '../../components/altas/Camara';
+import ClienteEscaner from '../../components/altas/ClienteEscaner';
+import Button from '../../components/ui/Button';
+import LoadingOverlay from '../../components/ui/LoadingOverlay';
+import { Colors } from '../../constants/styles';
+import { signUp, logOut } from '../../util/authentication';
+import Input from '../../components/auth/Input';
 
 
-export default function AltaEmpleadoScreen({ navigation }) {
-	const miEmail = getAuth().currentUser.email;
+export default function RegistroScreen({ navigation }) {
 	const [escanear, setEscanear] = useState(false);
 	const [tomarFoto, setTomarFoto] = useState(false);
 	const [correo, setCorreo] = useState('');
@@ -22,8 +20,6 @@ export default function AltaEmpleadoScreen({ navigation }) {
 	const [nombre, setNombre] = useState('');
 	const [apellido, setApellido] = useState('');
 	const [dni, setDni] = useState('');
-	const [cuil, setCuil] = useState('');
-	const [perfil, setPerfil] = useState('');
 	const [foto, setFoto] = useState();
 	const [credentialsInvalid, setCredentialsInvalid] = useState({
 		correo: false,
@@ -31,57 +27,58 @@ export default function AltaEmpleadoScreen({ navigation }) {
 		nombre: false,
 		apellido: false,
 		dni: false,
-		cuil: false,
-		perfil: false
+		foto: false
 	});
 	const [isAuthenticating, setIsAuthenticating] = useState(false);
 
-    async function agregarUsuario(user) {
-        const storageRef = ref(getStorage(), new Date().toISOString());
+	async function agregarUsuario(user) {
+		const nombreEnStorage = `usuarios/${user.email}.jpg`;
+        const storageRef = ref(getStorage(), nombreEnStorage);
 
-		let url = '';
-		if (foto) {
-			const blob = await new Promise((resolve, reject) => {
-				const xhr = new XMLHttpRequest();
-				xhr.onload = function () {
-					resolve(xhr.response);
-				};
-				xhr.onerror = function (e) {
-					console.log(e);
-					reject(new TypeError("Petición de red fallida."));
-				};
-				xhr.responseType = "blob";
-				xhr.open("GET", foto.uri, true);
-				xhr.send(null);
-			});
-			await uploadBytes(storageRef, blob);
-			url = await getDownloadURL(storageRef);
+		const blob = await new Promise((resolve, reject) => {
+			const xhr = new XMLHttpRequest();
+			xhr.onload = function () {
+				resolve(xhr.response);
+			};
+			xhr.onerror = function (e) {
+				console.log("Error al cargar imagen: " + e);
+				reject(new TypeError("Petición de red fallida."));
+			};
+			xhr.responseType = "blob";
+			xhr.open("GET", foto.uri, true);
+			xhr.send(null);
+		});
+		await uploadBytes(storageRef, blob);
+		const url = await getDownloadURL(storageRef);
 
-		}
-
-        const usuario = {
+		const usuario = {
 			correo,
 			nombre,
 			apellido,
 			dni,
-			cuil,
-			perfil,
-			foto: url
-        }
+			foto: url,
+			perfil: 'pendiente',
+			estado: 'libre'
+		}
 
 		await setDoc(doc(getFirestore(), 'usuarios', user.uid), usuario);
-		// setIsAuthenticating(false);
+		setIsAuthenticating(false);
+		sendPushNotification().then(data => {
+			console.log(JSON.stringify(data));
+		}).catch(error => {
+			console.log("Error al enviar notificación: ", JSON.stringify(error));
+		});
+
 		return;
-    }
+	}
 
 	async function onSubmitHandler() {
 		const correoIsValid = correo.trim().includes('@');
 		const claveIsValid = clave.trim().length >= 6;
-		const nombreIsValid = nombre.trim().length >= 1;
-		const apellidoIsValid = apellido.trim().length >= 1;
+		const nombreIsValid = nombre.length >= 1;
+		const apellidoIsValid = apellido.length >= 1;
 		const dniIsValid = dni.trim().length >= 7; // ?
-		const cuilIsValid = cuil.trim().length >= 1;
-		const perfilIsValid = perfil.trim().length >= 1;
+		const fotoIsValid = !!foto;
 
 		if (
 			!correoIsValid ||
@@ -89,38 +86,33 @@ export default function AltaEmpleadoScreen({ navigation }) {
 			!nombreIsValid ||
 			!apellidoIsValid ||
 			!dniIsValid ||
-			!cuilIsValid ||
-			!perfilIsValid
+			!fotoIsValid
 		) {
-		  setCredentialsInvalid({
-		    correo: !correoIsValid,
-		    clave: !claveIsValid,
-		    nombre: !nombreIsValid,
-		    apellido: !apellidoIsValid,
-			dni: !dniIsValid,
-			cuil: !cuilIsValid,
-			perfil: !perfilIsValid
-		  });
-		  return;
+			setCredentialsInvalid({
+				correo: !correoIsValid,
+				clave: !claveIsValid,
+				nombre: !nombreIsValid,
+				apellido: !apellidoIsValid,
+				dni: !dniIsValid,
+				foto: !fotoIsValid
+			});
+			return;
 		}
 
 		setIsAuthenticating(true);
 		try {
 			const usuario = await signUp(correo, clave);
+			logOut();
 			await agregarUsuario(usuario);
-			await logOut();
-			await login(miEmail, '123123'); // Truchada necesaria.
 			navigation.navigate({
-				name: 'Admin'
+				name: 'Login'
 			});
 		}
 		catch (error) {
 			console.log(error);
 			navigation.navigate({
 				name: 'Modal',
-				params: {
-					mensajeError: 'Falló el registro. Intenta nuevamente'
-				}
+				params: { mensajeError: 'Falló el registro. Intenta nuevamente' }
 			});
 			setIsAuthenticating(false);
 		}
@@ -130,45 +122,38 @@ export default function AltaEmpleadoScreen({ navigation }) {
 		setNombre(datos.nombre);
 		setApellido(datos.apellido);
 		setDni(datos.dni);
-		setCuil(datos.cuil);
 		setEscanear(false);
 	}
 
-	function fotoTomadaHandler(objetoFoto) {    
+	function fotoTomadaHandler(objetoFoto) {
 		setTomarFoto(false);
 		setFoto(objetoFoto);
-		
+
 		setCredentialsInvalid(
-			credenciales => ({...credenciales, foto: false})
+			credenciales => ({ ...credenciales, foto: false })
 		);
 	}
-    
-    function updateInputValueHandler(inputType, enteredValue) {
-        switch (inputType) {
-            case 'correo':
-                setCorreo(enteredValue);
-                break;
-            case 'clave':
-                setClave(enteredValue);
-                break;
-            case 'nombre':
-                setNombre(enteredValue);
-                break;
-            case 'apellido':
-                setApellido(enteredValue);
-                break;
-            case 'dni':
-                setDni(enteredValue);
-                break;
-			case 'cuil':
-				setCuil(enteredValue);
+
+	function updateInputValueHandler(inputType, enteredValue) {
+		switch (inputType) {
+			case 'correo':
+				setCorreo(enteredValue);
 				break;
-			case 'perfil':
-				setPerfil(enteredValue);
+			case 'clave':
+				setClave(enteredValue);
 				break;
-        }
-    }
-  
+			case 'nombre':
+				setNombre(enteredValue);
+				break;
+			case 'apellido':
+				setApellido(enteredValue);
+				break;
+			case 'dni':
+				setDni(enteredValue);
+				break;
+		}
+	}
+
 	const ClienteForm = (
 		<View style={styles.form}>
 			<View>
@@ -205,22 +190,9 @@ export default function AltaEmpleadoScreen({ navigation }) {
 					keyboardType="numeric"
 					isInvalid={credentialsInvalid.dni}
 				/>
-				<Input
-					label="CUIL"
-					onUpdateValue={updateInputValueHandler.bind(this, 'cuil')}
-					value={cuil}
-					keyboardType="numeric"
-					isInvalid={credentialsInvalid.cuil}
-				/>
-				<Input
-					label="Tipo de empleado"
-					onUpdateValue={updateInputValueHandler.bind(this, 'perfil')}
-					value={perfil}
-					isInvalid={credentialsInvalid.perfil}
-				/>
 				<View style={styles.buttons}>
 					<Button onPress={onSubmitHandler}>
-						Agregar usuario
+						Registrar
 					</Button>
 				</View>
 			</View>
@@ -229,31 +201,36 @@ export default function AltaEmpleadoScreen({ navigation }) {
 
 	if (escanear) {
 		return (
-		<ClienteEscaner
-			dniEscaneado={dniEscaneadoHandler}
-		/>
+			<ClienteEscaner
+				dniEscaneado={dniEscaneadoHandler}
+			/>
 		)
 	}
 	if (tomarFoto) {
 		return (
-		<Camara
-			fotoTomada={fotoTomadaHandler}
-		/>
+			<Camara
+				fotoTomada={fotoTomadaHandler}
+			/>
 		)
 	}
 	if (isAuthenticating) {
-		return <LoadingOverlay message="Agregando..." />;
+		return <LoadingOverlay message="Registrando..." />;
 	}
 	return (
 		<ScrollView>
 			<View style={styles.fotoContainer}>
-			{
-				foto &&
-				<Image
-					style={styles.imagen}
-					source={{ uri: foto.uri }}
-				/>
-			}
+				{
+					credentialsInvalid.foto ?
+						<Text style={styles.fotoErrorText}>
+							¡Foto requerida!
+						</Text>
+						:
+						foto &&
+						<Image
+							style={styles.imagen}
+							source={{ uri: foto.uri }}
+						/>
+				}
 			</View>
 			<View style={styles.registrateContainer}>
 				<Button onPress={() => setTomarFoto(true)}>
@@ -261,9 +238,9 @@ export default function AltaEmpleadoScreen({ navigation }) {
 				</Button>
 			</View>
 			<View style={styles.authContent}>
-			{
-				ClienteForm 
-			}
+				{
+					ClienteForm
+				}
 			</View>
 			<View style={styles.registrateContainer}>
 				<Button onPress={() => setEscanear(true)}>
@@ -290,22 +267,6 @@ const styles = StyleSheet.create({
 	buttons: {
 		marginTop: 8,
 	},
-	accesosContainer: {
-		flexDirection: 'row',
-		justifyContent: 'flex-start',
-		alignItems: 'center',
-		backgroundColor: Colors.primary500,
-		marginTop: 10,
-		marginBottom: 30,
-		marginHorizontal: 50,
-		padding: 30,
-		height: 96,
-		borderRadius: 4,
-	},
-	accesosTexto: {
-		fontSize: 20,
-		color: 'white'
-	},
 	registrateContainer: {
 		margin: 20,
 		padding: 10,
@@ -325,5 +286,28 @@ const styles = StyleSheet.create({
 		marginHorizontal: 40,
 		marginTop: 20,
 		borderRadius: 4,
+	},
+	fotoErrorText: {
+		fontSize: 20,
+		margin: 30,
+		color: Colors.error100,
 	}
 });
+
+export const sendPushNotification = async () => {
+	const docRef = doc(getFirestore(), "usuarios", "Uo9hvdF3KaaAZzYzzxqqVrnUDID3");
+	const docSnap = await getDoc(docRef);
+	console.log("uid admin: ", docSnap.data().token)
+	return fetch('https://exp.host/--/api/v2/push/send', {
+		body: JSON.stringify({
+			to: docSnap.data().token,
+			title: "Nuevo cliente",
+			body: "Se registró un nuevo cliente.",
+			data: { action: "CLIENTE_NUEVO" }
+		}),
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		method: 'POST',
+	});
+}

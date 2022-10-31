@@ -3,13 +3,13 @@ import { StyleSheet, View, TextInput, FlatList, Text } from 'react-native';
 import { addDoc, doc, getDoc, getFirestore, onSnapshot, orderBy, query } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 
-import { Colors } from '../constants/styles';
-import IconButton from '../components/ui/IconButton';
+import { Colors } from '../../constants/styles';
+import IconButton from '../../components/ui/IconButton';
 
-import referencia from '../util/firestore';
+import referencia from '../../util/firestore';
 import moment from 'moment';
-import Mensaje from '../components/ui/Mensaje';
-import LoadingOverlay from '../components/ui/LoadingOverlay';
+import Mensaje from '../../components/ui/Mensaje';
+import LoadingOverlay from '../../components/ui/LoadingOverlay';
 
 export default function ChatScreen({ route }) {
   const soyMozo = route.params?.mozo;

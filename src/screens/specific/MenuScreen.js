@@ -3,9 +3,9 @@ import { addDoc, collection, doc, getDoc, getFirestore, onSnapshot, query } from
 import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
 
-import LoadingOverlay from "../components/ui/LoadingOverlay";
-import ItemProducto from "../components/renderizadores/ItemProducto";
-import { Colors } from "../constants/styles";
+import LoadingOverlay from "../../components/ui/LoadingOverlay";
+import ItemProducto from "../../components/renderizadores/ItemProducto";
+import { Colors } from "../../constants/styles";
 import { getAuth } from "firebase/auth";
 
 

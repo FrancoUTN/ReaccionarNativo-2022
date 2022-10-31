@@ -1,5 +1,5 @@
 import { Button, StyleSheet, Text, View } from 'react-native';
-import { Colors } from '../constants/styles';
+import { Colors } from '../../constants/styles';
 
 export default function ModalScreen({ route, navigation }) {
   const mensajeError = route.params?.mensajeError;

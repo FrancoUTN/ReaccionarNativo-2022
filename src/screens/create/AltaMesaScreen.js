@@ -3,12 +3,12 @@ import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { doc, getFirestore, setDoc } from 'firebase/firestore';
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 
-import Camara from '../components/altas/Camara';
-import Button from '../components/ui/Button';
-import LoadingOverlay from '../components/ui/LoadingOverlay';
-import { Colors } from '../constants/styles';
-import Input from '../components/Auth/Input';
-import QrBase64 from '../components/shared/QrBase64';
+import Camara from '../../components/altas/Camara';
+import Button from '../../components/ui/Button';
+import LoadingOverlay from '../../components/ui/LoadingOverlay';
+import { Colors } from '../../constants/styles';
+import Input from '../../components/auth/Input';
+import QrBase64 from '../../components/shared/QrBase64';
 
 
 export default function AltaMesaScreen({ navigation }) {
@@ -27,7 +27,8 @@ export default function AltaMesaScreen({ navigation }) {
 	const [isAuthenticating, setIsAuthenticating] = useState(false);
 
     async function agregar() {
-        const storageRef = ref(getStorage(), new Date().toISOString());
+		const nombreEnStorage = `mesas/mesa${numero}.jpg`;
+        const storageRef = ref(getStorage(), nombreEnStorage);
 
         const blob = await new Promise((resolve, reject) => {
             const xhr = new XMLHttpRequest();

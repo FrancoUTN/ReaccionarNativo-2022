@@ -3,7 +3,7 @@ import { ActivityIndicator, Image, Pressable, StyleSheet, Text, View } from "rea
 
 import { Colors } from "../../constants/styles";
 import { AuthContext } from "../../store/auth-context";
-import Input from "../Auth/Input";
+import Input from "../auth/Input";
 
 export default function PedidoPreparador({ item, onPress }) {
 	const miPerfil = useContext(AuthContext).perfil;

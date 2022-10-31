@@ -2,9 +2,9 @@ import { collection, doc, getFirestore, onSnapshot, query, updateDoc } from "fir
 import { useContext, useEffect, useState } from "react";
 import { FlatList, View } from "react-native";
 
-import PedidoMozo from "../components/renderizadores/PedidoMozo";
-import PedidoPreparador from "../components/renderizadores/PedidoPreparador";
-import { AuthContext } from "../store/auth-context";
+import PedidoMozo from "../../components/renderizadores/PedidoMozo";
+import PedidoPreparador from "../../components/renderizadores/PedidoPreparador";
+import { AuthContext } from "../../store/auth-context";
 
 
 export default function PedidosScreen() {
