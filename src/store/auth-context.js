@@ -27,8 +27,6 @@ function AuthContextProvider({ children }) {
   const [perfil, setPerfil] = useState();
 
   useEffect(() => {
-    registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
-
     return () => {
       Notifications.removeNotificationSubscription(notificationListener.current);
       Notifications.removeNotificationSubscription(responseListener.current);
@@ -54,10 +52,12 @@ function AuthContextProvider({ children }) {
   };
 
   function updateNotificationToken(uid) {
-    const docRef = doc(getFirestore(), "usuarios", uid);
-
-    updateDoc(docRef, {
-      token: expoPushToken
+    registerForPushNotificationsAsync().then(token => {
+      const docRef = doc(getFirestore(), "usuarios", uid);
+      updateDoc(docRef, {
+        token
+      });
+    }).catch(error => {
     });
   }
 
@@ -86,13 +86,13 @@ async function registerForPushNotificationsAsync() {
       finalStatus = status;
     }
     if (finalStatus !== 'granted') {
-      alert('Failed to get push token for push notification!');
+      console.log('Failed to get push token for push notification!');
       return;
     }
     token = (await Notifications.getExpoPushTokenAsync()).data;
     console.log(token);
   } else {
-    alert('Must use physical device for Push Notifications');
+    console.log('Must use physical device for Push Notifications');
   }
 
   return token;

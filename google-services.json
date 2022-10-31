@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "296597500465",
+    "project_id": "comanda-94f6a",
+    "storage_bucket": "comanda-94f6a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:296597500465:android:e442c068550791dce21b10",
+        "android_client_info": {
+          "package_name": "com.rnativo.comanda"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "296597500465-bpj8sdsuv3kg271t042bdgbjt01flbi1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.rnativo.comanda",
+            "certificate_hash": "832a221613d8e1db296e147bfcbcaccff4704634"
+          }
+        },
+        {
+          "client_id": "296597500465-gl95saosmva0lmi4j9hnm4gqrq88lqmm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.rnativo.comanda",
+            "certificate_hash": "5320532e6e537b3a02c0673183e3eb5d5eed1868"
+          }
+        },
+        {
+          "client_id": "296597500465-992a0e9o9o56suijsuevhjrb91i65u2a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyACmSWpMpGUa_sFplDpugScmtr1xqNb-C8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "296597500465-992a0e9o9o56suijsuevhjrb91i65u2a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
