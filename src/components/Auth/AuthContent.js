@@ -7,7 +7,7 @@ import { Colors } from "../../constants/styles";
 import { useNavigation } from "@react-navigation/native";
 import Button from "../ui/Button";
 
-import packageJson from '../../../package.json';
+import appJson from '../../../app.json';
 
 function AuthContent({ isLogin, onAuthenticate }) {
   const navigation = useNavigation();
@@ -153,7 +153,7 @@ function AuthContent({ isLogin, onAuthenticate }) {
           onPressItem={(name) => onPressItemHandler(name)}
         />
       </View>
-      <Text style={styles.version}>version: {packageJson.version}</Text>
+      <Text style={styles.version}>version: {appJson.expo.version}</Text>
     </>
   );
 }
