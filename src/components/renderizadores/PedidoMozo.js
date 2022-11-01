@@ -1,29 +1,56 @@
+import { doc, getFirestore, updateDoc } from "firebase/firestore";
 import { useState } from "react";
 import { ActivityIndicator, Image, Pressable, StyleSheet, Text, View } from "react-native";
 
 import { Colors } from "../../constants/styles";
 
-export default function PedidoMozo({ item, onPress }) {
+export default function PedidoMozo({ item }) {
     const [cargandoImagen, setCargandoImagen] = useState(true);
 
     let textoBoton = '';
     let botonApretable = false;
     switch(item.estado) {
         case 'a confirmar':
-            textoBoton = 'Confirmar';
+            textoBoton = 'Confirmar pedido';
             botonApretable = true;
             break;
-        case 'pendiente':
+        case 'confirmado':
             textoBoton = 'Confirmado';
             botonApretable = false;
             break;
         case 'en preparación':
-            textoBoton = 'Finalizar';
+            textoBoton = 'En preparación';
+            botonApretable = false;
+            break;
+        case 'listo':
+            textoBoton = 'Listo para servir';
+            botonApretable = false;
+            break;
+        case 'entregado':
+            textoBoton = 'Confirmar el pago';
             botonApretable = true;
             break;
-        default:
-            textoBoton = 'Finalizado';
+        case 'abonado':
+            textoBoton = 'Pedido abonado';
             botonApretable = false;
+    }
+
+    function onPressHandler() {
+        let nuevosDatos = {};
+        switch(item.estado) {
+            case 'a confirmar':
+                nuevosDatos = {
+                    estado: 'confirmado'
+                };
+                break;
+            case 'entregado':
+                nuevosDatos = {
+                    estado: 'abonado'
+                };
+                break;
+        }
+        const docRef = doc(getFirestore(), 'pedidos', item.id);
+        updateDoc(docRef, nuevosDatos);
     }
 
     return (
@@ -51,9 +78,9 @@ export default function PedidoMozo({ item, onPress }) {
                     </Text>
                     {
                         item.metaProductos.map(
-                            (producto, index) => (
+                            (metaProducto, index) => (
                                 <Text key={index} style={styles.textDetallesContenido}>
-                                    { producto.cantidad }x { producto.producto.nombre }
+                                    { metaProducto.cantidad }x { metaProducto.producto.nombre }
                                 </Text>
                             )
                         )
@@ -67,13 +94,7 @@ export default function PedidoMozo({ item, onPress }) {
                 botonApretable ?
                 <Pressable
                     style={ ({pressed}) => [styles.pressable, pressed && {opacity: 0.7}] }
-                    onPress={() => onPress(
-                        item.id,
-                        item.estado,
-                        item.contenido,
-                        item.demoraEstimadaPlatos,
-                        item.demoraEstimadaBebidas
-                    )}
+                    onPress={ onPressHandler }
                 >
                     <Text style={styles.textPressable}>
                         { textoBoton }
