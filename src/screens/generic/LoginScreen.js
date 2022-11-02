@@ -10,7 +10,7 @@ function LoginScreen({ navigation }) {
   const [isAuthenticating, setIsAuthenticating] = useState(false);
 
   const authCtx = useContext(AuthContext);
-  /* HERIK CHANGE  */
+
   async function playSound() {
     const { sound } = await Audio.Sound.createAsync(
       require("../../../assets/sounds/sounLogin.wav")
@@ -20,7 +20,6 @@ function LoginScreen({ navigation }) {
       sound.unloadAsync();
     }, 2500);
   }
-  /******** */
 
   async function loginHandler({ email, password }) {
     setIsAuthenticating(true);
