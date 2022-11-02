@@ -98,7 +98,7 @@ export default function AnimatedSplashScreen({ onFinish }) {
             alignItems: "center",
           }}
         >
-          <Text style={{ fontSize: 20 }}>APP RESTAURANT PPS 2022</Text>
+          <Text style={{ fontSize: 20 }}>Reaccionar Nativo</Text>
         </View>
         <View
           style={{

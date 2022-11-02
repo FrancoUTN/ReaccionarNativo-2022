@@ -2,17 +2,17 @@ import { useEffect, useState } from "react";
 import { collection, getFirestore, onSnapshot, query, where } from "firebase/firestore";
 
 import { FlatList, StyleSheet, View } from "react-native";
-import LoadingOverlay from "../components/ui/LoadingOverlay";
-import ItemCliente from "../components/renderizadores/ItemCliente";
+import LoadingOverlay from "../../components/ui/LoadingOverlay";
+import ItemClienteEnEspera from "../../components/renderizadores/ItemClienteEnEspera";
 
-export default function ListadoClientesScreen() {
+export default function MetreScreen() {
     const [clientes, setClientes] = useState([]);
 
     useEffect(() => {
         const db = getFirestore();
         const q = query(
             collection(db, 'usuarios'),
-            where('perfil', '==', 'pendiente')
+            where('estado', '==', 'en espera')
         );
         return onSnapshot(q, qs => {
             const clientesTraidos = [];
@@ -35,7 +35,7 @@ export default function ListadoClientesScreen() {
         <View style={styles.container}>
             <FlatList
                 data={clientes}
-                renderItem={({ item }) => <ItemCliente item={item} />}
+                renderItem={({ item }) => <ItemClienteEnEspera item={item} />}
                 keyExtractor={item => item.id}
             />
         </View>

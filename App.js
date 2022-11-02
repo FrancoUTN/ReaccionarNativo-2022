@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
 
 import "./src/util/auth"; // Inicializa App y Auth

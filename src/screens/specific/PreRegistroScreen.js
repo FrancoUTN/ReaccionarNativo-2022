@@ -1,7 +1,7 @@
 import { Button, StyleSheet, Text, View } from 'react-native';
 
-import { AuthContext } from '../store/auth-context';
-import { Colors } from '../constants/styles';
+import { AuthContext } from '../../store/auth-context';
+import { Colors } from '../../constants/styles';
 import { useContext } from 'react';
 
 

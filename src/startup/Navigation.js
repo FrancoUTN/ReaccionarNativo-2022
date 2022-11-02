@@ -4,12 +4,13 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Audio } from "expo-av";
 import { AuthContext } from "../store/auth-context";
 import { Colors } from "../constants/styles";
-import LoginScreen from "../screens/LoginScreen";
-import ModalScreen from "../screens/ModalScreen";
+import LoginScreen from "../screens/generic/LoginScreen";
+import ModalScreen from "../screens/generic/ModalScreen";
 import IconButton from "../components/ui/IconButton";
-import RegistroScreen from "../screens/RegistroScreen";
-import AdminScreen from "../screens/AdminScreen";
+import RegistroScreen from "../screens/create/RegistroScreen";
+import AdminScreen from "../screens/main/AdminScreen";
 import LoadingOverlay from "../components/ui/LoadingOverlay";
+<<<<<<< HEAD
 import ListadoClientesScreen from "../screens/ListadoClientesScreen";
 import AnonimoScreen from "../screens/AnonimoScreen";
 import BotonEscanearScreen from "../screens/BotonEscanearScreen";
@@ -28,6 +29,24 @@ import PedidosScreen from "../screens/PedidosScreen";
 import PreRegistroScreen from "../screens/PreRegistroScreen";
 import Encuestas from "../screens/Encuestas";
 import EstadisticaEncuestas from "../screens/EstadisticaEncuestas";
+=======
+import ListadoClientesScreen from "../screens/specific/ListadoClientesScreen";
+import AnonimoScreen from "../screens/main/AnonimoScreen";
+import BotonEscanearScreen from "../screens/specific/BotonEscanearScreen";
+import AltaMesaScreen from "../screens/create/AltaMesaScreen";
+import MesaAgregadaScreen from "../screens/create/MesaAgregadaScreen";
+import MetreScreen from "../screens/main/MetreScreen";
+import ClienteScreen from "../screens/main/ClienteScreen";
+import ChatScreen from "../screens/specific/ChatScreen";
+import AltaEmpleadoScreen from "../screens/create/AltaEmpleadoScreen";
+import MozoScreen from "../screens/main/MozoScreen";
+import PreparadorScreen from "../screens/main/PreparadorScreen";
+import AltaProductoScreen from "../screens/create/AltaProductoScreen";
+import MenuScreen from "../screens/specific/MenuScreen";
+import PedidoAgregadoScreen from "../screens/specific/PedidoAgregadoScreen";
+import PedidosScreen from "../screens/specific/PedidosScreen";
+import PreRegistroScreen from "../screens/specific/PreRegistroScreen";
+>>>>>>> main
 
 const Stack = createNativeStackNavigator();
 

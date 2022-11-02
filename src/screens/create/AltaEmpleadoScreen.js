@@ -3,13 +3,13 @@ import { Image, ScrollView, StyleSheet, View } from 'react-native';
 import { doc, getFirestore, setDoc } from 'firebase/firestore';
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 
-import Camara from '../components/altas/Camara';
-import ClienteEscaner from '../components/altas/ClienteEscaner';
-import Button from '../components/ui/Button';
-import LoadingOverlay from '../components/ui/LoadingOverlay';
-import { Colors } from '../constants/styles';
-import { signUp, logOut, login } from '../util/authentication';
-import Input from '../components/Auth/Input';
+import Camara from '../../components/altas/Camara';
+import ClienteEscaner from '../../components/altas/ClienteEscaner';
+import Button from '../../components/ui/Button';
+import LoadingOverlay from '../../components/ui/LoadingOverlay';
+import { Colors } from '../../constants/styles';
+import { signUp, logOut, login } from '../../util/authentication';
+import Input from '../../components/Auth/Input';
 import { getAuth } from 'firebase/auth';
 
 
@@ -36,8 +36,9 @@ export default function AltaEmpleadoScreen({ navigation }) {
 	});
 	const [isAuthenticating, setIsAuthenticating] = useState(false);
 
-    async function agregarUsuario(user) {
-        const storageRef = ref(getStorage(), new Date().toISOString());
+	async function agregarUsuario(user) {
+		const nombreEnStorage = `usuarios/${user.email}.jpg`;
+		const storageRef = ref(getStorage(), nombreEnStorage);
 
 		let url = '';
 		if (foto) {
@@ -59,7 +60,7 @@ export default function AltaEmpleadoScreen({ navigation }) {
 
 		}
 
-        const usuario = {
+		const usuario = {
 			correo,
 			nombre,
 			apellido,
@@ -67,12 +68,12 @@ export default function AltaEmpleadoScreen({ navigation }) {
 			cuil,
 			perfil,
 			foto: url
-        }
+		}
 
 		await setDoc(doc(getFirestore(), 'usuarios', user.uid), usuario);
 		// setIsAuthenticating(false);
 		return;
-    }
+	}
 
 	async function onSubmitHandler() {
 		const correoIsValid = correo.trim().includes('@');
@@ -92,16 +93,16 @@ export default function AltaEmpleadoScreen({ navigation }) {
 			!cuilIsValid ||
 			!perfilIsValid
 		) {
-		  setCredentialsInvalid({
-		    correo: !correoIsValid,
-		    clave: !claveIsValid,
-		    nombre: !nombreIsValid,
-		    apellido: !apellidoIsValid,
-			dni: !dniIsValid,
-			cuil: !cuilIsValid,
-			perfil: !perfilIsValid
-		  });
-		  return;
+			setCredentialsInvalid({
+				correo: !correoIsValid,
+				clave: !claveIsValid,
+				nombre: !nombreIsValid,
+				apellido: !apellidoIsValid,
+				dni: !dniIsValid,
+				cuil: !cuilIsValid,
+				perfil: !perfilIsValid
+			});
+			return;
 		}
 
 		setIsAuthenticating(true);
@@ -134,41 +135,41 @@ export default function AltaEmpleadoScreen({ navigation }) {
 		setEscanear(false);
 	}
 
-	function fotoTomadaHandler(objetoFoto) {    
+	function fotoTomadaHandler(objetoFoto) {
 		setTomarFoto(false);
 		setFoto(objetoFoto);
-		
+
 		setCredentialsInvalid(
-			credenciales => ({...credenciales, foto: false})
+			credenciales => ({ ...credenciales, foto: false })
 		);
 	}
-    
-    function updateInputValueHandler(inputType, enteredValue) {
-        switch (inputType) {
-            case 'correo':
-                setCorreo(enteredValue);
-                break;
-            case 'clave':
-                setClave(enteredValue);
-                break;
-            case 'nombre':
-                setNombre(enteredValue);
-                break;
-            case 'apellido':
-                setApellido(enteredValue);
-                break;
-            case 'dni':
-                setDni(enteredValue);
-                break;
+
+	function updateInputValueHandler(inputType, enteredValue) {
+		switch (inputType) {
+			case 'correo':
+				setCorreo(enteredValue);
+				break;
+			case 'clave':
+				setClave(enteredValue);
+				break;
+			case 'nombre':
+				setNombre(enteredValue);
+				break;
+			case 'apellido':
+				setApellido(enteredValue);
+				break;
+			case 'dni':
+				setDni(enteredValue);
+				break;
 			case 'cuil':
 				setCuil(enteredValue);
 				break;
 			case 'perfil':
 				setPerfil(enteredValue);
 				break;
-        }
-    }
-  
+		}
+	}
+
 	const ClienteForm = (
 		<View style={styles.form}>
 			<View>
@@ -229,16 +230,16 @@ export default function AltaEmpleadoScreen({ navigation }) {
 
 	if (escanear) {
 		return (
-		<ClienteEscaner
-			dniEscaneado={dniEscaneadoHandler}
-		/>
+			<ClienteEscaner
+				dniEscaneado={dniEscaneadoHandler}
+			/>
 		)
 	}
 	if (tomarFoto) {
 		return (
-		<Camara
-			fotoTomada={fotoTomadaHandler}
-		/>
+			<Camara
+				fotoTomada={fotoTomadaHandler}
+			/>
 		)
 	}
 	if (isAuthenticating) {
@@ -247,13 +248,13 @@ export default function AltaEmpleadoScreen({ navigation }) {
 	return (
 		<ScrollView>
 			<View style={styles.fotoContainer}>
-			{
-				foto &&
-				<Image
-					style={styles.imagen}
-					source={{ uri: foto.uri }}
-				/>
-			}
+				{
+					foto &&
+					<Image
+						style={styles.imagen}
+						source={{ uri: foto.uri }}
+					/>
+				}
 			</View>
 			<View style={styles.registrateContainer}>
 				<Button onPress={() => setTomarFoto(true)}>
@@ -261,9 +262,9 @@ export default function AltaEmpleadoScreen({ navigation }) {
 				</Button>
 			</View>
 			<View style={styles.authContent}>
-			{
-				ClienteForm 
-			}
+				{
+					ClienteForm
+				}
 			</View>
 			<View style={styles.registrateContainer}>
 				<Button onPress={() => setEscanear(true)}>
