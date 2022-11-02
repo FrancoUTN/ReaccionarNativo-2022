@@ -60,7 +60,7 @@ function AuthStack() {
         contentStyle: { backgroundColor: Colors.primary100 },
       }}
     >
-      <Stack.Screen
+      {/* <Stack.Screen
         name="Estadisticas"
         component={EstadisticaEncuestas}
         options={{
@@ -73,7 +73,7 @@ function AuthStack() {
         options={{
           headerShown: false,
         }}
-      />
+      /> */}
 
       <Stack.Screen
         name="Login"

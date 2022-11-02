@@ -1,9 +1,27 @@
+import { getAuth } from "firebase/auth";
+import { doc, getDoc, getFirestore, onSnapshot } from 'firebase/firestore';
+import { useState } from 'react';
+import { useEffect } from 'react';
 import { StyleSheet, View} from 'react-native';
 
 import Apretable from '../../components/shared/Apretable';
 
 
 export default function ClienteScreen({ navigation }) {
+	const miUid = getAuth().currentUser.uid;
+	const userRef = doc(getFirestore(), 'usuarios', miUid);
+	const [miEstado, setMiEstado] = useState('');
+
+    useEffect(() => {
+        return onSnapshot(userRef, qs => {
+			if (qs.exists()) {
+				if (qs.data().estado) {
+					setMiEstado(qs.data().estado);
+				}
+			}
+        });
+    }, []);
+
 	function onMenuPressHandler() {
 		navigation.navigate({ name: 'Menu'});
 	}
@@ -28,28 +46,23 @@ export default function ClienteScreen({ navigation }) {
 			>
 				Consultar al mozo
 			</Apretable>
-			{/* <Apretable
-				onPress={onPressHandler}
-			>
-				Juegos
-			</Apretable> */}
-			<Apretable
-				onPress={onPressHandler}
-				desactivado={true}
-			>
-				Responder encuesta
-			</Apretable>
-			<Apretable
-				onPress={onPressHandler}
-				desactivado={true}
-			>
-				Ver encuestas
-			</Apretable>
 			<Apretable
 				onPress={onPressHandler}
 				desactivado={true}
 			>
 				Estado de mi pedido
+			</Apretable>
+			<Apretable
+				onPress={onPressHandler}
+				desactivado={miEstado != 'con pedido confirmado'}
+			>
+				Responder encuesta
+			</Apretable>
+			<Apretable
+				onPress={onPressHandler}
+				desactivado={miEstado != 'encuestado'}
+			>
+				Ver encuestas
 			</Apretable>
 			<Apretable
 				onPress={onPressHandler}

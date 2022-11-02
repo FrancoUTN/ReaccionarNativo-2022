@@ -36,21 +36,30 @@ export default function PedidoMozo({ item }) {
     }
 
     function onPressHandler() {
-        let nuevosDatos = {};
+        let nuevosDatosPedido = {};
+        let nuevosDatosUsuario = {};
         switch(item.estado) {
             case 'a confirmar':
-                nuevosDatos = {
+                nuevosDatosPedido = {
                     estado: 'confirmado'
+                };
+                nuevosDatosUsuario = {
+                    estado: 'con pedido confirmado'
                 };
                 break;
             case 'entregado':
-                nuevosDatos = {
+                nuevosDatosPedido = {
                     estado: 'abonado'
+                };
+                nuevosDatosUsuario = {
+                    estado: 'libre'
                 };
                 break;
         }
-        const docRef = doc(getFirestore(), 'pedidos', item.id);
-        updateDoc(docRef, nuevosDatos);
+        const docPedidoRef = doc(getFirestore(), 'pedidos', item.id);
+        const docUsuarioRef = doc(getFirestore(), 'usuarios', item.idCliente);
+        updateDoc(docPedidoRef, nuevosDatosPedido);
+        updateDoc(docUsuarioRef, nuevosDatosUsuario);
     }
 
     return (
