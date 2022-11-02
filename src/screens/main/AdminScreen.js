@@ -51,6 +51,10 @@ export default function AdminScreen({ navigation }) {
 		navigation.navigate({ name: "AltaEmpleado" });
 	}
 
+	function onVerEncuestasPressHandler() {
+		navigation.navigate({ name: "EstadisticaEncuestas" });
+	}
+
 	// Temporal
 	function onPressHandler() {
 		console.log("Apretado.");
@@ -78,6 +82,11 @@ export default function AdminScreen({ navigation }) {
 				onPress={onClientesPressHandler}
 			>
 				Clientes
+			</Apretable>
+			<Apretable
+				onPress={onVerEncuestasPressHandler}
+			>
+				Ver encuestas
 			</Apretable>
 			{/* <Apretable
 				onPress={onPressHandler}

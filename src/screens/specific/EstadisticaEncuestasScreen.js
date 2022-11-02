@@ -7,7 +7,7 @@ import {
   StyleSheet,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import { Colors } from "../constants/styles";
+import { Colors } from "../../constants/styles";
 import {
   LineChart,
   BarChart,
@@ -21,9 +21,9 @@ import {
   query,
   where,
 } from "firebase/firestore";
-import Sizes_ from "../util/Sizes";
-import StrongPoints from "../util/enum/strongPoints";
-import LoadingOverlay from "../components/ui/LoadingOverlay";
+import Sizes_ from "../../util/Sizes";
+import StrongPoints from "../../util/enum/strongPoints";
+import LoadingOverlay from "../../components/ui/LoadingOverlay";
 
 const chartConfig = {
   backgroundGradientFrom: "white", //"#1E2923",
@@ -199,7 +199,7 @@ const getProgressChart = (arrayEncuestas = [], setDataProgressChart) => {
   setDataProgressChart(data);
 };
 
-const EstadisticaEncuestas = () => {
+const EstadisticaEncuestasScreen = () => {
   const [loading, setLoading] = useState(false);
   const [estadisticas, setEstadisticas] = useState([]);
   const [dataLineChart, setDataLineChart] = useState({
@@ -398,4 +398,4 @@ const styles = StyleSheet.create({
     marginVertical: 0,
   },
 });
-export default EstadisticaEncuestas;
+export default EstadisticaEncuestasScreen;

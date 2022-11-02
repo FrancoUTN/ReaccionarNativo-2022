@@ -9,18 +9,18 @@ import {
   Platform,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import { Colors } from "../constants/styles";
-import Sizes_ from "../util/Sizes";
+import { Colors } from "../../constants/styles";
+import Sizes_ from "../../util/Sizes";
 import { AntDesign, Entypo, SimpleLineIcons } from "@expo/vector-icons";
 import { Input } from "react-native-elements";
 import { Slider } from "react-native-range-slider-expo";
 import RadioButtonRN from "radio-buttons-react-native-expo";
 import Checkbox from "expo-checkbox";
 import { Picker } from "@react-native-picker/picker";
-import Button from "../components/ui/Button";
-import Camara from "../components/altas/Camara";
-import SurveyType from "../util/enum/surveyType";
-import StrongPoints from "../util/enum/strongPoints";
+import Button from "../../components/ui/Button";
+import Camara from "../../components/altas/Camara";
+import SurveyType from "../../util/enum/surveyType";
+import StrongPoints from "../../util/enum/strongPoints";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import {
   addDoc,
@@ -28,10 +28,10 @@ import {
   getFirestore,
   updateDoc,
 } from "firebase/firestore";
-import LoadingOverlay from "../components/ui/LoadingOverlay";
-import { vibrationError } from "../util/VibrationError";
+import LoadingOverlay from "../../components/ui/LoadingOverlay";
+import { vibrationError } from "../../util/VibrationError";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-const Encuestas = () => {
+const EncuestaScreen = () => {
   const [tomarFoto, setTomarFoto] = useState(false);
   const [fotos, setFotos] = useState([]);
   const [valueRange, setValueRange] = useState(0);
@@ -255,7 +255,7 @@ const Encuestas = () => {
             }}
           >
             <Image
-              source={require("../../assets/encuestas/encuestaCliente.png")}
+              source={require("../../../assets/encuestas/encuestaCliente.png")}
               style={{ width: "100%", height: "100%", resizeMode: "contain" }}
             />
           </View>
@@ -535,4 +535,4 @@ const styles = StyleSheet.create({
     fontSize: Sizes_.small - 1,
   },
 });
-export default Encuestas;
+export default EncuestaScreen;

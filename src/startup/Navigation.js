@@ -26,8 +26,8 @@ import MenuScreen from "../screens/specific/MenuScreen";
 import PedidoAgregadoScreen from "../screens/specific/PedidoAgregadoScreen";
 import PedidosScreen from "../screens/specific/PedidosScreen";
 import PreRegistroScreen from "../screens/specific/PreRegistroScreen";
-import Encuestas from "../screens/Encuestas";
-import EstadisticaEncuestas from "../screens/EstadisticaEncuestas";
+import EncuestaScreen from "../screens/specific/EncuestaScreen";
+import EstadisticaEncuestasScreen from "../screens/specific/EstadisticaEncuestasScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -41,15 +41,6 @@ export default function Navigation() {
     </NavigationContainer>
   );
 }
-/*
-<Stack.Screen
-        name="Encuestas"
-        component={Encuestas}
-        options={{
-          headerShown: false,
-        }}
-      />
-*/
 
 function AuthStack() {
   return (
@@ -60,21 +51,6 @@ function AuthStack() {
         contentStyle: { backgroundColor: Colors.primary100 },
       }}
     >
-      {/* <Stack.Screen
-        name="Estadisticas"
-        component={EstadisticaEncuestas}
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name="Encuestas"
-        component={Encuestas}
-        options={{
-          headerShown: false,
-        }}
-      /> */}
-
       <Stack.Screen
         name="Login"
         component={LoginScreen}
@@ -188,6 +164,14 @@ function AuthenticatedStack() {
               title: "Alta de empleado",
             }}
           />
+          <Stack.Screen
+            name="Estadisticas"
+            component={EstadisticaEncuestasScreen}
+            options={{
+              ...opcionesTipicas,
+              title: "Estadísticas",
+            }}
+          />
         </>
       );
       break;
@@ -294,6 +278,22 @@ function AuthenticatedStack() {
             component={ChatScreen}
             options={opcionesTipicas}
           />
+          <Stack.Screen
+            name="Estadisticas"
+            component={EstadisticaEncuestasScreen}
+            options={{
+              ...opcionesTipicas,
+              title: "Estadísticas",
+            }}
+          />
+          <Stack.Screen
+            name="Encuesta"
+            component={EncuestaScreen}
+            options={{
+              ...opcionesTipicas,
+              title: "Encuesta",
+            }}
+          />
         </>
       );
       break;
@@ -333,6 +333,22 @@ function AuthenticatedStack() {
             name="Chat"
             component={ChatScreen}
             options={opcionesTipicas}
+          />
+          <Stack.Screen
+            name="EstadisticaEncuestas"
+            component={EstadisticaEncuestasScreen}
+            options={{
+              ...opcionesTipicas,
+              title: "Estadísticas",
+            }}
+          />
+          <Stack.Screen
+            name="Encuesta"
+            component={EncuestaScreen}
+            options={{
+              ...opcionesTipicas,
+              title: "Encuesta",
+            }}
           />
         </>
       );

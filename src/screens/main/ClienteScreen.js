@@ -30,6 +30,14 @@ export default function ClienteScreen({ navigation }) {
 		navigation.navigate({ name: 'Chat'});
 	}
 
+	function onResponderEncuestaPressHandler() {
+		navigation.navigate({ name: "Encuesta" });
+	}
+
+	function onVerEncuestasPressHandler() {
+		navigation.navigate({ name: "EstadisticaEncuestas" });
+	}
+
 	function onPressHandler() { // Temporal
 		console.log("Apretado.");
 	}
@@ -53,14 +61,14 @@ export default function ClienteScreen({ navigation }) {
 				Estado de mi pedido
 			</Apretable>
 			<Apretable
-				onPress={onPressHandler}
-				desactivado={miEstado != 'con pedido confirmado'}
+				onPress={onResponderEncuestaPressHandler}
+				// desactivado={miEstado != 'con pedido confirmado'}
 			>
 				Responder encuesta
 			</Apretable>
 			<Apretable
-				onPress={onPressHandler}
-				desactivado={miEstado != 'encuestado'}
+				onPress={onVerEncuestasPressHandler}
+				// desactivado={miEstado != 'encuestado'}
 			>
 				Ver encuestas
 			</Apretable>
@@ -74,6 +82,10 @@ export default function ClienteScreen({ navigation }) {
 				onPress={onPressHandler}
 			>
 				Reservar
+			</Apretable><Apretable
+				onPress={onPressHandler}
+			>
+				Jugar
 			</Apretable>
 			<Apretable
 				onPress={onPressHandler}
