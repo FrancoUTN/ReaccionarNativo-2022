@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
     },
     itemIcono: {
         marginHorizontal: 10,        
-        backgroundColor: 'green',
+        backgroundColor: Colors.success,
         borderRadius: 10,
         padding: 10
     },

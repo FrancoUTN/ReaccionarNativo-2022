@@ -3,6 +3,8 @@ export const Colors = {
   primary500: '#774936',
   primary800: '#3C0000',
   error100: '#F5FDC6',
-  error500: '#FB8B24',
-  success: '#33673B'
+  error300: '#FFADAD',
+  error500: '#B00000',
+  cancelar: '#FF0A0A',
+  success: '#157F1F',
 }

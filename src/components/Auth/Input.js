@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     fontSize: 18
   },
   labelInvalid: {
-    color: Colors.error500,
+    // color: Colors.error500,
   },
   input: {
     paddingVertical: 8,
@@ -49,6 +49,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   inputInvalid: {
-    backgroundColor: Colors.error100,
+    backgroundColor: Colors.error300,
   },
 });

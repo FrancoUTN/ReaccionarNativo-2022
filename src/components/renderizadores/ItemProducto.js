@@ -90,7 +90,7 @@ export default function ItemProducto({ item, onCantidadModificada }) {
                             <Ionicons
                                 name='remove-circle'
                                 size={42}
-                                color='red'
+                                color={Colors.cancelar}
                             />
                         </Pressable>
                         <View style={styles.viewCantidad}>
@@ -107,7 +107,7 @@ export default function ItemProducto({ item, onCantidadModificada }) {
                             <Ionicons
                                 name='add-circle'
                                 size={42}
-                                color='green'
+                                color={Colors.success}
                             />
                         </Pressable>
                     </View>

@@ -237,7 +237,7 @@ const styles = StyleSheet.create({
         marginLeft: 10
     },
     pressablePedir: {
-        backgroundColor: 'green',
+        backgroundColor: Colors.success,
         paddingVertical: 5,
         paddingHorizontal: 15,
         borderRadius: 8,

@@ -74,7 +74,7 @@ function AuthStack() {
           presentation: "modal",
           headerStyle: { backgroundColor: Colors.error500 },
           headerTintColor: "white",
-          contentStyle: { backgroundColor: Colors.error100 },
+          contentStyle: { backgroundColor: Colors.error300 },
         }}
       >
         <Stack.Screen
@@ -342,7 +342,7 @@ function AuthenticatedStack() {
           presentation: "modal",
           headerStyle: { backgroundColor: Colors.error500 },
           headerTintColor: "white",
-          contentStyle: { backgroundColor: Colors.error100 },
+          contentStyle: { backgroundColor: Colors.error300 },
         }}
       >
         <Stack.Screen
