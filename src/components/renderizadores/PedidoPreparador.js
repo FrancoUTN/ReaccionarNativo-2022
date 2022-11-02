@@ -1,78 +1,211 @@
-import { useContext, useState } from "react";
+import { doc, getFirestore, updateDoc } from "firebase/firestore";
+import { useContext, useEffect, useState } from "react";
 import { ActivityIndicator, Image, Pressable, StyleSheet, Text, View } from "react-native";
 
 import { Colors } from "../../constants/styles";
 import { AuthContext } from "../../store/auth-context";
 import Input from "../Auth/Input";
 
-export default function PedidoPreparador({ item, onPress }) {
+export default function PedidoPreparador({ item }) {
     const miPerfil = useContext(AuthContext).perfil;
     const miTipo = miPerfil == 'cocinero' ? 'plato' : 'bebida';
     const [cargandoImagen, setCargandoImagen] = useState(true);
-    const [demoraEstimada, setDemoraEstimada] = useState('');
+    const [demoraEstimadaTextual, setDemoraEstimadaTextual] = useState('');
+    const [demoraIsInvalid, setDemoraIsInvalid] = useState(false);
+    const [funcionDelBoton, setFuncionDelBoton] = useState('');
 
-    let yaTomeElPedido = false;
-    if (miPerfil == 'cocinero') {
-        if (item.demoraEstimadaPlatos) {
-            yaTomeElPedido = true;
-        }
-    }
-    else {
-        if (item.demoraEstimadaBebidas) {
-            yaTomeElPedido = true;
-        }
-    }
-
-    let textoBoton = '';
-    let botonApretable = false;
-    switch (item.estado) {
-        case 'pendiente':
-            textoBoton = 'Tomar pedido';
-            botonApretable = true;
-            break;
-        case 'en preparación':
-            textoBoton = yaTomeElPedido ? 'Finalizar' : 'Tomar pedido';
-            botonApretable = true;
-            break;
-        case 'platos listos':
-            if (miPerfil == 'cocinero') {
-                textoBoton = 'Finalizado';
-                botonApretable = false;
+    useEffect(
+        () => {
+            if (item.contenido == 'mixto') {
+                if (miPerfil == 'cocinero') {
+                    if (item.demoraRealPlatos) {
+                        setFuncionDelBoton('finalizado');
+                    }
+                    else {
+                        if (item.demoraEstimadaPlatos) {
+                            setFuncionDelBoton('finalizarPlatos');
+                        }
+                        else {
+                            setFuncionDelBoton('tomarPlatos');
+                        }
+                    }
+                }
+                else {
+                    if (item.demoraRealBebidas) {
+                        setFuncionDelBoton('finalizado');
+                    }
+                    else {
+                        if (item.demoraEstimadaBebidas) {
+                            setFuncionDelBoton('finalizarBebidas');
+                        }
+                        else {
+                            setFuncionDelBoton('tomarBebidas');
+                        }
+                    }
+                }
             }
             else {
-                textoBoton = yaTomeElPedido ? 'Finalizar' : 'Tomar pedido';
-                botonApretable = true;
+                if (item.demoraRealUnivoco) {
+                    setFuncionDelBoton('finalizado');
+                }
+                else {
+                    if (item.demoraEstimadaUnivoco) {
+                        setFuncionDelBoton('finalizarUnivoco');
+                    }
+                    else {
+                        setFuncionDelBoton('tomarUnivoco');
+                    }
+                }
             }
-            break;
-        case 'bebidas listas':
-            if (miPerfil == 'bartender') {
-                textoBoton = 'Finalizado';
-                botonApretable = false;
+        },
+    [item]);
+
+    function onTomarPressHandler() {
+        const demoraEstimadaNumerica = Number(demoraEstimadaTextual);
+        if (demoraEstimadaNumerica <= 0) {
+            setDemoraIsInvalid(true);
+        }
+        else {
+            setDemoraIsInvalid(false);
+            let nuevosDatos = {};
+            switch(funcionDelBoton) {
+                case 'tomarUnivoco':
+                    nuevosDatos = {
+                        demoraEstimadaUnivoco: demoraEstimadaNumerica,
+                        estado: 'en preparación'
+                    };
+                    break;
+                case 'tomarPlatos':
+                    if (item.demoraEstimadaBebidas) {
+                        nuevosDatos = {
+                            demoraEstimadaPlatos: demoraEstimadaNumerica
+                        };
+                    }
+                    else {
+                        nuevosDatos = {
+                            demoraEstimadaPlatos: demoraEstimadaNumerica,
+                            estado: 'en preparación'
+                        };
+                    }
+                    break;
+                case 'tomarBebidas':
+                    if (item.demoraEstimadaPlatos) {
+                        nuevosDatos = {
+                            demoraEstimadaBebidas: demoraEstimadaNumerica
+                        };
+                    }
+                    else {
+                        nuevosDatos = {
+                            demoraEstimadaBebidas: demoraEstimadaNumerica,
+                            estado: 'en preparación'
+                        };
+                    }
+                    break;
             }
-            else {
-                textoBoton = yaTomeElPedido ? 'Finalizar' : 'Tomar pedido';
-                botonApretable = true;
-            }
-            break;
-        default:
-            textoBoton = 'Finalizado';
-            botonApretable = false;
+            actualizarDocumento(nuevosDatos);
+        }
     }
+
+    function onFinalizarPressHandler() {      
+        let nuevosDatos = {};
+        switch(funcionDelBoton) {
+            case 'finalizarUnivoco':
+                nuevosDatos = {
+                    demoraRealUnivoco: 10, // Provisorio
+                    estado: 'listo'
+                };
+                break;
+            case 'finalizarPlatos':
+                if (item.demoraRealBebidas) {
+                    nuevosDatos = {
+                        demoraRealPlatos: 20, // Provisorio
+                        estado: 'listo'
+                    };
+                }
+                else {
+                    nuevosDatos = {
+                        demoraRealPlatos: 20, // Provisorio
+                    };
+                }
+                break;
+            case 'finalizarBebidas':
+                if (item.demoraRealPlatos) {
+                    nuevosDatos = {
+                        demoraRealBebidas: 5, // Provisorio
+                        estado: 'listo'
+                    };
+                }
+                else {
+                    nuevosDatos = {
+                        demoraRealBebidas: 5, // Provisorio
+                    };
+                }
+                break;
+        };
+        actualizarDocumento(nuevosDatos);
+    }
+
+    function actualizarDocumento(nuevosDatos) {
+        const docRef = doc(getFirestore(), 'pedidos', item.id);
+        updateDoc(docRef, nuevosDatos);
+    }
+
+    let boton = <></>
+    switch(funcionDelBoton) {
+        case 'tomarUnivoco':
+        case 'tomarPlatos':
+        case 'tomarBebidas':
+            boton = (
+                <Pressable
+                    style={({ pressed }) => [styles.pressable, pressed && { opacity: 0.7 }]}
+                    onPress={ onTomarPressHandler }
+                >
+                    <Text style={styles.textPressable}>
+                        Tomar pedido
+                    </Text>
+                </Pressable>
+            );
+            break;
+        case 'finalizarUnivoco':
+        case 'finalizarPlatos':
+        case 'finalizarBebidas':
+            boton = (
+                <Pressable
+                    style={({ pressed }) => [styles.pressable, pressed && { opacity: 0.7 }]}
+                    onPress={ onFinalizarPressHandler }
+                >
+                    <Text style={styles.textPressable}>
+                        Finalizar pedido
+                    </Text>
+                </Pressable>
+            );
+            break;
+        case 'finalizado':
+            boton = (
+                <Pressable
+                    style={[styles.pressable, { opacity: 0.6 }]}
+                >
+                    <Text style={styles.textPressable}>
+                        Finalizado
+                    </Text>
+                </Pressable>
+            );
+            break;
+    };
 
     let renderizar = false;
     const arrayDeProductos = item.metaProductos.map(
-        (producto, index) => {
-            if (producto.producto.tipo === miTipo) {
+        (metaProducto, index) => {
+            if (metaProducto.producto.tipo === miTipo) {
                 renderizar = true;
                 return (
                     <Text key={index} style={styles.textDetallesContenido}>
-                        {producto.cantidad}x {producto.producto.nombre}
+                        {metaProducto.cantidad}x {metaProducto.producto.nombre}
                     </Text>
                 );
             }
         }
     );
-
     if (!renderizar) {
         return <></>;
     }
@@ -105,40 +238,20 @@ export default function PedidoPreparador({ item, onPress }) {
                 </View>
             </View>
             {
-                yaTomeElPedido
-                ||
+                funcionDelBoton.includes('tomar')
+                &&
                 <View style={styles.viewInput}>
                     <Input
                         label="Demora estimada de elaboración:"
-                        onUpdateValue={setDemoraEstimada}
-                        value={demoraEstimada}
+                        onUpdateValue={setDemoraEstimadaTextual}
+                        value={demoraEstimadaTextual}
                         keyboardType="numeric"
+                        isInvalid={demoraIsInvalid}
                     />
                 </View>
             }
             {
-                botonApretable ?
-                    <Pressable
-                        style={({ pressed }) => [styles.pressable, pressed && { opacity: 0.7 }]}
-                        onPress={() => onPress(
-                            item.id,
-                            item.estado,
-                            item.contenido,
-                            demoraEstimada
-                        )}
-                    >
-                        <Text style={styles.textPressable}>
-                            {textoBoton}
-                        </Text>
-                    </Pressable>
-                    :
-                    <Pressable
-                        style={[styles.pressable, { opacity: 0.6 }]}
-                    >
-                        <Text style={styles.textPressable}>
-                            {textoBoton}
-                        </Text>
-                    </Pressable>
+                boton
             }
         </View>
     );
