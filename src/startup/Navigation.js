@@ -10,26 +10,6 @@ import IconButton from "../components/ui/IconButton";
 import RegistroScreen from "../screens/create/RegistroScreen";
 import AdminScreen from "../screens/main/AdminScreen";
 import LoadingOverlay from "../components/ui/LoadingOverlay";
-<<<<<<< HEAD
-import ListadoClientesScreen from "../screens/ListadoClientesScreen";
-import AnonimoScreen from "../screens/AnonimoScreen";
-import BotonEscanearScreen from "../screens/BotonEscanearScreen";
-import AltaMesaScreen from "../screens/AltaMesaScreen";
-import MesaAgregadaScreen from "../screens/MesaAgregadaScreen";
-import MetreScreen from "../screens/MetreScreen";
-import ClienteScreen from "../screens/ClienteScreen";
-import ChatScreen from "../screens/ChatScreen";
-import AltaEmpleadoScreen from "../screens/AltaEmpleadoScreen";
-import MozoScreen from "../screens/MozoScreen";
-import PreparadorScreen from "../screens/PreparadorScreen";
-import AltaProductoScreen from "../screens/AltaProductoScreen";
-import MenuScreen from "../screens/MenuScreen";
-import PedidoAgregadoScreen from "../screens/PedidoAgregadoScreen";
-import PedidosScreen from "../screens/PedidosScreen";
-import PreRegistroScreen from "../screens/PreRegistroScreen";
-import Encuestas from "../screens/Encuestas";
-import EstadisticaEncuestas from "../screens/EstadisticaEncuestas";
-=======
 import ListadoClientesScreen from "../screens/specific/ListadoClientesScreen";
 import AnonimoScreen from "../screens/main/AnonimoScreen";
 import BotonEscanearScreen from "../screens/specific/BotonEscanearScreen";
@@ -46,7 +26,8 @@ import MenuScreen from "../screens/specific/MenuScreen";
 import PedidoAgregadoScreen from "../screens/specific/PedidoAgregadoScreen";
 import PedidosScreen from "../screens/specific/PedidosScreen";
 import PreRegistroScreen from "../screens/specific/PreRegistroScreen";
->>>>>>> main
+import Encuestas from "../screens/Encuestas";
+import EstadisticaEncuestas from "../screens/EstadisticaEncuestas";
 
 const Stack = createNativeStackNavigator();
 
