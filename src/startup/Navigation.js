@@ -27,6 +27,7 @@ import PedidoAgregadoScreen from "../screens/PedidoAgregadoScreen";
 import PedidosScreen from "../screens/PedidosScreen";
 import PreRegistroScreen from "../screens/PreRegistroScreen";
 import Encuestas from "../screens/Encuestas";
+import EstadisticaEncuestas from "../screens/EstadisticaEncuestas";
 
 const Stack = createNativeStackNavigator();
 
@@ -40,6 +41,15 @@ export default function Navigation() {
     </NavigationContainer>
   );
 }
+/*
+<Stack.Screen
+        name="Encuestas"
+        component={Encuestas}
+        options={{
+          headerShown: false,
+        }}
+      />
+*/
 
 function AuthStack() {
   return (
@@ -51,12 +61,20 @@ function AuthStack() {
       }}
     >
       <Stack.Screen
+        name="Estadisticas"
+        component={EstadisticaEncuestas}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
         name="Encuestas"
         component={Encuestas}
         options={{
           headerShown: false,
         }}
       />
+
       <Stack.Screen
         name="Login"
         component={LoginScreen}
