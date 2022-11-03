@@ -171,7 +171,7 @@ export default function MenuScreen({ navigation }) {
         }
     }
 
-    if (!productos) {
+    if (productos.length <= 0) {
         return <LoadingOverlay message={'Cargando productos...'} />
     }    
     if (pidiendo) {

@@ -153,7 +153,7 @@ function AuthContent({ isLogin, onAuthenticate }) {
           onPressItem={(name) => onPressItemHandler(name)}
         />
       </View>
-      <Text style={styles.version}>version: {appJson.expo.version}</Text>
+      <Text style={styles.version}>Versión: {appJson.expo.version}</Text>
     </>
   );
 }

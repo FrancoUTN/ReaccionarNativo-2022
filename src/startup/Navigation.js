@@ -29,6 +29,7 @@ import PreRegistroScreen from "../screens/specific/PreRegistroScreen";
 import EncuestaScreen from "../screens/specific/EncuestaScreen";
 import EstadisticaEncuestasScreen from "../screens/specific/EstadisticaEncuestasScreen";
 import EstadoPedidoScreen from "../screens/specific/EstadoPedidoScreen";
+import { View } from "react-native";
 
 const Stack = createNativeStackNavigator();
 
@@ -44,6 +45,34 @@ export default function Navigation() {
 }
 
 function AuthStack() {
+  const authCtx = useContext(AuthContext);
+  const soundOnIcon = (
+    <IconButton
+      icon="volume-high"
+      color="white"
+      size={24}
+      onPress={ authCtx.alternarSonidos }
+    />
+  );
+  const soundOffIcon = (
+    <IconButton
+      icon="volume-mute"
+      color="white"
+      size={24}
+      onPress={ authCtx.alternarSonidos }
+    />
+  );
+  const opcionesTipicas = {
+    headerRight: () => (
+      <>
+        {
+          authCtx.sonidosDesactivados ?
+          soundOffIcon : soundOnIcon
+        }
+      </>
+    ),
+  };
+
   return (
     <Stack.Navigator
       screenOptions={{
@@ -56,6 +85,7 @@ function AuthStack() {
         name="Login"
         component={LoginScreen}
         options={{
+          ...opcionesTipicas,
           title: "Inicia sesión",
         }}
       />
@@ -63,6 +93,7 @@ function AuthStack() {
         name="Registro"
         component={RegistroScreen}
         options={{
+          ...opcionesTipicas,
           title: "Registro",
         }}
       />
@@ -77,7 +108,10 @@ function AuthStack() {
         <Stack.Screen
           name="Modal"
           component={ModalScreen}
-          options={{ title: "Error" }}
+          options={{
+            ...opcionesTipicas,
+            title: "Error"
+          }}
         />
       </Stack.Group>
     </Stack.Navigator>
@@ -102,13 +136,43 @@ function AuthenticatedStack() {
       color="white"
       size={24}
       onPress={() => {
-        playSound();
+        if (!authCtx.sonidosDesactivados) {
+          playSound();
+        }
         authCtx.logout();
       }}
     />
   );
+  const soundOnIcon = (
+    <IconButton
+      icon="volume-high"
+      color="white"
+      size={24}
+      onPress={ authCtx.alternarSonidos }
+    />
+  );
+  const soundOffIcon = (
+    <IconButton
+      icon="volume-mute"
+      color="white"
+      size={24}
+      onPress={ authCtx.alternarSonidos }
+    />
+  );
   const opcionesTipicas = {
-    headerRight: () => logoutIcon,
+    headerRight: () => (
+      <View style={{
+        flexDirection: 'row',
+        width: 80,
+        justifyContent: 'space-between'
+      }}>
+        {
+          authCtx.sonidosDesactivados ?
+          soundOffIcon : soundOnIcon
+        }
+        { logoutIcon }
+      </View>
+    ),
   };
   let retorno = <></>;
 

@@ -15,8 +15,10 @@ Notifications.setNotificationHandler({
 export const AuthContext = createContext({
   email: '',
   perfil: '',
+  sonidosDesactivados: false,
   authenticate: (email, perfil) => { },
   logout: () => { },
+  alternarSonidos: () => { },
 });
 
 function AuthContextProvider({ children }) {
@@ -25,6 +27,7 @@ function AuthContextProvider({ children }) {
   const responseListener = useRef();
   const [email, setEmail] = useState();
   const [perfil, setPerfil] = useState();
+  const [sonidosDesactivados, setSonidosDesactivados] = useState();
 
   useEffect(() => {
     return () => {
@@ -44,11 +47,17 @@ function AuthContextProvider({ children }) {
     setPerfil(null);
   }
 
+  function alternarSonidos() {
+    setSonidosDesactivados(estadoPrevio => !estadoPrevio);
+  }
+  
   const value = {
     email: email,
     perfil: perfil,
+    sonidosDesactivados: sonidosDesactivados,
     authenticate: authenticate,
     logout: logout,
+    alternarSonidos: alternarSonidos,
   };
 
   function updateNotificationToken(uid) {

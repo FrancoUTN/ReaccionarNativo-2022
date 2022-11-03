@@ -1,4 +1,4 @@
-import { doc, getFirestore, updateDoc } from "firebase/firestore";
+import { doc, getDoc, getFirestore, updateDoc } from "firebase/firestore";
 import { useState } from "react";
 import { ActivityIndicator, Image, Pressable, StyleSheet, Text, View } from "react-native";
 
@@ -9,10 +9,16 @@ export default function PedidoMozo({ item }) {
 
     let textoBoton = '';
     let botonApretable = false;
+    let puedoRechazar = false;
     switch(item.estado) {
         case 'a confirmar':
             textoBoton = 'Confirmar pedido';
             botonApretable = true;
+            puedoRechazar = true;
+            break;
+        case 'rechazado':
+            textoBoton = 'Rechazado';
+            botonApretable = false;
             break;
         case 'confirmado':
             textoBoton = 'Confirmado';
@@ -34,17 +40,13 @@ export default function PedidoMozo({ item }) {
             textoBoton = 'Pedido abonado';
             botonApretable = false;
     }
-
-    function onPressHandler() {
+    
+    async function onPressHandler() {
         let nuevosDatosPedido = {};
-        let nuevosDatosUsuario = {};
         switch(item.estado) {
             case 'a confirmar':
                 nuevosDatosPedido = {
                     estado: 'confirmado'
-                };
-                nuevosDatosUsuario = {
-                    estado: 'con pedido confirmado'
                 };
                 break;
             case 'entregado':
@@ -57,9 +59,25 @@ export default function PedidoMozo({ item }) {
                 break;
         }
         const docPedidoRef = doc(getFirestore(), 'pedidos', item.id);
-        const docUsuarioRef = doc(getFirestore(), 'usuarios', item.idCliente);
         updateDoc(docPedidoRef, nuevosDatosPedido);
+        const docUsuarioRef = doc(getFirestore(), 'usuarios', item.idCliente);
         updateDoc(docUsuarioRef, nuevosDatosUsuario);
+
+        // Libero mesa también
+        const docUsuario = await getDoc(docUsuarioRef);
+        const mesa = docUsuario.data().mesa;
+        if (mesa) {
+            const docMesaRef = doc(getFirestore(), 'mesas', mesa);
+            updateDoc(docMesaRef, { cliente: '' });
+        }
+    }
+
+    function onRechazarPressHandler() {
+        const nuevosDatosPedido = {
+            estado: 'rechazado'
+        };
+        const docPedidoRef = doc(getFirestore(), 'pedidos', item.id);
+        updateDoc(docPedidoRef, nuevosDatosPedido);
     }
 
     return (
@@ -111,10 +129,26 @@ export default function PedidoMozo({ item }) {
                 </Pressable>
                 :
                 <Pressable
-                    style={ [styles.pressable, {opacity: 0.6}] }
+                    style={[
+                        item.estado == 'rechazado' ? styles.pressableRojo : styles.pressable,
+                            {opacity: 0.6}
+                    ]}
                 >
                     <Text style={styles.textPressable}>
                         { textoBoton }
+                    </Text>
+                </Pressable>
+            }
+            {
+                puedoRechazar &&
+                <Pressable
+                    style={ ({pressed}) => (
+                        [styles.pressableRojo, {marginTop: 5}, pressed && {opacity: 0.7}]
+                    )}
+                    onPress={ onRechazarPressHandler }
+                >
+                    <Text style={styles.textPressable}>
+                        Rechazar pedido
                     </Text>
                 </Pressable>
             }
@@ -135,6 +169,13 @@ const styles = StyleSheet.create({
     },
     pressable: {
         backgroundColor: Colors.success,
+        padding: 10,
+        margin: 20,
+        marginBottom: 15,
+        borderRadius: 4,
+    },
+    pressableRojo: {
+        backgroundColor: Colors.error500,
         padding: 10,
         margin: 20,
         marginBottom: 15,

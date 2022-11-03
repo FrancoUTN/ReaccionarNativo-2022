@@ -58,6 +58,10 @@ export default function EstadoPedidoScreen() {
             textoBoton = 'A confirmar';
             botonApretable = false;
             break;
+        case 'rechazado':
+            textoBoton = 'Rechazado';
+            botonApretable = false;
+            break;
         case 'confirmado':
             textoBoton = 'Confirmado';
             botonApretable = false;
@@ -71,7 +75,7 @@ export default function EstadoPedidoScreen() {
             botonApretable = true;
             break;
         case 'entregado':
-            textoBoton = '¡Recibido!';
+            textoBoton = 'Entregado';
             botonApretable = false;
             break;
         case 'abonado': // Igual, no debería llegar hasta acá. Se libera antes
@@ -138,7 +142,10 @@ export default function EstadoPedidoScreen() {
                     </Pressable>
                     :
                     <Pressable
-                        style={ [styles.pressable, {opacity: 0.6}] }
+                        style={[
+                            item.estado == 'rechazado' ? styles.pressableRojo : styles.pressable,
+                            {opacity: 0.6}
+                        ]}
                     >
                         <Text style={styles.textPressable}>
                             { textoBoton }
@@ -180,6 +187,13 @@ const styles = StyleSheet.create({
     },
     pressable: {
         backgroundColor: Colors.success,
+        padding: 10,
+        margin: 20,
+        marginBottom: 15,
+        borderRadius: 4,
+    },
+    pressableRojo: {
+        backgroundColor: Colors.error500,
         padding: 10,
         margin: 20,
         marginBottom: 15,

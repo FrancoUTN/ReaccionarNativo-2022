@@ -2,10 +2,11 @@ import { getAuth } from 'firebase/auth';
 import { doc, getDoc, getFirestore, updateDoc } from 'firebase/firestore';
 import { useState } from 'react';
 import { StyleSheet, View, Text, Pressable } from 'react-native';
-import Escaner from '../../components/shared/Escaner';
-import LoadingOverlay from '../../components/ui/LoadingOverlay';
 
 import { Colors } from '../../constants/styles';
+import Apretable from '../../components/shared/Apretable';
+import Escaner from '../../components/shared/Escaner';
+import LoadingOverlay from '../../components/ui/LoadingOverlay';
 
 
 export default function BotonEscanearScreen({ navigation }) {
@@ -25,7 +26,7 @@ export default function BotonEscanearScreen({ navigation }) {
 		const userSnap = await getDoc(userRef);
 		const miEstado = userSnap.data().estado;
 		if (data == 'ingreso') {
-			await escaneoIngreso(miEstado);
+			setQrIngresoEscaneado(true);
 		}
 		else if (data.includes('mesa')) {
 			await escaneoMesa(data, miEstado);
@@ -39,11 +40,10 @@ export default function BotonEscanearScreen({ navigation }) {
 		setCargando(false);
 	}
 
-	async function escaneoIngreso(miEstado) {
-		await onSolicitarMesaPressHandler(miEstado);
-	}
-
-	async function onSolicitarMesaPressHandler(miEstado) {
+	async function onSolicitarMesaPressHandler() {
+		setCargando(true);
+		const userSnap = await getDoc(userRef);
+		const miEstado = userSnap.data().estado;
 		if (miEstado == 'libre') {
 			await actualizarEstado();
 			setMensajeOk('¡Ahora estás en la lista de espera!');
@@ -51,6 +51,12 @@ export default function BotonEscanearScreen({ navigation }) {
 		else {
 			setMensajeError('Usted ya está ' + miEstado + ".");
 		}
+		setQrIngresoEscaneado(false);
+		setCargando(false);
+	}
+
+	function onVerEncuestasPressHandler() {
+		navigation.navigate({ name: "EstadisticaEncuestas" });
 	}
 
 	function onCancelarHandler() {
@@ -115,6 +121,22 @@ export default function BotonEscanearScreen({ navigation }) {
                 onEscaneado={onEscaneadoHandler}
                 onCancelar={onCancelarHandler}
             />
+		);
+	}
+	if (qrIngresoEscaneado) {
+		return (
+			<View style={styles.container}>
+				<Apretable
+					onPress={onVerEncuestasPressHandler}
+				>
+					Ver encuestas
+				</Apretable>
+				<Apretable
+					onPress={onSolicitarMesaPressHandler}
+				>
+					Solicitar una mesa
+				</Apretable>
+			</View>
 		);
 	}
 	return (
