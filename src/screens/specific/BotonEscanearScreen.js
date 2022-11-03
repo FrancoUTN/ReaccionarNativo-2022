@@ -17,25 +17,39 @@ export default function BotonEscanearScreen({ navigation }) {
 	const [cargando, setCargando] = useState(false);
 	const [mensajeError, setMensajeError] = useState('');
 	const [mensajeOk, setMensajeOk] = useState('');
+	const [qrIngresoEscaneado, setQrIngresoEscaneado] = useState(false);
     
 	async function onEscaneadoHandler({ data }) {
 		setEscanear(false);
+		setCargando(true);
 		const userSnap = await getDoc(userRef);
 		const miEstado = userSnap.data().estado;
 		if (data == 'ingreso') {
-			if (miEstado == 'libre') {
-				await actualizarEstado();
-				setMensajeOk('¡Ahora estás en la lista de espera!');
-			}
-			else {
-				setMensajeError('Usted ya está ' + miEstado + ".");
-			}
+			await escaneoIngreso(miEstado);
 		}
 		else if (data.includes('mesa')) {
 			await escaneoMesa(data, miEstado);
 		}
+		else if (data.includes('propina')) {
+			// Completar
+		}
 		else {
 			setMensajeError('Qr inválido.');
+		}
+		setCargando(false);
+	}
+
+	async function escaneoIngreso(miEstado) {
+		await onSolicitarMesaPressHandler(miEstado);
+	}
+
+	async function onSolicitarMesaPressHandler(miEstado) {
+		if (miEstado == 'libre') {
+			await actualizarEstado();
+			setMensajeOk('¡Ahora estás en la lista de espera!');
+		}
+		else {
+			setMensajeError('Usted ya está ' + miEstado + ".");
 		}
 	}
 
@@ -51,9 +65,7 @@ export default function BotonEscanearScreen({ navigation }) {
 		return;
 	}
 	
-	async function escaneoMesa(mesa, miEstado) {
-		setCargando(true);
-		
+	async function escaneoMesa(mesa, miEstado) {		
 		if (miEstado == 'libre') {
 			setMensajeError('Debe anotarse a la lista de espera.');
 		}
@@ -92,7 +104,6 @@ export default function BotonEscanearScreen({ navigation }) {
 				});
 			}
 		}
-		setCargando(false);
 	}
 
 	if (cargando) {
@@ -156,18 +167,15 @@ const styles = StyleSheet.create({
 	textoBoton: {
 		color: 'white',
 		fontSize: 36,
-		fontFamily: 'Montserrat_400Regular'
 	},
 	textoError: {
 		color: Colors.error500,
 		fontSize: 20,
-		fontFamily: 'Montserrat_400Regular',
 		textAlign: 'center'
 	},	
 	textoOk: {
 		color: Colors.success,
 		fontSize: 20,
-		fontFamily: 'Montserrat_400Regular',
 		textAlign: 'center'
 	}
 });

@@ -233,7 +233,7 @@ const styles = StyleSheet.create({
     textImporte: {
         fontSize: 20,
         color: 'white',
-        fontFamily: 'Montserrat_500Medium',
+        fontWeight: '500',
         marginLeft: 10
     },
     pressablePedir: {
@@ -246,7 +246,6 @@ const styles = StyleSheet.create({
     textPedir: {
         fontSize: 20,
         color: 'white',
-        fontFamily: 'Montserrat_400Regular',
     },
     viewDemora: {
         flexDirection: 'row',
@@ -255,7 +254,6 @@ const styles = StyleSheet.create({
     textDemora: {
         fontSize: 20,
         color: 'white',
-        fontFamily: 'Montserrat_400Regular',
         marginLeft: 4
     }
 });

@@ -30,6 +30,10 @@ export default function ClienteScreen({ navigation }) {
 		navigation.navigate({ name: 'Chat'});
 	}
 
+	function onEstadoPedidoPressHandler() {
+		navigation.navigate({ name: "EstadoPedido" });
+	}
+
 	function onResponderEncuestaPressHandler() {
 		navigation.navigate({ name: "Encuesta" });
 	}
@@ -55,8 +59,8 @@ export default function ClienteScreen({ navigation }) {
 				Consultar al mozo
 			</Apretable>
 			<Apretable
-				onPress={onPressHandler}
-				desactivado={true}
+				onPress={onEstadoPedidoPressHandler}
+				// desactivado={miEstado != 'con pedido confirmado'}
 			>
 				Estado de mi pedido
 			</Apretable>

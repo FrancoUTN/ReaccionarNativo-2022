@@ -55,6 +55,5 @@ const styles = StyleSheet.create({
 	textoBoton: {
 		color: 'white',
 		fontSize: 26,
-		fontFamily: 'Montserrat_400Regular'
 	}
 });

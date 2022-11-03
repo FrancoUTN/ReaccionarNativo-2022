@@ -28,6 +28,7 @@ import PedidosScreen from "../screens/specific/PedidosScreen";
 import PreRegistroScreen from "../screens/specific/PreRegistroScreen";
 import EncuestaScreen from "../screens/specific/EncuestaScreen";
 import EstadisticaEncuestasScreen from "../screens/specific/EstadisticaEncuestasScreen";
+import EstadoPedidoScreen from "../screens/specific/EstadoPedidoScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -56,9 +57,6 @@ function AuthStack() {
         component={LoginScreen}
         options={{
           title: "Inicia sesión",
-          headerTitleStyle: {
-            fontFamily: "Montserrat_500Medium",
-          },
         }}
       />
       <Stack.Screen
@@ -66,9 +64,6 @@ function AuthStack() {
         component={RegistroScreen}
         options={{
           title: "Registro",
-          headerTitleStyle: {
-            fontFamily: "Montserrat_500Medium",
-          },
         }}
       />
       <Stack.Group
@@ -113,9 +108,6 @@ function AuthenticatedStack() {
     />
   );
   const opcionesTipicas = {
-    headerTitleStyle: {
-      fontFamily: "Montserrat_500Medium",
-    },
     headerRight: () => logoutIcon,
   };
   let retorno = <></>;
@@ -165,7 +157,7 @@ function AuthenticatedStack() {
             }}
           />
           <Stack.Screen
-            name="Estadisticas"
+            name="EstadisticaEncuestas"
             component={EstadisticaEncuestasScreen}
             options={{
               ...opcionesTipicas,
@@ -279,7 +271,15 @@ function AuthenticatedStack() {
             options={opcionesTipicas}
           />
           <Stack.Screen
-            name="Estadisticas"
+            name="EstadoPedido"
+            component={EstadoPedidoScreen}
+            options={{
+              ...opcionesTipicas,
+              title: "Pedido",
+            }}
+          />
+          <Stack.Screen
+            name="EstadisticaEncuestas"
             component={EstadisticaEncuestasScreen}
             options={{
               ...opcionesTipicas,
@@ -333,6 +333,14 @@ function AuthenticatedStack() {
             name="Chat"
             component={ChatScreen}
             options={opcionesTipicas}
+          />
+          <Stack.Screen
+            name="EstadoPedido"
+            component={EstadoPedidoScreen}
+            options={{
+              ...opcionesTipicas,
+              title: "Pedido",
+            }}
           />
           <Stack.Screen
             name="EstadisticaEncuestas"

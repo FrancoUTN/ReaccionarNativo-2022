@@ -103,7 +103,6 @@ const styles = StyleSheet.create({
         fontSize: 18,
         marginHorizontal: 10,
         textAlign: 'center',
-        fontFamily: 'Montserrat_400Regular'
     },
     iconosContainer: {
         flexDirection: 'row',

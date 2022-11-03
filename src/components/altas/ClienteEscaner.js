@@ -35,7 +35,7 @@ export default function ClienteEscaner({ dniEscaneado }) {
   };
 
   if (hasPermission === null) {
-    return <LoadingOverlay>Verificando permisos...</LoadingOverlay>;
+    return <LoadingOverlay message={'Verificando permisos...'} />;
   }
   if (hasPermission === false) {
     return <Text>Sin acceso a la cámara.</Text>;
@@ -102,7 +102,6 @@ const styles = StyleSheet.create({
     bottom: 0,
     right: 0,
 
-    fontFamily: 'Monda_400Regular',
     zIndex: 3,
     color: 'white',
     textAlign: 'center',

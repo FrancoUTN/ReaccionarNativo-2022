@@ -141,18 +141,18 @@ const styles = StyleSheet.create({
     },
     textNombre: {
         color: 'white',
-        fontFamily: 'Montserrat_500Medium',
+        fontWeight: '500',
         fontSize: 18,
         marginBottom: 5
     },
     textDescripcion: {
         color: 'white',
-        fontFamily: 'Montserrat_300Light_Italic',
+        fontWeight: '300',
+        fontStyle: "italic",
         fontSize: 12
     },
     textPrecioYTiempo: {
         color: 'white',
-        fontFamily: 'Montserrat_400Regular',
         fontSize: 16
     },
     viewIzquierda: {
@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
     },
     textCantidad: {
         color: 'white',
-        fontFamily: 'Montserrat_500Medium',
+        fontWeight: '500',
         textAlign: 'center',
         fontSize: 20,
         color: Colors.primary800,

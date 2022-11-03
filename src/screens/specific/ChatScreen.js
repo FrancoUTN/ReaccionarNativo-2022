@@ -195,7 +195,6 @@ const styles = StyleSheet.create({
   error: {
     color: Colors.error500,
     marginBottom: 4,
-    fontFamily: 'Montserrat_400Regular',
     textAlign: 'center'
   }
 });

@@ -221,7 +221,7 @@ const EncuestaScreen = () => {
     return <Camara fotoTomada={fotoTomadaHandler} />;
   }
   if (loading) {
-    return <LoadingOverlay>cargando ...</LoadingOverlay>;
+    return <LoadingOverlay message={'Cargando...'} />;
   }
   return (
     <KeyboardAwareScrollView

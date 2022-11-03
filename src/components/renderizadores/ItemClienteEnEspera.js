@@ -77,7 +77,6 @@ const styles = StyleSheet.create({
         fontSize: 18,
         marginHorizontal: 10,
         textAlign: 'center',
-        fontFamily: 'Montserrat_400Regular'
     },
     iconosContainer: {
         flexDirection: 'row',
@@ -92,6 +91,6 @@ const styles = StyleSheet.create({
     },
     asignarTexto: {
         color: 'white',
-        fontFamily: 'Montserrat_500Medium'
+        fontWeight: '500',
     }
 });
