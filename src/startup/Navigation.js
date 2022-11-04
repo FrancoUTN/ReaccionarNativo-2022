@@ -30,6 +30,7 @@ import EncuestaScreen from "../screens/specific/EncuestaScreen";
 import EstadisticaEncuestasScreen from "../screens/specific/EstadisticaEncuestasScreen";
 import EstadoPedidoScreen from "../screens/specific/EstadoPedidoScreen";
 import { View } from "react-native";
+import CuentaScreen from "../screens/specific/CuentaScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -352,6 +353,14 @@ function AuthenticatedStack() {
               title: "Encuesta",
             }}
           />
+          <Stack.Screen
+            name="Cuenta"
+            component={CuentaScreen}
+            options={{
+              ...opcionesTipicas,
+              title: "La cuenta",
+            }}
+          />
         </>
       );
       break;
@@ -414,6 +423,14 @@ function AuthenticatedStack() {
             options={{
               ...opcionesTipicas,
               title: "Encuesta",
+            }}
+          />
+          <Stack.Screen
+            name="Cuenta"
+            component={CuentaScreen}
+            options={{
+              ...opcionesTipicas,
+              title: "La cuenta",
             }}
           />
         </>

@@ -103,6 +103,10 @@ export default function PedidoMozo({ item }) {
       botonApretable = false;
       break;
     case "entregado":
+      textoBoton = "¡Entregado!";
+      botonApretable = false;
+      break;
+    case "cobrado":
       textoBoton = "Confirmar el pago";
       botonApretable = true;
       break;
@@ -125,7 +129,7 @@ export default function PedidoMozo({ item }) {
           }
         });
         break;
-      case "entregado":
+      case "cobrado":
         const docUsuarioRef = doc(getFirestore(), "usuarios", item.idCliente);
 
         // Libero la mesa ANTES:

@@ -13,7 +13,7 @@ export default function ClienteScreen({ navigation }) {
 	const userRef = doc(getFirestore(), 'usuarios', miUid);
     const [cargando1, setCargando1] = useState(true);
     const [cargando2, setCargando2] = useState(true);
-	const [cuentaSolicitada, setCuentaSolicitada] = useState(true);
+	const [cobrado, setCobrado] = useState(true);
 	const [libre, setLibre] = useState(true);
 	const [encuestado, setEncuestado] = useState(true);
     const [estadoPedido, setEstadoPedido] = useState();
@@ -22,7 +22,7 @@ export default function ClienteScreen({ navigation }) {
         return onSnapshot(userRef, qs => {
 			if (qs.exists()) {
 				if (qs.data().estado) {
-					setCuentaSolicitada(qs.data().estado == 'cuenta solicitada');
+					setCobrado(qs.data().estado == 'cobrado');
 					setLibre(qs.data().estado == 'libre');
 				}
 				else {
@@ -87,7 +87,7 @@ export default function ClienteScreen({ navigation }) {
 	}
 
 	function onPedirLaCuentaPressHandler() {
-		// navigation.navigate({ name: "Cuenta" });
+		navigation.navigate({ name: "Cuenta" });
 	}
 
 	function onPressHandler() { // Temporal
@@ -97,7 +97,7 @@ export default function ClienteScreen({ navigation }) {
 	if (cargando1 || cargando2) {
 		return <LoadingOverlay message={"Cargando..."}/>
 	}
-	if (cuentaSolicitada || libre) {
+	if (cobrado || libre) {
 		return (
 			<View style={styles.container}>
 				<Text>
@@ -140,7 +140,6 @@ export default function ClienteScreen({ navigation }) {
 					estadoPedido == 'a confirmar' ||
 					estadoPedido == 'rechazado' ||
 					estadoPedido == 'abonado'
-					// || cuentaSolicitada // No hace falta si está el otro return
 				}
 			>
 				Responder encuesta

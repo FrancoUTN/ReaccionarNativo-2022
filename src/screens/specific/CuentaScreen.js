@@ -12,15 +12,18 @@ import {
 import { useEffect } from "react";
 import { useState } from "react";
 import { ActivityIndicator, Image, Pressable, StyleSheet, Text, View } from "react-native";
+import Escaner from "../../components/shared/Escaner";
 
 import LoadingOverlay from "../../components/ui/LoadingOverlay";
 import { Colors } from "../../constants/styles";
 
-export default function EstadoPedidoScreen() {
+export default function CuentaScreen() {
     const miUid = getAuth().currentUser.uid;
     const [item, setItem] = useState();
-    const [cargandoPedido, setCargandoPedido] = useState(true);
+    const [cargando, setCargando] = useState(true);
     const [cargandoImagen, setCargandoImagen] = useState(true);
+    const [escanear, setEscanear] = useState(false);
+    const [mensajeError, setMensajeError] = useState("");
 
     useEffect(() => {
         const coleccion = collection(getFirestore(), 'pedidos');
@@ -34,7 +37,7 @@ export default function EstadoPedidoScreen() {
                     ...qs.docs[0].data()
                 };
                 setItem(pedidoTraido);
-                setCargandoPedido(false);
+                setCargando(false);
             }
             else {
                 console.log("Error: usuario sin pedidos.");
@@ -42,62 +45,71 @@ export default function EstadoPedidoScreen() {
         });
     }, []);
 
-    if (cargandoPedido) {
-        return <LoadingOverlay message={'Cargando pedido...'} />;
-    }
 
     function onPressHandler() {
-        const docPedidoRef = doc(getFirestore(), 'pedidos', item.id);
-        updateDoc(docPedidoRef, { estado: 'entregado' });
+        setMensajeError("");
+        if (!item.porcentajePropina) {
+            setEscanear(true);
+        }
+        else {
+            const docPedidoRef = doc(getFirestore(), 'pedidos', item.id);
+            updateDoc(docPedidoRef, { estado: 'cobrado' });
+        }
+    }
+
+    async function onEscaneadoHandler({ data }) {
+        setEscanear(false);
+        setCargando(true);
+        if (data.includes("propina")) {
+            const numeroPropina = Number(data.replace('propina', ''));
+            const docPedidoRef = doc(getFirestore(), 'pedidos', item.id);
+            updateDoc(docPedidoRef, { porcentajePropina: numeroPropina });
+        } else {
+          setMensajeError("Qr inválido.");
+        }
+        setCargando(false);
+    }
+    
+    function onCancelarHandler() {
+        setEscanear(false);
+    }
+
+    // return 1:
+    if (cargando) {
+        return <LoadingOverlay message={"Cargando..."} />;
     }
 
     let textoBoton = '';
     let botonApretable = false;
-    switch(item.estado) {
-        case 'a confirmar':
-            textoBoton = 'A confirmar';
-            botonApretable = false;
-            break;
-        case 'rechazado':
-            textoBoton = 'Rechazado';
-            botonApretable = false;
-            break;
-        case 'confirmado':
-            textoBoton = 'Confirmado';
-            botonApretable = false;
-            break;
-        case 'en preparación':
-            textoBoton = 'En preparación';
-            botonApretable = false;
-            break;
-        case 'listo':
-            textoBoton = 'Confirmar recepción';
+    if (item) {
+        if (item.porcentajePropina || item.porcentajePropina == 0) {
+            if (item.estado == 'entregado') {
+                textoBoton = 'Pagar';
+                botonApretable = true;
+            }
+            else {
+                textoBoton = '¡Gracias!'
+            }
+        }
+        else {
+            textoBoton = 'Agregar propina';
             botonApretable = true;
-            break;
-        case 'entregado':
-            textoBoton = 'Entregado';
-            botonApretable = false;
-            break;
-        case "cobrado":
-            textoBoton = "Cobrado";
-            botonApretable = false;
-            break;
-        case 'abonado': // Igual, no debería llegar hasta acá. Se libera antes
-            textoBoton = 'Pedido abonado';
-            botonApretable = false;
+        }
     }
 
+    // return 2:
+    if (escanear) {
+        return (
+            <Escaner
+                onEscaneado={onEscaneadoHandler}
+                onCancelar={onCancelarHandler}
+            />
+        );
+    }
+
+    // return 3:
     return (
         <View style={styles.viewSuperadora}>
-            <Text style={styles.tituloSuperior}>
-                ¡Hola!
-            </Text>
-            <Text style={styles.textoSuperior}>
-                Aquí podrás seguir el estado de tu pedido y confirmar su recepción cuando llegue a tu mesa.
-            </Text>
-            <Text style={styles.tituloSuperior}>
-                Tu orden:
-            </Text>
             <View style={styles.viewPrincipal}>
                 <View style={styles.viewRow}>
                     <View>
@@ -138,7 +150,7 @@ export default function EstadoPedidoScreen() {
                     botonApretable ?
                     <Pressable
                         style={ ({pressed}) => [styles.pressable, pressed && {opacity: 0.7}] }
-                        onPress={ onPressHandler }
+                        onPress={onPressHandler}
                     >
                         <Text style={styles.textPressable}>
                             { textoBoton }
@@ -147,7 +159,7 @@ export default function EstadoPedidoScreen() {
                     :
                     <Pressable
                         style={[
-                            item.estado == 'rechazado' ? styles.pressableRojo : styles.pressable,
+                            styles.pressable,
                             {opacity: 0.6}
                         ]}
                     >
@@ -157,47 +169,37 @@ export default function EstadoPedidoScreen() {
                     </Pressable>
                 }
             </View>
+            {!!mensajeError && (
+                <Text style={styles.textoError}>Error: {mensajeError}</Text>
+            )}
         </View>
     );
 }
 
 const styles = StyleSheet.create({
+    textoError: {
+      color: Colors.error500,
+      fontSize: 20,
+      textAlign: "center",
+    },
     viewSuperadora: {
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center'
     },
-    tituloSuperior: {
-        color: Colors.primary800,
-        fontSize: 48,
-        textAlign: 'center',
-    }, 
-    textoSuperior: {
-        color: Colors.primary800,
-        fontSize: 22,
-        textAlign: 'center',
-        marginHorizontal: 30,
-        marginVertical: 15
-    },
     viewPrincipal: {
         backgroundColor: Colors.primary800,
         width: 300,
-        marginVertical: 20,
-        borderRadius: 10,
-        overflow: 'hidden',
+        // marginVertical: 20,
+        borderRadius: 2,
+        // overflow: 'hidden',
+        flex: .8
     },
     viewRow: {
         flexDirection: 'row',
     },
     pressable: {
         backgroundColor: Colors.success,
-        padding: 10,
-        margin: 20,
-        marginBottom: 15,
-        borderRadius: 4,
-    },
-    pressableRojo: {
-        backgroundColor: Colors.error500,
         padding: 10,
         margin: 20,
         marginBottom: 15,
