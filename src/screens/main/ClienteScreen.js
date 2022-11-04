@@ -1,6 +1,7 @@
 import { getAuth } from "firebase/auth";
 import { collection, doc, getFirestore, onSnapshot, orderBy, query, where } from 'firebase/firestore';
 import { useState, useEffect } from 'react';
+import { Text } from "react-native";
 import { StyleSheet, View} from 'react-native';
 
 import Apretable from '../../components/shared/Apretable';
@@ -13,6 +14,7 @@ export default function ClienteScreen({ navigation }) {
     const [cargando1, setCargando1] = useState(true);
     const [cargando2, setCargando2] = useState(true);
 	const [cuentaSolicitada, setCuentaSolicitada] = useState(true);
+	const [libre, setLibre] = useState(true);
 	const [encuestado, setEncuestado] = useState(true);
     const [estadoPedido, setEstadoPedido] = useState();
 
@@ -21,6 +23,7 @@ export default function ClienteScreen({ navigation }) {
 			if (qs.exists()) {
 				if (qs.data().estado) {
 					setCuentaSolicitada(qs.data().estado == 'cuenta solicitada');
+					setLibre(qs.data().estado == 'libre');
 				}
 				else {
 					console.log("Error: sin estado de usuario.");
@@ -94,7 +97,7 @@ export default function ClienteScreen({ navigation }) {
 	if (cargando1 || cargando2) {
 		return <LoadingOverlay message={"Cargando..."}/>
 	}
-	if (cuentaSolicitada) {
+	if (cuentaSolicitada || libre) {
 		return (
 			<View style={styles.container}>
 				<Text>
@@ -109,7 +112,8 @@ export default function ClienteScreen({ navigation }) {
 				onPress={onMenuPressHandler}
 				desactivado={
 					estadoPedido &&
-					estadoPedido != 'rechazado'
+					estadoPedido != 'rechazado' &&
+					estadoPedido != 'abonado'
 				}
 			>
 				Menú
@@ -121,7 +125,10 @@ export default function ClienteScreen({ navigation }) {
 			</Apretable>
 			<Apretable
 				onPress={onEstadoPedidoPressHandler}
-				desactivado={!estadoPedido}
+				desactivado={
+					!estadoPedido ||
+					estadoPedido == 'abonado'
+				}
 			>
 				Estado de mi pedido
 			</Apretable>
@@ -130,7 +137,9 @@ export default function ClienteScreen({ navigation }) {
 				desactivado={
 					encuestado ||
 					!estadoPedido ||
-					estadoPedido == 'a confirmar'
+					estadoPedido == 'a confirmar' ||
+					estadoPedido == 'rechazado' ||
+					estadoPedido == 'abonado'
 					// || cuentaSolicitada // No hace falta si está el otro return
 				}
 			>
@@ -144,10 +153,7 @@ export default function ClienteScreen({ navigation }) {
 			</Apretable>
 			<Apretable
 				onPress={onPedirLaCuentaPressHandler}
-				desactivado={
-					!estadoPedido ||
-					estadoPedido != 'entregado'
-				}
+				desactivado={estadoPedido != 'entregado'}
 			>
 				Pedir la cuenta
 			</Apretable>

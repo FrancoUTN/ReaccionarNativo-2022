@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { getAuth } from "firebase/auth";
 import {
   ActivityIndicator,
   Image,
@@ -16,13 +15,11 @@ import {
   collection,
   onSnapshot,
   query,
-  where,
 } from "firebase/firestore";
 
 import { Colors } from "../../constants/styles";
 
 export default function PedidoMozo({ item }) {
-  const usuario = getAuth().currentUser;
   const [cargandoImagen, setCargandoImagen] = useState(true);
   const [usersCocina, setUsersCocina] = useState([]);
   useEffect(() => {
@@ -50,13 +47,13 @@ export default function PedidoMozo({ item }) {
     });
   }, []);
 
-  const sendPushNotification = async (token, tittle, body, data) => {
+  const sendPushNotification = async (token, title, body, data) => {
     //obtener el token
 
     return fetch("https://exp.host/--/api/v2/push/send", {
       body: JSON.stringify({
         to: token,
-        title: tittle,
+        title: title,
         body: body,
         data: data,
       }),
@@ -73,7 +70,7 @@ export default function PedidoMozo({ item }) {
         (await sendPushNotification(
           metre.token,
           " ❗️❗️ Nuevo pedido confirmado ❗️❗️ ",
-          `el Cliente ${usuario.email} ha hecho un pedido.`,
+          "Tienes un nuevo pedido pendiente de elaboración.",
           { data: "" }
         ).then((response) => {
           console.log("todo ok");
@@ -115,6 +112,7 @@ export default function PedidoMozo({ item }) {
   }
 
   async function onPressHandler() {
+    const docPedidoRef = doc(getFirestore(), "pedidos", item.id);
     let nuevosDatosPedido = {};
     switch (item.estado) {
       case "a confirmar":
@@ -128,21 +126,27 @@ export default function PedidoMozo({ item }) {
         });
         break;
       case "entregado":
+        const docUsuarioRef = doc(getFirestore(), "usuarios", item.idCliente);
+
+        // Libero la mesa ANTES:
+        const docUsuario = await getDoc(docUsuarioRef);
+        updateDoc(
+          doc(getFirestore(), "mesas", docUsuario.data().mesa),
+          { cliente: "" }
+        );
+
+        // Y luego, dejo al usuario sin mesa:
+        const nuevosDatosUsuario = {
+          estado: "libre",
+          mesa: ""
+        };
+        updateDoc(docUsuarioRef, nuevosDatosUsuario);
+
         nuevosDatosPedido = {
           estado: "abonado",
-        };        
-        const docUsuarioRef = doc(getFirestore(), "usuarios", item.idCliente);
-        updateDoc(docUsuarioRef, { estado: "libre" });
-        // Libero mesa también:
-        const docUsuario = await getDoc(docUsuarioRef);
-        const mesa = docUsuario.data().mesa;
-        if (mesa) {
-          const docMesaRef = doc(getFirestore(), "mesas", mesa);
-          updateDoc(docMesaRef, { cliente: "" });
-        }
+        };
         break;
     }
-    const docPedidoRef = doc(getFirestore(), "pedidos", item.id);
     updateDoc(docPedidoRef, nuevosDatosPedido);
   }
 
