@@ -22,7 +22,6 @@ export const AuthContext = createContext({
 });
 
 function AuthContextProvider({ children }) {
-  const [expoPushToken, setExpoPushToken] = useState('');
   const notificationListener = useRef();
   const responseListener = useRef();
   const [email, setEmail] = useState();
@@ -84,6 +83,7 @@ async function registerForPushNotificationsAsync() {
       importance: Notifications.AndroidImportance.MAX,
       vibrationPattern: [0, 250, 250, 250],
       lightColor: '#FF231F7C',
+      sound: "smileringtone.mp3"
     });
   }
 
