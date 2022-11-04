@@ -44,16 +44,6 @@ export default function Navigation() {
   const authCtx = useContext(AuthContext);
   const [hasLoaded, setHasLoaded] = useState(false);
 
-  async function playSound() {
-    const { sound } = await Audio.Sound.createAsync(
-      require("../../assets/sounds/sounLogin.wav")
-    );
-    await sound.playAsync();
-    setTimeout(() => {
-      sound.unloadAsync();
-    }, 2500);
-  }
-
   useLayoutEffect(() => {
     const unsubscribeAuth = auth.onAuthStateChanged(async (authenticatedUser) => {
       try {
@@ -61,7 +51,6 @@ export default function Navigation() {
         const docSnap = await getDoc(docRef);
         console.log("data: " + JSON.stringify(docSnap.data()));
         if (docSnap.exists()) {
-          playSound();
           authCtx.authenticate(docSnap.data().correo, docSnap.data().perfil, authenticatedUser.uid);
         }
       } catch (error) {
@@ -76,6 +65,7 @@ export default function Navigation() {
     <NavigationContainer>
       {authCtx.email && hasLoaded && <AuthenticatedStack />}
       {!authCtx.email && hasLoaded && <AuthStack />}
+      {!hasLoaded && <LoadingOverlay message="Accediendo..." />}
     </NavigationContainer>
   );
 }
