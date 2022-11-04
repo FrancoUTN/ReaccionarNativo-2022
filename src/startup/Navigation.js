@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useLayoutEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Audio } from "expo-av";
@@ -31,16 +31,41 @@ import EstadisticaEncuestasScreen from "../screens/specific/EstadisticaEncuestas
 import EstadoPedidoScreen from "../screens/specific/EstadoPedidoScreen";
 import { View } from "react-native";
 import CuentaScreen from "../screens/specific/CuentaScreen";
+import { getAuth } from 'firebase/auth';
+import { doc, getDoc, getFirestore } from "firebase/firestore";
+import { logOut } from '../util/authentication';
 
+const auth = getAuth();
 const Stack = createNativeStackNavigator();
 
+
 export default function Navigation() {
+
   const authCtx = useContext(AuthContext);
+  const [hasLoaded, setHasLoaded] = useState(false);
+
+  useLayoutEffect(() => {
+    const unsubscribeAuth = auth.onAuthStateChanged(async (authenticatedUser) => {
+      try {
+        const docRef = doc(getFirestore(), "usuarios", authenticatedUser.uid);
+        const docSnap = await getDoc(docRef);
+        console.log("data: " + JSON.stringify(docSnap.data()));
+        if (docSnap.exists()) {
+          authCtx.authenticate(docSnap.data().correo, docSnap.data().perfil, authenticatedUser.uid);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+      setHasLoaded(true);
+    });
+    return unsubscribeAuth;
+  }, []);
 
   return (
     <NavigationContainer>
-      {!authCtx.email && <AuthStack />}
-      {!!authCtx.email && <AuthenticatedStack />}
+      {authCtx.email && hasLoaded && <AuthenticatedStack />}
+      {!authCtx.email && hasLoaded && <AuthStack />}
+      {!hasLoaded && <LoadingOverlay message="Accediendo..." />}
     </NavigationContainer>
   );
 }
@@ -136,6 +161,7 @@ function AuthenticatedStack() {
           playSound();
         }
         authCtx.logout();
+        logOut();
       }}
     />
   );

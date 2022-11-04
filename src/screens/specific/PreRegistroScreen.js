@@ -2,6 +2,8 @@ import { Button, StyleSheet, Text, View } from "react-native";
 import { AuthContext } from "../../store/auth-context";
 import { Colors } from "../../constants/styles";
 import { useContext } from "react";
+import { logOut } from '../../util/authentication';
+
 
 export default function PreRegistroScreen() {
   const authCtx = useContext(AuthContext);
@@ -20,7 +22,10 @@ export default function PreRegistroScreen() {
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
       <Text style={styles.texto}>{mensajeError}</Text>
       <Button
-        onPress={() => authCtx.logout()}
+        onPress={() => {
+          authCtx.logout();
+          logOut();
+        }}
         title="De acuerdo"
         color={Colors.primary500}
       />
