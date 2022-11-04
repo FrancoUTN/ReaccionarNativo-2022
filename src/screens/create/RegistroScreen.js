@@ -370,7 +370,7 @@ export const sendPushNotification = async () => {
 			to: docSnap.data().token,
 			title: "Nuevo cliente",
 			body: "Se registró un nuevo cliente.",
-			data: { action: "CLIENTE_NUEVO" },
+			data: { action: "CLIENTE_NUEVO" }
 		}),
 		headers: {
 			'Content-Type': 'application/json',
