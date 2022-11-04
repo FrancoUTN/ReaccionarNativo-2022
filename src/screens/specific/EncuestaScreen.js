@@ -63,7 +63,6 @@ const EncuestaScreen = () => {
         max={3}
         step={1}
         valueOnChange={(value) => {
-          console.log("vau", value);
           setValueRange(value);
         }}
         initialValue={2}
@@ -98,7 +97,6 @@ const EncuestaScreen = () => {
         mode="dropdown"
         selectedValue={howDoYouKnow}
         onValueChange={(itemValue, itemIndex) => {
-          console.log("medio conocifo", itemValue);
           setHowDoYouKnow(itemValue);
         }}
       >
@@ -221,7 +219,7 @@ const EncuestaScreen = () => {
     return <Camara fotoTomada={fotoTomadaHandler} />;
   }
   if (loading) {
-    return <LoadingOverlay message={'Cargando...'} />;
+    return <LoadingOverlay message={"Cargando..."} />;
   }
   return (
     <KeyboardAwareScrollView
@@ -269,7 +267,10 @@ const EncuestaScreen = () => {
           >
             ¿Que tal estuvo el servicio?
           </Text>
-          <ScrollView style={{ flex: 0.6, width: "100%", height: "100%" }}>
+          <ScrollView
+            style={{ flex: 0.6, width: "100%", height: "100%", borderWidth: 0 }}
+            nestedScrollEnabled={true}
+          >
             <View style={{ flex: 1, width: "100%", height: "100%" }}>
               <View
                 style={{
