@@ -130,24 +130,20 @@ export default function PedidoMozo({ item }) {
       case "entregado":
         nuevosDatosPedido = {
           estado: "abonado",
-        };
-        nuevosDatosUsuario = {
-          estado: "libre",
-        };
+        };        
+        const docUsuarioRef = doc(getFirestore(), "usuarios", item.idCliente);
+        updateDoc(docUsuarioRef, { estado: "libre" });
+        // Libero mesa también:
+        const docUsuario = await getDoc(docUsuarioRef);
+        const mesa = docUsuario.data().mesa;
+        if (mesa) {
+          const docMesaRef = doc(getFirestore(), "mesas", mesa);
+          updateDoc(docMesaRef, { cliente: "" });
+        }
         break;
     }
     const docPedidoRef = doc(getFirestore(), "pedidos", item.id);
     updateDoc(docPedidoRef, nuevosDatosPedido);
-    const docUsuarioRef = doc(getFirestore(), "usuarios", item.idCliente);
-    updateDoc(docUsuarioRef, nuevosDatosUsuario);
-
-    // Libero mesa también
-    const docUsuario = await getDoc(docUsuarioRef);
-    const mesa = docUsuario.data().mesa;
-    if (mesa) {
-      const docMesaRef = doc(getFirestore(), "mesas", mesa);
-      updateDoc(docMesaRef, { cliente: "" });
-    }
   }
 
   function onRechazarPressHandler() {
