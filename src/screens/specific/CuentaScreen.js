@@ -11,7 +11,7 @@ import {
 } from "firebase/firestore";
 import { useEffect } from "react";
 import { useState } from "react";
-import { ActivityIndicator, Image, Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import Escaner from "../../components/shared/Escaner";
 
 import LoadingOverlay from "../../components/ui/LoadingOverlay";
@@ -21,9 +21,9 @@ export default function CuentaScreen() {
     const miUid = getAuth().currentUser.uid;
     const [item, setItem] = useState();
     const [cargando, setCargando] = useState(true);
-    const [cargandoImagen, setCargandoImagen] = useState(true);
     const [escanear, setEscanear] = useState(false);
     const [mensajeError, setMensajeError] = useState("");
+    const [hayPropina, setHayPropina] = useState(false);
 
     useEffect(() => {
         const coleccion = collection(getFirestore(), 'pedidos');
@@ -37,6 +37,9 @@ export default function CuentaScreen() {
                     ...qs.docs[0].data()
                 };
                 setItem(pedidoTraido);
+                if (pedidoTraido.porcentajePropina || pedidoTraido.porcentajePropina == 0) {
+                    setHayPropina(true);
+                }
                 setCargando(false);
             }
             else {
@@ -48,7 +51,7 @@ export default function CuentaScreen() {
 
     function onPressHandler() {
         setMensajeError("");
-        if (!item.porcentajePropina) {
+        if (hayPropina) {
             setEscanear(true);
         }
         else {
@@ -82,7 +85,7 @@ export default function CuentaScreen() {
     let textoBoton = '';
     let botonApretable = false;
     if (item) {
-        if (item.porcentajePropina || item.porcentajePropina == 0) {
+        if (hayPropina) {
             if (item.estado == 'entregado') {
                 textoBoton = 'Pagar';
                 botonApretable = true;
@@ -106,144 +109,206 @@ export default function CuentaScreen() {
             />
         );
     }
-
+    
     // return 3:
     return (
-        <View style={styles.viewSuperadora}>
-            <View style={styles.viewPrincipal}>
-                <View style={styles.viewRow}>
-                    <View>
-                        <Image
-                            style={styles.imageMesa}
-                            source={ {uri: item.fotoMesa }}
-                            onLoadEnd={ () => setCargandoImagen(false) }
-                        />
-                        {                        
-                            cargandoImagen &&
-                            <View style={styles.absoluto}>
-                                <ActivityIndicator size="large" color="white" />
-                            </View>
-                        }
-                        <Text style={styles.textMesa}>
-                            { item.idMesa }
-                        </Text>
+        <View style={styles.viewPrincipal}>
+            <View style={styles.viewCuentaYBoton}>
+                <View style={styles.viewTitulo}>
+                    <Text style={styles.textoTitulo}>
+                        Reaccionar Nativo
+                    </Text>
+                </View>
+                <View style={styles.viewCuenta}>
+                    <View style={styles.viewRow}>
+                        <View style={[styles.viewProducto, styles.viewCelda]}>
+                            <Text style={[styles.textoEncabezado, styles.textoCelda]}>
+                                Producto(s)
+                            </Text>
+                        </View>
+                        <View style={[styles.viewPrecioUnitario, styles.viewCelda]}>
+                            <Text style={[styles.textoEncabezado, styles.textoCelda]}>
+                                Precio
+                            </Text>
+                            {/* <Text style={styles.textoEncabezado}>
+                                unitario
+                            </Text> */}
+                        </View>
+                        <View style={[styles.viewSuma, styles.viewCelda]}>
+                            <Text style={[styles.textoEncabezado, styles.textoCelda]}>
+                                Suma
+                            </Text>
+                        </View>
                     </View>
-                    <View style={styles.viewDerecho}>
-                        <Text style={styles.textDetallesTitulo}>
-                            Detalles
-                        </Text>
-                        {
-                            item.metaProductos.map(
-                                (metaProducto, index) => (
-                                    <Text key={index} style={styles.textDetallesContenido}>
-                                        { metaProducto.cantidad }x { metaProducto.producto.nombre }
+                    {
+                        item.metaProductos.map((metaProducto, index) => (
+                            <View key={index} style={styles.viewRow}>
+                                <View style={[styles.viewProducto, styles.viewCelda]}>
+                                    <Text style={[styles.textoDato, styles.textoCelda]}>
+                                        {`${metaProducto.cantidad}x ${metaProducto.producto.nombre}`}
                                     </Text>
-                                )
-                            )
-                        }                  
-                        <Text style={styles.textImporte}>
-                            Total:  $ { item.importe }
-                        </Text>
-                    </View>
+                                </View>
+                                <View style={[styles.viewPrecioUnitario, styles.viewCelda]}>
+                                    <Text style={[styles.textoDato, styles.textoCelda]}>
+                                        ${metaProducto.producto.precio}
+                                    </Text>
+                                </View>
+                                <View style={[styles.viewSuma, styles.viewCelda]}>
+                                    <Text style={[styles.textoDato, styles.textoCelda]}>
+                                        $
+                                        {
+                                            metaProducto.producto.precio *
+                                            metaProducto.cantidad
+                                        }
+                                    </Text>
+                                </View>
+                            </View>
+                        ))
+                    }
                 </View>
                 {
-                    botonApretable ?
-                    <Pressable
-                        style={ ({pressed}) => [styles.pressable, pressed && {opacity: 0.7}] }
-                        onPress={onPressHandler}
-                    >
-                        <Text style={styles.textPressable}>
-                            { textoBoton }
-                        </Text>
-                    </Pressable>
+                    hayPropina ?
+                    <>
+                        <View style={styles.viewTotales}>
+                            <View style={styles.viewTotalesDescripcion}>
+                                <Text style={styles.textoSubtotales}>
+                                    Subtotal:
+                                </Text>
+                            </View>
+                            <View style={styles.viewSuma}>
+                                <Text style={styles.textoSubtotales}>
+                                    ${item.importe}
+                                </Text>
+                            </View>
+                        </View>
+                        <View style={styles.viewTotales}>
+                            <View style={styles.viewTotalesDescripcion}>
+                                <Text style={styles.textoSubtotales}>
+                                    Propina del
+                                    {item.porcentajePropina}%
+                                    (¡Muy buenoo!):
+                                </Text>
+                            </View>
+                            <View style={styles.viewSuma}>
+                                <Text style={styles.textoSubtotales}>
+                                    ${item.importe * item.porcentajePropina / 100}
+                                </Text>
+                            </View>
+                        </View>
+                        <View style={styles.viewTotal}>
+                            <Text style={styles.textoTotal}>
+                                TOTAL: $
+                                {
+                                    item.importe + 
+                                    (item.importe * item.porcentajePropina / 100)
+                                }
+                            </Text>
+                        </View>
+                    </>
                     :
-                    <Pressable
-                        style={[
-                            styles.pressable,
-                            {opacity: 0.6}
-                        ]}
-                    >
-                        <Text style={styles.textPressable}>
-                            { textoBoton }
+                    <View style={styles.viewTotal}>
+                        <Text style={styles.textoTotal}>
+                            TOTAL: ${item.importe}
+                        </Text>
+                    </View>
+                }
+                <View style={styles.viewBoton}>
+                    <Pressable>
+                        <Text style={styles.textoBoton}>
+                            Pagar
                         </Text>
                     </Pressable>
-                }
+                </View>
             </View>
-            {!!mensajeError && (
-                <Text style={styles.textoError}>Error: {mensajeError}</Text>
-            )}
+            <View style={styles.viewMensaje}>
+                <Text style={styles.textoMensaje}>
+                    Error: Qr inválido
+                </Text>
+            </View>
         </View>
     );
 }
 
 const styles = StyleSheet.create({
-    textoError: {
-      color: Colors.error500,
-      fontSize: 20,
-      textAlign: "center",
-    },
-    viewSuperadora: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
     viewPrincipal: {
+        flex: 1,
+        padding: 40,
+    },
+    viewCuentaYBoton: {
+        flex: 9,
         backgroundColor: Colors.primary800,
-        width: 300,
-        // marginVertical: 20,
         borderRadius: 2,
-        // overflow: 'hidden',
-        flex: .8
+        padding: 10
+    },
+    viewTitulo: {
+        flex: 1,
+    },
+    viewCuenta: {
+        flex: 4,
+    },
+    viewBoton: {
+        flex: 1,
+    },
+    viewMensaje: {
+        flex: 1,
     },
     viewRow: {
         flexDirection: 'row',
     },
-    pressable: {
-        backgroundColor: Colors.success,
-        padding: 10,
-        margin: 20,
-        marginBottom: 15,
-        borderRadius: 4,
+    viewProducto: {
+        width: '50%'
     },
-    imageMesa: {
-        width: 120,
-        height: 120,
+    viewPrecioUnitario: {
+        width: '25%'
     },
-    viewDerecho: {
-        flex: 1,
-        padding: 10,
+    viewSuma: {
+        width: '25%'
     },
-    textDetallesTitulo: {
+    viewCelda: {
+        padding: 2,
+        justifyContent: 'center',
+    },
+    viewTotales: {
+        flexDirection: 'row',
+        padding: 2,
+    },
+    viewTotalesDescripcion: {
+
+    },
+    viewTotal: {
+        
+    },
+    textoTitulo: {
         color: 'white',
-        fontWeight: '500',
-        fontSize: 18,
-        marginBottom: 5,
+        fontSize: 30,
+        textAlign: 'center',
     },
-    textDetallesContenido: {
-        color: 'white',
+    textoEncabezado: {
+        fontWeight: 'bold',
     },
-    textImporte: {
+    textoDato: {
+        fontWeight: "300",
+    },
+    textoCelda: {
         color: 'white',
-        fontWeight: '500',
-        fontSize: 16,
-        marginTop: 20,
         textAlign: "right",
     },
-    textMesa: {
+    textoSubtotales: {
         color: 'white',
-        fontSize: 16,
-        textAlign: 'center',
-        marginTop: 5,
+        textAlign: "right",
+        // borderColor: 'green',
+        // borderWidth: .5
     },
-    textPressable: {
+    textoTotal: {
         color: 'white',
-        fontWeight: '500',
-        fontSize: 16,
-        textAlign: 'center',
+        textAlign: "right",
+        fontWeight: "500",
+        fontSize: 26,
     },
-    absoluto: {
-        position: 'absolute',
-        top: '30%',
-        left: '30%'
+    textoBoton: {
+        color: 'white',
     },
+    textoMensaje: {
+        color: Colors.error500,
+    }
 });
