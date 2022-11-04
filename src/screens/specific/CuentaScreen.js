@@ -40,6 +40,9 @@ export default function CuentaScreen() {
                 if (pedidoTraido.porcentajePropina || pedidoTraido.porcentajePropina == 0) {
                     setHayPropina(true);
                 }
+                else {
+                    setHayPropina(false); // Testing
+                }
                 setCargando(false);
             }
             else {
@@ -51,7 +54,7 @@ export default function CuentaScreen() {
 
     function onPressHandler() {
         setMensajeError("");
-        if (hayPropina) {
+        if (!hayPropina) {
             setEscanear(true);
         }
         else {
@@ -68,7 +71,7 @@ export default function CuentaScreen() {
             const docPedidoRef = doc(getFirestore(), 'pedidos', item.id);
             updateDoc(docPedidoRef, { porcentajePropina: numeroPropina });
         } else {
-          setMensajeError("Qr inválido.");
+          setMensajeError("Error: Qr inválido.");
         }
         setCargando(false);
     }
@@ -119,6 +122,11 @@ export default function CuentaScreen() {
                         Reaccionar Nativo
                     </Text>
                 </View>
+                <View style={styles.viewSubtitulo}>
+                    <Text style={styles.textoSubtitulo}>
+                        Le trae la cuenta:
+                    </Text>
+                </View>
                 <View style={styles.viewCuenta}>
                     <View style={styles.viewRow}>
                         <View style={[styles.viewProducto, styles.viewCelda]}>
@@ -128,11 +136,8 @@ export default function CuentaScreen() {
                         </View>
                         <View style={[styles.viewPrecioUnitario, styles.viewCelda]}>
                             <Text style={[styles.textoEncabezado, styles.textoCelda]}>
-                                Precio
+                                Precio unitario
                             </Text>
-                            {/* <Text style={styles.textoEncabezado}>
-                                unitario
-                            </Text> */}
                         </View>
                         <View style={[styles.viewSuma, styles.viewCelda]}>
                             <Text style={[styles.textoEncabezado, styles.textoCelda]}>
@@ -166,63 +171,82 @@ export default function CuentaScreen() {
                         ))
                     }
                 </View>
-                {
-                    hayPropina ?
-                    <>
-                        <View style={styles.viewTotales}>
-                            <View style={styles.viewTotalesDescripcion}>
-                                <Text style={styles.textoSubtotales}>
-                                    Subtotal:
+                <View style={styles.viewTotales}>
+                    {
+                        hayPropina ?
+                        <>
+                            <View style={styles.viewSubtotales}>
+                                <View style={styles.viewSubtotalesDescripcion}>
+                                    <Text style={styles.textoSubtotales}>
+                                        Subtotal:
+                                    </Text>
+                                </View>
+                                <View style={styles.viewSuma}>
+                                    <Text style={styles.textoSubtotales}>
+                                        ${item.importe}
+                                    </Text>
+                                </View>
+                            </View>
+                            <View style={styles.viewSubtotales}>
+                                <View style={styles.viewSubtotalesDescripcion}>
+                                    <Text style={styles.textoSubtotales}>                                        
+                                        {
+                                            `Propina del ${item.porcentajePropina}%:`
+                                        }
+                                    </Text>
+                                </View>
+                                <View style={styles.viewSuma}>
+                                    <Text style={styles.textoSubtotales}>
+                                        ${item.importe * item.porcentajePropina / 100}
+                                    </Text>
+                                </View>
+                            </View>
+                            <View style={styles.viewTotal}>
+                                <Text style={styles.textoTotal}>
+                                    TOTAL: $
+                                    {
+                                        item.importe + 
+                                        (item.importe * item.porcentajePropina / 100)
+                                    }
                                 </Text>
                             </View>
-                            <View style={styles.viewSuma}>
-                                <Text style={styles.textoSubtotales}>
-                                    ${item.importe}
-                                </Text>
-                            </View>
-                        </View>
-                        <View style={styles.viewTotales}>
-                            <View style={styles.viewTotalesDescripcion}>
-                                <Text style={styles.textoSubtotales}>
-                                    Propina del
-                                    {item.porcentajePropina}%
-                                    (¡Muy buenoo!):
-                                </Text>
-                            </View>
-                            <View style={styles.viewSuma}>
-                                <Text style={styles.textoSubtotales}>
-                                    ${item.importe * item.porcentajePropina / 100}
-                                </Text>
-                            </View>
-                        </View>
+                        </>
+                        :
                         <View style={styles.viewTotal}>
                             <Text style={styles.textoTotal}>
-                                TOTAL: $
-                                {
-                                    item.importe + 
-                                    (item.importe * item.porcentajePropina / 100)
-                                }
+                                TOTAL: ${item.importe}
                             </Text>
                         </View>
-                    </>
-                    :
-                    <View style={styles.viewTotal}>
-                        <Text style={styles.textoTotal}>
-                            TOTAL: ${item.importe}
-                        </Text>
-                    </View>
-                }
+                    }
+                </View>
                 <View style={styles.viewBoton}>
-                    <Pressable>
-                        <Text style={styles.textoBoton}>
-                            Pagar
-                        </Text>
-                    </Pressable>
+                    {
+                        botonApretable ?
+                        <Pressable
+                            style={ ({pressed}) => [styles.pressable, pressed && {opacity: 0.7}] }
+                            onPress={ onPressHandler }
+                        >
+                            <Text style={styles.textoBoton}>
+                                { textoBoton }
+                            </Text>
+                        </Pressable>
+                        :
+                        <Pressable
+                            style={[
+                                styles.pressable,
+                                {opacity: 0.6}
+                            ]}
+                        >
+                            <Text style={styles.textoBoton}>
+                                { textoBoton }
+                            </Text>
+                        </Pressable>
+                    }
                 </View>
             </View>
             <View style={styles.viewMensaje}>
                 <Text style={styles.textoMensaje}>
-                    Error: Qr inválido
+                    {mensajeError}
                 </Text>
             </View>
         </View>
@@ -231,26 +255,22 @@ export default function CuentaScreen() {
 
 const styles = StyleSheet.create({
     viewPrincipal: {
-        flex: 1,
         padding: 40,
+        justifyContent: "center",
+        flex: 1
     },
     viewCuentaYBoton: {
-        flex: 9,
         backgroundColor: Colors.primary800,
-        borderRadius: 2,
+        borderRadius: 4,
         padding: 10
     },
     viewTitulo: {
-        flex: 1,
+        marginTop: 14
+    },
+    viewSubtitulo: {
+        marginBottom: 20
     },
     viewCuenta: {
-        flex: 4,
-    },
-    viewBoton: {
-        flex: 1,
-    },
-    viewMensaje: {
-        flex: 1,
     },
     viewRow: {
         flexDirection: 'row',
@@ -266,21 +286,46 @@ const styles = StyleSheet.create({
     },
     viewCelda: {
         padding: 2,
-        justifyContent: 'center',
+        justifyContent: "flex-start",
     },
-    viewTotales: {
+    viewSubtotales: {
         flexDirection: 'row',
+        justifyContent: "flex-end",
         padding: 2,
+        marginTop: 10
     },
-    viewTotalesDescripcion: {
+    viewSubtotalesDescripcion: {
 
     },
+    viewTotales: {
+    },
     viewTotal: {
-        
+        marginTop: 10,        
+    },
+    viewBoton: {
+    },
+    viewMensaje: {
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: 30,
+    },
+    pressable: {
+        backgroundColor: Colors.success,
+        padding: 10,
+        margin: 20,
+        marginBottom: 15,
+        borderRadius: 4,
     },
     textoTitulo: {
         color: 'white',
         fontSize: 30,
+        textAlign: 'center',
+    },
+    textoSubtitulo: {
+        color: 'white',
+        fontSize: 18,
+        fontStyle: "italic",
+        fontWeight: '300',
         textAlign: 'center',
     },
     textoEncabezado: {
@@ -296,8 +341,6 @@ const styles = StyleSheet.create({
     textoSubtotales: {
         color: 'white',
         textAlign: "right",
-        // borderColor: 'green',
-        // borderWidth: .5
     },
     textoTotal: {
         color: 'white',
@@ -307,8 +350,12 @@ const styles = StyleSheet.create({
     },
     textoBoton: {
         color: 'white',
+        fontWeight: '500',
+        fontSize: 16,
+        textAlign: 'center',
     },
     textoMensaje: {
         color: Colors.error500,
+        fontSize: 20
     }
 });

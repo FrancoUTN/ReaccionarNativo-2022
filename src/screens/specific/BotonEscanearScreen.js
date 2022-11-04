@@ -89,8 +89,6 @@ export default function BotonEscanearScreen({ navigation }) {
       setQrIngresoEscaneado(true);
     } else if (data.includes("mesa")) {
       await escaneoMesa(data, miEstado);
-    } else if (data.includes("propina")) {
-      // Completar
     } else {
       setMensajeError("Qr inválido.");
     }

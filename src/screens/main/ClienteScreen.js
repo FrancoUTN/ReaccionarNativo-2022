@@ -6,6 +6,7 @@ import { StyleSheet, View} from 'react-native';
 
 import Apretable from '../../components/shared/Apretable';
 import LoadingOverlay from "../../components/ui/LoadingOverlay";
+import { Colors } from "../../constants/styles";
 
 
 export default function ClienteScreen({ navigation }) {
@@ -99,8 +100,8 @@ export default function ClienteScreen({ navigation }) {
 	}
 	if (cobrado || libre) {
 		return (
-			<View style={styles.container}>
-				<Text>
+			<View style={styles.viewGracias}>
+				<Text style={styles.textoGracias}>
 					¡Gracias, vuelva pronto!
 				</Text>
 			</View>
@@ -178,5 +179,15 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		paddingVertical: 30
+	},
+	viewGracias: {
+		flex: 1,
+		justifyContent: 'center',
+	},
+	textoGracias: {
+		color: Colors.primary800,
+		fontSize: 50,
+		textAlign: "center",
+		padding: 20
 	}
 });
