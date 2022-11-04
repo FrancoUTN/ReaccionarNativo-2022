@@ -31,7 +31,7 @@ export default function ClienteScreen({ navigation }) {
 				}
 
 				if (qs.data().encuestado) {
-					setEncuestado(qs.data().encuestado);
+					setEncuestado(true);
 				}
 				else {
 					console.log("Usuario no encuestado. (No es un error)");

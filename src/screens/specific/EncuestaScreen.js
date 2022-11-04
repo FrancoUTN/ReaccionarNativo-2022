@@ -25,13 +25,15 @@ import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import {
   addDoc,
   collection,
+  doc,
   getFirestore,
   updateDoc,
 } from "firebase/firestore";
 import LoadingOverlay from "../../components/ui/LoadingOverlay";
 import { vibrationError } from "../../util/VibrationError";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-const EncuestaScreen = () => {
+import { getAuth } from "firebase/auth";
+const EncuestaScreen = ({ navigation }) => {
   const [tomarFoto, setTomarFoto] = useState(false);
   const [fotos, setFotos] = useState([]);
   const [valueRange, setValueRange] = useState(0);
@@ -207,9 +209,15 @@ const EncuestaScreen = () => {
 
       const colRef = collection(getFirestore(), "encuestas");
       const docRef = await addDoc(colRef, objValues);
+
+      // FRANCO agrega update de usuario (cliente):
+      const miUid = getAuth().currentUser.uid;
+      const userRef = doc(getFirestore(), 'usuarios', miUid);
+      await updateDoc(userRef, { encuestado: true });
+
       cleanValues();
       setLoading(false);
-      //console.log("colRef", colRef, "docRef", docRef);
+      navigation.goBack();
     } else {
       setLoading(false);
       vibrationError();

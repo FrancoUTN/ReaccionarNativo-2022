@@ -142,6 +142,7 @@ export default function PedidoMozo({ item }) {
         // Y luego, dejo al usuario sin mesa:
         const nuevosDatosUsuario = {
           estado: "libre",
+          encuestado: false,
           mesa: ""
         };
         updateDoc(docUsuarioRef, nuevosDatosUsuario);
