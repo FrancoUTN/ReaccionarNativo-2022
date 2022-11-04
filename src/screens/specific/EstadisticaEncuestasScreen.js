@@ -19,7 +19,6 @@ import {
   getFirestore,
   onSnapshot,
   query,
-  where,
 } from "firebase/firestore";
 import Sizes_ from "../../util/Sizes";
 import StrongPoints from "../../util/enum/strongPoints";
@@ -73,7 +72,7 @@ const getDateDays = (arrayEncuestas = [], setDataLineChart) => {
         break;
     }
   });
-  var labels = ["Lun", "Mar", "Mie", "Jue", "Vie", "Sab", "Dom"];
+  var labels = ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"];
   var datasets = [
     {
       data: [monday, tuesday, wednesday, thursday, friday, saturday, sunday],
@@ -157,7 +156,7 @@ const getBarChart = (arrayEncuestas = [], setDataBarChart) => {
   });
 
   let dataBarChart = {
-    labels: ["Claro que si!", "En otro momento"],
+    labels: ["¡Claro que sí!", "En otro momento"],
     datasets: [
       {
         data: [contadorSi, contadorNo],
@@ -206,10 +205,10 @@ const EstadisticaEncuestasScreen = () => {
     labels: [
       "Lunes",
       "Martes",
-      "Miercoles",
+      "Miércoles",
       "Jueves",
       "Viernes",
-      "Sabado",
+      "Sábado",
       "Domingo",
     ],
     datasets: [
@@ -298,7 +297,7 @@ const EstadisticaEncuestasScreen = () => {
           fontWeight: "bold",
         }}
       >
-        Estadisticas
+        Estadísticas
       </Text>
       <ScrollView>
         <View style={{ flex: 1, justifyContent: "space-around" }}>
@@ -327,7 +326,7 @@ const EstadisticaEncuestasScreen = () => {
             }}
           >
             <Text style={styles.txtTittle}>
-              ¿Por que nos eligen nuestros clientes?{" "}
+              ¿Por qué nos eligen nuestros clientes?{" "}
             </Text>
             <PieChart
               data={dataPieChart}
@@ -347,7 +346,7 @@ const EstadisticaEncuestasScreen = () => {
             }}
           >
             <Text style={styles.txtTittle}>
-              ¿Nos recomendaron despues de su última visita?
+              ¿Nos recomendaron después de su última visita?
             </Text>
             <BarChart
               style={{ borderWidth: 0 }}
@@ -392,7 +391,7 @@ const EstadisticaEncuestasScreen = () => {
 const styles = StyleSheet.create({
   txtTittle: {
     textAlign: "center",
-    color: "white",
+    color: Colors.primary800,
     fontWeight: "bold",
     fontSize: Sizes_.small,
     marginVertical: 0,

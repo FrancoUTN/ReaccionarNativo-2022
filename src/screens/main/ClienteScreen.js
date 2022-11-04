@@ -34,7 +34,6 @@ export default function ClienteScreen({ navigation }) {
 					setEncuestado(true);
 				}
 				else {
-					console.log("Usuario no encuestado. (No es un error)");
 					setEncuestado(false);
 				}
             }
@@ -60,7 +59,6 @@ export default function ClienteScreen({ navigation }) {
 				}
             }
             else {
-                console.log("Usuario sin pedidos. (No es un error)");
 				setEstadoPedido(null);
             }
 			setCargando1(false);

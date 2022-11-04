@@ -8,10 +8,10 @@ import {
   StyleSheet,
   Platform,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Colors } from "../../constants/styles";
 import Sizes_ from "../../util/Sizes";
-import { AntDesign, Entypo, SimpleLineIcons } from "@expo/vector-icons";
+import { AntDesign, SimpleLineIcons } from "@expo/vector-icons";
 import { Input } from "react-native-elements";
 import { Slider } from "react-native-range-slider-expo";
 import RadioButtonRN from "radio-buttons-react-native-expo";
@@ -33,6 +33,7 @@ import LoadingOverlay from "../../components/ui/LoadingOverlay";
 import { vibrationError } from "../../util/VibrationError";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { getAuth } from "firebase/auth";
+
 const EncuestaScreen = ({ navigation }) => {
   const [tomarFoto, setTomarFoto] = useState(false);
   const [fotos, setFotos] = useState([]);
@@ -48,12 +49,12 @@ const EncuestaScreen = ({ navigation }) => {
 
   const dataRadio = [
     {
-      label: "Si! 🥳",
+      label: "¡Sí! 🥳",
       accessibilityLabel: "Your label",
       value: "si",
     },
     {
-      label: "Quiza en otro momento 🤗",
+      label: "Quizá en otro momento 🤗",
       accessibilityLabel: "Your label",
       value: "no",
     },
@@ -273,7 +274,7 @@ const EncuestaScreen = ({ navigation }) => {
               marginBottom: 10,
             }}
           >
-            ¿Que tal estuvo el servicio?
+            ¿Qué tal estuvo el servicio?
           </Text>
           <ScrollView
             style={{ flex: 0.6, width: "100%", height: "100%", borderWidth: 0 }}
@@ -298,7 +299,7 @@ const EncuestaScreen = ({ navigation }) => {
                 }}
               >
                 <Text style={styles.labelTxt}>
-                  ¿Nos recomendarias a un amigo?
+                  ¿Nos recomendarías a un amigo?
                   {!verifyRecommendation() && spanError()}
                 </Text>
                 {radioCalification()}
@@ -311,7 +312,7 @@ const EncuestaScreen = ({ navigation }) => {
                 }}
               >
                 <Text style={styles.labelTxt}>
-                  ¿Que fue lo que mas te gusto?
+                  ¿Qué fue lo que más te gustó?
                   {!verifyCheck() && spanError()}
                 </Text>
                 <View
@@ -406,7 +407,7 @@ const EncuestaScreen = ({ navigation }) => {
                   }}
                 >
                   <Text style={styles.labelTxt}>
-                    ¿Como nos encontraste? {spanError()}
+                    ¿Cómo nos encontraste? {spanError()}
                   </Text>
                   {selectPicker()}
                 </View>
@@ -424,7 +425,7 @@ const EncuestaScreen = ({ navigation }) => {
                 }}
               >
                 <Text style={styles.labelTxt}>
-                  ¡ Añade algunas imagenes! {!verifyPhotos() && spanError()}
+                  ¡Añade algunas imágenes! {!verifyPhotos() && spanError()}
                 </Text>
                 <View
                   style={{
@@ -462,7 +463,7 @@ const EncuestaScreen = ({ navigation }) => {
                 <Button
                   onPress={() => {
                     if (fotos.length > 2) {
-                      alert("ya has subido todas las fotos ");
+                      alert("Ya has subido todas las fotos");
                       return;
                     }
                     setTomarFoto(true);
@@ -484,7 +485,7 @@ const EncuestaScreen = ({ navigation }) => {
                   {!verifyComentary() && spanError()}
                 </Text>
                 <Input
-                  placeholder="Tu opinion es muy importante"
+                  placeholder="Tu opinión es muy importante"
                   inputStyle={{ fontSize: Sizes_.small }}
                   leftIcon={
                     <SimpleLineIcons
