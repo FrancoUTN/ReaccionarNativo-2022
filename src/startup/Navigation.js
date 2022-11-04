@@ -51,7 +51,7 @@ function AuthStack() {
       icon="volume-high"
       color="white"
       size={24}
-      onPress={ authCtx.alternarSonidos }
+      onPress={authCtx.alternarSonidos}
     />
   );
   const soundOffIcon = (
@@ -59,17 +59,12 @@ function AuthStack() {
       icon="volume-mute"
       color="white"
       size={24}
-      onPress={ authCtx.alternarSonidos }
+      onPress={authCtx.alternarSonidos}
     />
   );
   const opcionesTipicas = {
     headerRight: () => (
-      <>
-        {
-          authCtx.sonidosDesactivados ?
-          soundOffIcon : soundOnIcon
-        }
-      </>
+      <>{authCtx.sonidosDesactivados ? soundOffIcon : soundOnIcon}</>
     ),
   };
 
@@ -110,7 +105,7 @@ function AuthStack() {
           component={ModalScreen}
           options={{
             ...opcionesTipicas,
-            title: "Error"
+            title: "Error",
           }}
         />
       </Stack.Group>
@@ -148,7 +143,7 @@ function AuthenticatedStack() {
       icon="volume-high"
       color="white"
       size={24}
-      onPress={ authCtx.alternarSonidos }
+      onPress={authCtx.alternarSonidos}
     />
   );
   const soundOffIcon = (
@@ -156,21 +151,20 @@ function AuthenticatedStack() {
       icon="volume-mute"
       color="white"
       size={24}
-      onPress={ authCtx.alternarSonidos }
+      onPress={authCtx.alternarSonidos}
     />
   );
   const opcionesTipicas = {
     headerRight: () => (
-      <View style={{
-        flexDirection: 'row',
-        width: 80,
-        justifyContent: 'space-between'
-      }}>
-        {
-          authCtx.sonidosDesactivados ?
-          soundOffIcon : soundOnIcon
-        }
-        { logoutIcon }
+      <View
+        style={{
+          flexDirection: "row",
+          width: 80,
+          justifyContent: "space-between",
+        }}
+      >
+        {authCtx.sonidosDesactivados ? soundOffIcon : soundOnIcon}
+        {logoutIcon}
       </View>
     ),
   };
