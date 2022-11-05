@@ -26,36 +26,38 @@ import MenuScreen from "../screens/specific/MenuScreen";
 import PedidoAgregadoScreen from "../screens/specific/PedidoAgregadoScreen";
 import PedidosScreen from "../screens/specific/PedidosScreen";
 import PreRegistroScreen from "../screens/specific/PreRegistroScreen";
-import Encuestas from "../screens/Encuestas";
-import EstadisticaEncuestas from "../screens/EstadisticaEncuestas";
+import EncuestaScreen from "../screens/specific/EncuestaScreen";
+import EstadisticaEncuestasScreen from "../screens/specific/EstadisticaEncuestasScreen";
+import EstadoPedidoScreen from "../screens/specific/EstadoPedidoScreen";
+import { View } from "react-native";
+import CuentaScreen from "../screens/specific/CuentaScreen";
+import { getAuth } from 'firebase/auth';
+import { doc, getDoc, getFirestore } from "firebase/firestore";
+import { logOut } from '../util/authentication';
 
 const auth = getAuth();
 const Stack = createNativeStackNavigator();
 
+
 export default function Navigation() {
+
   const authCtx = useContext(AuthContext);
   const [hasLoaded, setHasLoaded] = useState(false);
 
   useLayoutEffect(() => {
-    const unsubscribeAuth = auth.onAuthStateChanged(
-      async (authenticatedUser) => {
-        try {
-          const docRef = doc(getFirestore(), "usuarios", authenticatedUser.uid);
-          const docSnap = await getDoc(docRef);
-          console.log("data: " + JSON.stringify(docSnap.data()));
-          if (docSnap.exists()) {
-            authCtx.authenticate(
-              docSnap.data().correo,
-              docSnap.data().perfil,
-              authenticatedUser.uid
-            );
-          }
-        } catch (error) {
-          console.log(error);
+    const unsubscribeAuth = auth.onAuthStateChanged(async (authenticatedUser) => {
+      try {
+        const docRef = doc(getFirestore(), "usuarios", authenticatedUser.uid);
+        const docSnap = await getDoc(docRef);
+        console.log("data: " + JSON.stringify(docSnap.data()));
+        if (docSnap.exists()) {
+          authCtx.authenticate(docSnap.data().correo, docSnap.data().perfil, authenticatedUser.uid);
         }
-        setHasLoaded(true);
+      } catch (error) {
+        console.log(error);
       }
-    );
+      setHasLoaded(true);
+    });
     return unsubscribeAuth;
   }, []);
 
@@ -67,15 +69,6 @@ export default function Navigation() {
     </NavigationContainer>
   );
 }
-/*
-<Stack.Screen
-        name="Encuestas"
-        component={Encuestas}
-        options={{
-          headerShown: false,
-        }}
-      />
-*/
 
 function AuthStack() {
   const authCtx = useContext(AuthContext);
@@ -109,21 +102,6 @@ function AuthStack() {
         contentStyle: { backgroundColor: Colors.primary100 },
       }}
     >
-      <Stack.Screen
-        name="Estadisticas"
-        component={EstadisticaEncuestas}
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name="Encuestas"
-        component={Encuestas}
-        options={{
-          headerShown: false,
-        }}
-      />
-
       <Stack.Screen
         name="Login"
         component={LoginScreen}
@@ -261,6 +239,14 @@ function AuthenticatedStack() {
             options={{
               ...opcionesTipicas,
               title: "Alta de empleado",
+            }}
+          />
+          <Stack.Screen
+            name="EstadisticaEncuestas"
+            component={EstadisticaEncuestasScreen}
+            options={{
+              ...opcionesTipicas,
+              title: "Estadísticas",
             }}
           />
         </>
