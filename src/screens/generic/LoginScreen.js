@@ -30,7 +30,9 @@ function LoginScreen({ navigation }) {
       const docSnap = await getDoc(docRef);
 
       if (docSnap.exists()) {
-        playSound();
+        if (!authCtx.sonidosDesactivados) {
+          playSound();
+        }
         authCtx.authenticate(usuario.email, docSnap.data().perfil, usuario.uid);
       } else {
         console.log("Error en Login: No existe el documento.");

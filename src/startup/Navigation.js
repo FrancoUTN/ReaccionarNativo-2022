@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useLayoutEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Audio } from "expo-av";
@@ -29,15 +29,41 @@ import PreRegistroScreen from "../screens/specific/PreRegistroScreen";
 import Encuestas from "../screens/Encuestas";
 import EstadisticaEncuestas from "../screens/EstadisticaEncuestas";
 
+const auth = getAuth();
 const Stack = createNativeStackNavigator();
 
 export default function Navigation() {
   const authCtx = useContext(AuthContext);
+  const [hasLoaded, setHasLoaded] = useState(false);
+
+  useLayoutEffect(() => {
+    const unsubscribeAuth = auth.onAuthStateChanged(
+      async (authenticatedUser) => {
+        try {
+          const docRef = doc(getFirestore(), "usuarios", authenticatedUser.uid);
+          const docSnap = await getDoc(docRef);
+          console.log("data: " + JSON.stringify(docSnap.data()));
+          if (docSnap.exists()) {
+            authCtx.authenticate(
+              docSnap.data().correo,
+              docSnap.data().perfil,
+              authenticatedUser.uid
+            );
+          }
+        } catch (error) {
+          console.log(error);
+        }
+        setHasLoaded(true);
+      }
+    );
+    return unsubscribeAuth;
+  }, []);
 
   return (
     <NavigationContainer>
-      {!authCtx.email && <AuthStack />}
-      {!!authCtx.email && <AuthenticatedStack />}
+      {authCtx.email && hasLoaded && <AuthenticatedStack />}
+      {!authCtx.email && hasLoaded && <AuthStack />}
+      {!hasLoaded && <LoadingOverlay message="Accediendo..." />}
     </NavigationContainer>
   );
 }
@@ -52,6 +78,29 @@ export default function Navigation() {
 */
 
 function AuthStack() {
+  const authCtx = useContext(AuthContext);
+  const soundOnIcon = (
+    <IconButton
+      icon="volume-high"
+      color="white"
+      size={24}
+      onPress={authCtx.alternarSonidos}
+    />
+  );
+  const soundOffIcon = (
+    <IconButton
+      icon="volume-mute"
+      color="white"
+      size={24}
+      onPress={authCtx.alternarSonidos}
+    />
+  );
+  const opcionesTipicas = {
+    headerRight: () => (
+      <>{authCtx.sonidosDesactivados ? soundOffIcon : soundOnIcon}</>
+    ),
+  };
+
   return (
     <Stack.Navigator
       screenOptions={{
@@ -79,20 +128,16 @@ function AuthStack() {
         name="Login"
         component={LoginScreen}
         options={{
+          ...opcionesTipicas,
           title: "Inicia sesión",
-          headerTitleStyle: {
-            fontFamily: "Montserrat_500Medium",
-          },
         }}
       />
       <Stack.Screen
         name="Registro"
         component={RegistroScreen}
         options={{
+          ...opcionesTipicas,
           title: "Registro",
-          headerTitleStyle: {
-            fontFamily: "Montserrat_500Medium",
-          },
         }}
       />
       <Stack.Group
@@ -100,13 +145,16 @@ function AuthStack() {
           presentation: "modal",
           headerStyle: { backgroundColor: Colors.error500 },
           headerTintColor: "white",
-          contentStyle: { backgroundColor: Colors.error100 },
+          contentStyle: { backgroundColor: Colors.error300 },
         }}
       >
         <Stack.Screen
           name="Modal"
           component={ModalScreen}
-          options={{ title: "Error" }}
+          options={{
+            ...opcionesTipicas,
+            title: "Error",
+          }}
         />
       </Stack.Group>
     </Stack.Navigator>
@@ -131,16 +179,43 @@ function AuthenticatedStack() {
       color="white"
       size={24}
       onPress={() => {
-        playSound();
+        if (!authCtx.sonidosDesactivados) {
+          playSound();
+        }
         authCtx.logout();
+        logOut();
       }}
     />
   );
+  const soundOnIcon = (
+    <IconButton
+      icon="volume-high"
+      color="white"
+      size={24}
+      onPress={authCtx.alternarSonidos}
+    />
+  );
+  const soundOffIcon = (
+    <IconButton
+      icon="volume-mute"
+      color="white"
+      size={24}
+      onPress={authCtx.alternarSonidos}
+    />
+  );
   const opcionesTipicas = {
-    headerTitleStyle: {
-      fontFamily: "Montserrat_500Medium",
-    },
-    headerRight: () => logoutIcon,
+    headerRight: () => (
+      <View
+        style={{
+          flexDirection: "row",
+          width: 80,
+          justifyContent: "space-between",
+        }}
+      >
+        {authCtx.sonidosDesactivados ? soundOffIcon : soundOnIcon}
+        {logoutIcon}
+      </View>
+    ),
   };
   let retorno = <></>;
 
@@ -294,6 +369,38 @@ function AuthenticatedStack() {
             component={ChatScreen}
             options={opcionesTipicas}
           />
+          <Stack.Screen
+            name="EstadoPedido"
+            component={EstadoPedidoScreen}
+            options={{
+              ...opcionesTipicas,
+              title: "Pedido",
+            }}
+          />
+          <Stack.Screen
+            name="EstadisticaEncuestas"
+            component={EstadisticaEncuestasScreen}
+            options={{
+              ...opcionesTipicas,
+              title: "Estadísticas",
+            }}
+          />
+          <Stack.Screen
+            name="Encuesta"
+            component={EncuestaScreen}
+            options={{
+              ...opcionesTipicas,
+              title: "Encuesta",
+            }}
+          />
+          <Stack.Screen
+            name="Cuenta"
+            component={CuentaScreen}
+            options={{
+              ...opcionesTipicas,
+              title: "La cuenta",
+            }}
+          />
         </>
       );
       break;
@@ -334,6 +441,38 @@ function AuthenticatedStack() {
             component={ChatScreen}
             options={opcionesTipicas}
           />
+          <Stack.Screen
+            name="EstadoPedido"
+            component={EstadoPedidoScreen}
+            options={{
+              ...opcionesTipicas,
+              title: "Pedido",
+            }}
+          />
+          <Stack.Screen
+            name="EstadisticaEncuestas"
+            component={EstadisticaEncuestasScreen}
+            options={{
+              ...opcionesTipicas,
+              title: "Estadísticas",
+            }}
+          />
+          <Stack.Screen
+            name="Encuesta"
+            component={EncuestaScreen}
+            options={{
+              ...opcionesTipicas,
+              title: "Encuesta",
+            }}
+          />
+          <Stack.Screen
+            name="Cuenta"
+            component={CuentaScreen}
+            options={{
+              ...opcionesTipicas,
+              title: "La cuenta",
+            }}
+          />
         </>
       );
       break;
@@ -367,7 +506,7 @@ function AuthenticatedStack() {
           presentation: "modal",
           headerStyle: { backgroundColor: Colors.error500 },
           headerTintColor: "white",
-          contentStyle: { backgroundColor: Colors.error100 },
+          contentStyle: { backgroundColor: Colors.error300 },
         }}
       >
         <Stack.Screen

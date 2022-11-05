@@ -26,7 +26,6 @@ const styles = StyleSheet.create({
     opacity: 0.7,
   },
   buttonText: {
-    fontFamily: 'Montserrat_400Regular',
     textAlign: 'center',
     color: Colors.primary100,
   },

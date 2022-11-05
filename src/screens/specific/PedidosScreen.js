@@ -31,7 +31,11 @@ export default function PedidosScreen() {
         if (miPerfil == 'mozo') {
             return <PedidoMozo item={item}/>
         }
-        else if (item.estado != 'a confirmar') {
+        else if (
+            item.estado == 'confirmado' ||
+            item.estado == 'en preparación' ||
+            item.estado == 'listo'
+        ) {
             return <PedidoPreparador item={item}/>
         }
     }

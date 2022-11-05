@@ -77,7 +77,6 @@ const styles = StyleSheet.create({
         fontSize: 18,
         marginHorizontal: 10,
         textAlign: 'center',
-        fontFamily: 'Montserrat_400Regular'
     },
     iconosContainer: {
         flexDirection: 'row',
@@ -86,12 +85,12 @@ const styles = StyleSheet.create({
     },
     itemIcono: {
         marginHorizontal: 10,        
-        backgroundColor: 'green',
+        backgroundColor: Colors.success,
         borderRadius: 10,
         padding: 10
     },
     asignarTexto: {
         color: 'white',
-        fontFamily: 'Montserrat_500Medium'
+        fontWeight: '500',
     }
 });

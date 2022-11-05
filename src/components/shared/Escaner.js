@@ -17,7 +17,7 @@ export default function Escaner({ onEscaneado, onCancelar }) {
     }, []);
 
     if (hasPermission === null) {
-        return <LoadingOverlay>Verificando permisos...</LoadingOverlay>;
+        return <LoadingOverlay message={'Cargando...'} />;
     }
     if (hasPermission === false) {
         return <View> <Text>Sin acceso a la cámara.</Text> </View> ;
@@ -64,7 +64,6 @@ const styles = StyleSheet.create({
     },
     botonEscaner: {
         color: 'white',
-        fontFamily: 'Montserrat_400Regular',
         fontSize: 18,
     },
 }); 

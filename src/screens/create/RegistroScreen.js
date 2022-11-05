@@ -75,7 +75,7 @@ export default function RegistroScreen({ navigation }) {
 	}
 
 	async function onSubmitHandler() {
-		const correoIsValid = correo.trim().includes('@');
+		const correoIsValid = correo.trim().match(/^\S+@\S+\.\S+$/);
 		const claveIsValid = clave.trim().length >= 6;
 		const repetirClaveIsValid = clave === repetirClave;
 		const nombreIsValid = nombre.length >= 1;
@@ -172,6 +172,14 @@ export default function RegistroScreen({ navigation }) {
 					keyboardType="email-address"
 					isInvalid={credentialsInvalid.correo}
 				/>
+				{
+					credentialsInvalid.correo &&
+					<View>
+						<Text style={styles.textoInvalid}>
+							Formato de correo inválido.
+						</Text>
+					</View>
+				}
 				<Input
 					label="Contraseña"
 					onUpdateValue={updateInputValueHandler.bind(this, 'clave')}
@@ -179,25 +187,57 @@ export default function RegistroScreen({ navigation }) {
 					value={clave}
 					isInvalid={credentialsInvalid.clave}
 				/>
+				{
+					credentialsInvalid.clave &&
+					<View>
+						<Text style={styles.textoInvalid}>
+							Al menos 6 caracteres.
+						</Text>
+					</View>
+				}
 				<Input
 					label="Repetir contraseña"
 					onUpdateValue={updateInputValueHandler.bind(this, 'repetirClave')}
 					secure
 					value={repetirClave}
-					isInvalid={credentialsInvalid.repetirClave}
+					isInvalid={credentialsInvalid.clave || credentialsInvalid.repetirClave}
 				/>
+				{
+					credentialsInvalid.repetirClave &&
+					<View>
+						<Text style={styles.textoInvalid}>
+							Las contraseñas no coinciden.
+						</Text>
+					</View>
+				}
 				<Input
 					label="Nombre"
 					onUpdateValue={updateInputValueHandler.bind(this, 'nombre')}
 					value={nombre}
 					isInvalid={credentialsInvalid.nombre}
 				/>
+				{
+					credentialsInvalid.nombre &&
+					<View>
+						<Text style={styles.textoInvalid}>
+							¡Debes ingresar tu nombre!
+						</Text>
+					</View>
+				}
 				<Input
 					label="Apellido"
 					onUpdateValue={updateInputValueHandler.bind(this, 'apellido')}
 					value={apellido}
 					isInvalid={credentialsInvalid.apellido}
 				/>
+				{
+					credentialsInvalid.apellido &&
+					<View>
+						<Text style={styles.textoInvalid}>
+							¡Debes ingresar tu apellido!
+						</Text>
+					</View>
+				}
 				<Input
 					label="DNI"
 					onUpdateValue={updateInputValueHandler.bind(this, 'dni')}
@@ -205,6 +245,14 @@ export default function RegistroScreen({ navigation }) {
 					keyboardType="numeric"
 					isInvalid={credentialsInvalid.dni}
 				/>
+				{
+					credentialsInvalid.dni &&
+					<View>
+						<Text style={styles.textoInvalid}>
+							El DNI ha de tener 7 cifras o más.
+						</Text>
+					</View>
+				}
 				<View style={styles.buttons}>
 					<Button onPress={onSubmitHandler}>
 						Registrar
@@ -280,7 +328,7 @@ const styles = StyleSheet.create({
 		marginBottom: 20
 	},
 	buttons: {
-		marginTop: 8,
+		marginTop: 16,
 	},
 	registrateContainer: {
 		margin: 20,
@@ -306,6 +354,10 @@ const styles = StyleSheet.create({
 		fontSize: 20,
 		margin: 30,
 		color: Colors.error100,
+	},
+	textoInvalid: {
+		color: Colors.error100,
+		textAlign: 'right'
 	}
 });
 
@@ -318,7 +370,7 @@ export const sendPushNotification = async () => {
 			to: docSnap.data().token,
 			title: "Nuevo cliente",
 			body: "Se registró un nuevo cliente.",
-			data: { action: "CLIENTE_NUEVO" },
+			data: { action: "CLIENTE_NUEVO" }
 		}),
 		headers: {
 			'Content-Type': 'application/json',

@@ -53,7 +53,7 @@ export default function ItemCliente({ item }) {
                         <Ionicons
                             name='checkmark-circle'
                             size={42}
-                            color='green'
+                            color={Colors.success}
                         />
                     </Pressable>
                     <Pressable
@@ -63,7 +63,7 @@ export default function ItemCliente({ item }) {
                         <Ionicons
                             name='close-circle'
                             size={42}
-                            color='red'
+                            color={Colors.cancelar}
                         />
                     </Pressable>
                 </View>
@@ -103,7 +103,6 @@ const styles = StyleSheet.create({
         fontSize: 18,
         marginHorizontal: 10,
         textAlign: 'center',
-        fontFamily: 'Montserrat_400Regular'
     },
     iconosContainer: {
         flexDirection: 'row',

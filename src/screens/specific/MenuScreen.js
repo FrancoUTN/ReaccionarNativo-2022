@@ -171,7 +171,7 @@ export default function MenuScreen({ navigation }) {
         }
     }
 
-    if (!productos) {
+    if (productos.length <= 0) {
         return <LoadingOverlay message={'Cargando productos...'} />
     }    
     if (pidiendo) {
@@ -233,11 +233,11 @@ const styles = StyleSheet.create({
     textImporte: {
         fontSize: 20,
         color: 'white',
-        fontFamily: 'Montserrat_500Medium',
+        fontWeight: '500',
         marginLeft: 10
     },
     pressablePedir: {
-        backgroundColor: 'green',
+        backgroundColor: Colors.success,
         paddingVertical: 5,
         paddingHorizontal: 15,
         borderRadius: 8,
@@ -246,7 +246,6 @@ const styles = StyleSheet.create({
     textPedir: {
         fontSize: 20,
         color: 'white',
-        fontFamily: 'Montserrat_400Regular',
     },
     viewDemora: {
         flexDirection: 'row',
@@ -255,7 +254,6 @@ const styles = StyleSheet.create({
     textDemora: {
         fontSize: 20,
         color: 'white',
-        fontFamily: 'Montserrat_400Regular',
         marginLeft: 4
     }
 });
