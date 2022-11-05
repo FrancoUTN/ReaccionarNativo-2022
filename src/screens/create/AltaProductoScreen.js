@@ -49,26 +49,25 @@ export default function AltaProductoScreen({ navigation, route }) {
   async function agregar() {
     const arrayDeFotos = [];
 
-		for (const [indice, foto] of fotos.entries()) {
-			const nombreEnStorage = `productos/${nombre}_${indice + 1}.jpg`;
-			const storageRef = ref(getStorage(), nombreEnStorage);
-			const blob = await new Promise((resolve, reject) => {
-				const xhr = new XMLHttpRequest();
-				xhr.onload = function () {
-					resolve(xhr.response);
-				};
-				xhr.onerror = function (e) {
-					console.log(e);
-					reject(new TypeError("Petición de red fallida."));
-				};
-				xhr.responseType = "blob";
-				xhr.open("GET", foto.uri, true);
-				xhr.send(null);
-			});
-			await uploadBytes(storageRef, blob);
-			const url = await getDownloadURL(storageRef);
-			arrayDeFotos.push(url);
-		}
+    for (const foto of fotos) {
+      const storageRef = ref(getStorage(), new Date().toISOString());
+      const blob = await new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+          resolve(xhr.response);
+        };
+        xhr.onerror = function (e) {
+          console.log(e);
+          reject(new TypeError("Petición de red fallida."));
+        };
+        xhr.responseType = "blob";
+        xhr.open("GET", foto.uri, true);
+        xhr.send(null);
+      });
+      await uploadBytes(storageRef, blob);
+      const url = await getDownloadURL(storageRef);
+      arrayDeFotos.push(url);
+    }
 
     const producto = {
       nombre,
