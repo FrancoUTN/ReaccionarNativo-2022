@@ -11,7 +11,7 @@ import { Colors } from '../../constants/styles';
 import { signUp, logOut, login } from '../../util/authentication';
 import Input from '../../components/Auth/Input';
 import { getAuth } from 'firebase/auth';
-
+import getFirebaseErrorMsg from "../../util/firebaseErrorMsg";
 
 export default function AltaEmpleadoScreen({ navigation }) {
 	const miEmail = getAuth().currentUser.email;
@@ -116,11 +116,11 @@ export default function AltaEmpleadoScreen({ navigation }) {
 			});
 		}
 		catch (error) {
-			console.log(error);
+			let message = getFirebaseErrorMsg(error);
 			navigation.navigate({
 				name: 'Modal',
 				params: {
-					mensajeError: 'Falló el registro. Intenta nuevamente'
+					mensajeError: message
 				}
 			});
 			setIsAuthenticating(false);

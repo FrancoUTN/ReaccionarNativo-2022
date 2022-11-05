@@ -15,6 +15,7 @@ import { Colors } from "../../constants/styles";
 import Input from "../../components/Auth/Input";
 import QrBase64 from "../../components/shared/QrBase64";
 import Apretable from "../../components/shared/Apretable";
+import getFirebaseErrorMsg from "../../util/firebaseErrorMsg";
 
 export default function AltaProductoScreen({ navigation, route }) {
   const esBebida = route.params.miPerfil == "bartender" ? true : false;
@@ -49,26 +50,26 @@ export default function AltaProductoScreen({ navigation, route }) {
   async function agregar() {
     const arrayDeFotos = [];
 
-		for (const [indice, foto] of fotos.entries()) {
-			const nombreEnStorage = `productos/${nombre}_${indice + 1}.jpg`;
-			const storageRef = ref(getStorage(), nombreEnStorage);
-			const blob = await new Promise((resolve, reject) => {
-				const xhr = new XMLHttpRequest();
-				xhr.onload = function () {
-					resolve(xhr.response);
-				};
-				xhr.onerror = function (e) {
-					console.log(e);
-					reject(new TypeError("Petición de red fallida."));
-				};
-				xhr.responseType = "blob";
-				xhr.open("GET", foto.uri, true);
-				xhr.send(null);
-			});
-			await uploadBytes(storageRef, blob);
-			const url = await getDownloadURL(storageRef);
-			arrayDeFotos.push(url);
-		}
+    for (const [indice, foto] of fotos.entries()) {
+      const nombreEnStorage = `productos/${nombre}_${indice + 1}.jpg`;
+      const storageRef = ref(getStorage(), nombreEnStorage);
+      const blob = await new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+          resolve(xhr.response);
+        };
+        xhr.onerror = function (e) {
+          console.log(e);
+          reject(new TypeError("Petición de red fallida."));
+        };
+        xhr.responseType = "blob";
+        xhr.open("GET", foto.uri, true);
+        xhr.send(null);
+      });
+      await uploadBytes(storageRef, blob);
+      const url = await getDownloadURL(storageRef);
+      arrayDeFotos.push(url);
+    }
 
     const producto = {
       nombre,
@@ -111,10 +112,10 @@ export default function AltaProductoScreen({ navigation, route }) {
     try {
       await agregar();
     } catch (error) {
-      console.log(error);
+      let message = getFirebaseErrorMsg(error);
       navigation.navigate({
         name: "Modal",
-        params: { mensajeError: "Falló el registro. Intenta nuevamente" },
+        params: { mensajeError: message },
       });
       setIsAuthenticating(false);
     }

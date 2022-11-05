@@ -9,7 +9,7 @@ import LoadingOverlay from '../../components/ui/LoadingOverlay';
 import { Colors } from '../../constants/styles';
 import Input from '../../components/Auth/Input';
 import QrBase64 from '../../components/shared/QrBase64';
-
+import getFirebaseErrorMsg from "../../util/firebaseErrorMsg";
 
 export default function AltaMesaScreen({ navigation }) {
 	const [qrEnBase64, setQrEnBase64] = useState(false);
@@ -89,10 +89,10 @@ export default function AltaMesaScreen({ navigation }) {
 			await agregar();
 		}
 		catch (error) {
-			console.log(error);
+			let message = getFirebaseErrorMsg(error);
 			navigation.navigate({
 				name: 'Modal',
-				params: { mensajeError: 'Falló el registro. Intenta nuevamente' }
+				params: { mensajeError: message }
 			});
 			setIsAuthenticating(false);
 		}

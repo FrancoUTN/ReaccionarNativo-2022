@@ -47,11 +47,13 @@ export default function Navigation() {
   useLayoutEffect(() => {
     const unsubscribeAuth = auth.onAuthStateChanged(async (authenticatedUser) => {
       try {
-        const docRef = doc(getFirestore(), "usuarios", authenticatedUser.uid);
-        const docSnap = await getDoc(docRef);
-        console.log("data: " + JSON.stringify(docSnap.data()));
-        if (docSnap.exists()) {
-          authCtx.authenticate(docSnap.data().correo, docSnap.data().perfil, authenticatedUser.uid);
+        if (authenticatedUser) {
+          const docRef = doc(getFirestore(), "usuarios", authenticatedUser.uid);
+          const docSnap = await getDoc(docRef);
+          console.log("data: " + JSON.stringify(docSnap.data()));
+          if (docSnap.exists()) {
+            authCtx.authenticate(docSnap.data().correo, docSnap.data().perfil, authenticatedUser.uid);
+          }
         }
       } catch (error) {
         console.log(error);

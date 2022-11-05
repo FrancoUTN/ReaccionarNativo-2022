@@ -9,7 +9,7 @@ import LoadingOverlay from '../../components/ui/LoadingOverlay';
 import { Colors } from '../../constants/styles';
 import Input from '../../components/Auth/Input';
 import { getAuth } from 'firebase/auth';
-
+import getFirebaseErrorMsg from "../../util/firebaseErrorMsg";
 
 export default function AnonimoScreen({ navigation }) {
 	const [tomarFoto, setTomarFoto] = useState(false);
@@ -75,10 +75,10 @@ export default function AnonimoScreen({ navigation }) {
 			});
 		}
 		catch (error) {
-			console.log(error);
+			let message = getFirebaseErrorMsg(error);
 			navigation.navigate({
 				name: 'Modal',
-				params: { mensajeError: 'Falló el registro. Intenta nuevamente' }
+				params: { mensajeError: message }
 			});
 			setIsAuthenticating(false);
 		}

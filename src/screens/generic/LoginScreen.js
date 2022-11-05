@@ -5,6 +5,7 @@ import AuthContent from "../../components/Auth/AuthContent";
 import LoadingOverlay from "../../components/ui/LoadingOverlay";
 import { AuthContext } from "../../store/auth-context";
 import { login } from "../../util/authentication";
+import getFirebaseErrorMsg from "../../util/firebaseErrorMsg";
 
 function LoginScreen({ navigation }) {
   const [isAuthenticating, setIsAuthenticating] = useState(false);
@@ -38,10 +39,10 @@ function LoginScreen({ navigation }) {
         console.log("Error en Login: No existe el documento.");
       }
     } catch (error) {
-      console.log(error);
+      let message = getFirebaseErrorMsg(error);
       navigation.navigate({
         name: "Modal",
-        params: { mensajeError: "Falló la autenticación. Intenta nuevamente" },
+        params: { mensajeError: message },
       });
       setIsAuthenticating(false);
     }

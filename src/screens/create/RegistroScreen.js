@@ -10,7 +10,7 @@ import LoadingOverlay from '../../components/ui/LoadingOverlay';
 import { Colors } from '../../constants/styles';
 import { signUp, logOut } from '../../util/authentication';
 import Input from '../../components/Auth/Input';
-
+import getFirebaseErrorMsg from "../../util/firebaseErrorMsg";
 
 export default function RegistroScreen({ navigation }) {
 	const [escanear, setEscanear] = useState(false);
@@ -114,10 +114,10 @@ export default function RegistroScreen({ navigation }) {
 			});
 		}
 		catch (error) {
-			console.log(error);
+			let message = getFirebaseErrorMsg(error);
 			navigation.navigate({
 				name: 'Modal',
-				params: { mensajeError: 'Falló el registro. Intenta nuevamente' }
+				params: { mensajeError: message }
 			});
 			setIsAuthenticating(false);
 		}
