@@ -60,7 +60,31 @@ Además, vas a poder chatear con el mozo, pedir la cuenta, y compartirnos tu opi
   - Encuesta de clientes (lógica) :clock2:
   - Gráficos estadísticos (clientes) :clock2:
 
-### :calendar: Semana 3 (29/10 - 5/11): (A definir)
+### :calendar: Semana 3 (29/10 - 5/11):
+
+- **Catania Franco**
+  - Botón de sonido (activar/desactivar) :heavy_check_mark:
+  - Elaborar y confirmar pedidos :heavy_check_mark:
+  - Push a todos los mozos cuando el pedido está listo :clock2:
+  - Mejorar contraste de los mensajes de información al usuario :heavy_check_mark:
+  - Solicitar la cuenta y pagar :heavy_check_mark:
+
+- **Cantero Agustín**
+  - Confirmar contraseña en registro de cliente :heavy_check_mark:
+  - Qr's de propinas (de 0% a 20%) :heavy_check_mark:
+  - Persistencia de la sesión del usuario :heavy_check_mark:
+  - Sonido de las notificaciones :clock2:
+  - Push al administrador cuando un cliente se registra :heavy_check_mark:
+
+- **Arismendy Herik**
+  - Qr de ingreso (ahora con encuestas) :heavy_check_mark:
+  - Encuesta de clientes (completa) :heavy_check_mark:
+  - Gráficos estadísticos (clientes) :heavy_check_mark:
+  - Push al metre cuando el cliente solicita una mesa :heavy_check_mark:
+  - Push a cada sector cuando el mozo confirma un pedido :heavy_check_mark:
+  - Vibraciones al detectarse un error :heavy_check_mark:
+
+### :calendar: Semana 4 (5/11 - 12/11): (A definir)
 
 - **Catania Franco**
   - ???
@@ -76,3 +100,14 @@ Además, vas a poder chatear con el mozo, pedir la cuenta, y compartirnos tu opi
   - ???
   - ???
   - ???
+
+## :pencil2: Diagramas
+
+### Clientes:
+![Estados del cliente](./Diagramas/Estados%20del%20cliente-4.drawio.png)
+
+### Pedidos:
+![Estados del pedido](./Diagramas/Estados%20del%20pedido-3.drawio.png)
+
+### Elaboración:
+![Elaboración del pedido](./Diagramas/Elaboraci%C3%B3n%20del%20pedido.drawio.png)
