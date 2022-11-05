@@ -49,7 +49,6 @@ export default function AltaMesaScreen({ navigation }) {
 		const mesa = {
 			tipo,
 			cantidadComensales,
-			// numero,
 			foto: url,
 			qrEnBase64
 		}
