@@ -31,33 +31,38 @@ import EstadisticaEncuestasScreen from "../screens/specific/EstadisticaEncuestas
 import EstadoPedidoScreen from "../screens/specific/EstadoPedidoScreen";
 import { View } from "react-native";
 import CuentaScreen from "../screens/specific/CuentaScreen";
-import { getAuth } from 'firebase/auth';
+import { getAuth } from "firebase/auth";
 import { doc, getDoc, getFirestore } from "firebase/firestore";
-import { logOut } from '../util/authentication';
+import { logOut } from "../util/authentication";
+import ListadoProductos from "../screens/specific/ListadoProductos";
 
 const auth = getAuth();
 const Stack = createNativeStackNavigator();
 
-
 export default function Navigation() {
-
   const authCtx = useContext(AuthContext);
   const [hasLoaded, setHasLoaded] = useState(false);
 
   useLayoutEffect(() => {
-    const unsubscribeAuth = auth.onAuthStateChanged(async (authenticatedUser) => {
-      try {
-        const docRef = doc(getFirestore(), "usuarios", authenticatedUser.uid);
-        const docSnap = await getDoc(docRef);
-        console.log("data: " + JSON.stringify(docSnap.data()));
-        if (docSnap.exists()) {
-          authCtx.authenticate(docSnap.data().correo, docSnap.data().perfil, authenticatedUser.uid);
+    const unsubscribeAuth = auth.onAuthStateChanged(
+      async (authenticatedUser) => {
+        try {
+          const docRef = doc(getFirestore(), "usuarios", authenticatedUser.uid);
+          const docSnap = await getDoc(docRef);
+          console.log("data: " + JSON.stringify(docSnap.data()));
+          if (docSnap.exists()) {
+            authCtx.authenticate(
+              docSnap.data().correo,
+              docSnap.data().perfil,
+              authenticatedUser.uid
+            );
+          }
+        } catch (error) {
+          console.log(error);
         }
-      } catch (error) {
-        console.log(error);
+        setHasLoaded(true);
       }
-      setHasLoaded(true);
-    });
+    );
     return unsubscribeAuth;
   }, []);
 
@@ -93,7 +98,16 @@ function AuthStack() {
       <>{authCtx.sonidosDesactivados ? soundOffIcon : soundOnIcon}</>
     ),
   };
-
+  /*
+<Stack.Screen
+        name="lis"
+        component={ListadoProductos}
+        options={{
+          ...opcionesTipicas,
+          title: "ListadoProductos",
+        }}
+      />
+*/
   return (
     <Stack.Navigator
       screenOptions={{
