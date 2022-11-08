@@ -78,7 +78,7 @@ export default function MetreScreen() {
         </View>
       )}
 
-      {clientes.length > 1 && (
+      {clientes.length > 0 && (
         <FlatList
           data={clientes}
           renderItem={({ item }) => <ItemClienteEnEspera item={item} />}

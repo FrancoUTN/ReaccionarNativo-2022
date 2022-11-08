@@ -35,8 +35,7 @@ export default function MenuScreen({ navigation }) {
         };
         productosTraidos.push(objeto);
       });
-      //setProductos(productosTraidos);
-      setProductos([]);
+      setProductos(productosTraidos);
     });
   }, []);
 

@@ -29,9 +29,7 @@ export default function PedidosScreen() {
         };
         pedidosTraidos.push(pedidoTraido);
       });
-      //setPedidos(pedidosTraidos);
-      console.log(pedidosTraidos);
-      setPedidos([]);
+      setPedidos(pedidosTraidos);
     });
   }, []);
 
