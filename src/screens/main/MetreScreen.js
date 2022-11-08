@@ -6,15 +6,15 @@ import {
   query,
   where,
 } from "firebase/firestore";
-
 import { FlatList, StyleSheet, View, Image, Text } from "react-native";
+
 import LoadingOverlay from "../../components/ui/LoadingOverlay";
 import ItemClienteEnEspera from "../../components/renderizadores/ItemClienteEnEspera";
 import Sizes_ from "../../util/Sizes";
 import { Colors } from "../../constants/styles";
 
 export default function MetreScreen() {
-  const [clientes, setClientes] = useState([]);
+  const [clientes, setClientes] = useState();
 
   useEffect(() => {
     const db = getFirestore();
@@ -73,7 +73,7 @@ export default function MetreScreen() {
               color: Colors.primary500,
             }}
           >
-            Sin Clientes aun ...
+            Sin clientes aún...
           </Text>
         </View>
       )}

@@ -6,15 +6,15 @@ import {
   query,
   where,
 } from "firebase/firestore";
-
 import { FlatList, StyleSheet, View, Image, Text } from "react-native";
+
 import LoadingOverlay from "../../components/ui/LoadingOverlay";
 import ItemCliente from "../../components/renderizadores/ItemCliente";
 import Sizes_ from "../../util/Sizes";
 import { Colors } from "../../constants/styles";
 
 export default function ListadoClientesScreen() {
-  const [clientes, setClientes] = useState([]);
+  const [clientes, setClientes] = useState();
 
   useEffect(() => {
     const db = getFirestore();
@@ -73,7 +73,7 @@ export default function ListadoClientesScreen() {
               color: Colors.primary500,
             }}
           >
-            Sin Clientes aun ...
+            Sin clientes aún...
           </Text>
         </View>
       )}

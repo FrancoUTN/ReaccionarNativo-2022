@@ -6,17 +6,19 @@ import {
   query,
 } from "firebase/firestore";
 import { useContext, useEffect, useState } from "react";
-import { FlatList, View, Image, Dimensions, Text } from "react-native";
+import { FlatList, View, Image, Text } from "react-native";
+
 import { Colors } from "../../constants/styles";
 import PedidoMozo from "../../components/renderizadores/PedidoMozo";
 import PedidoPreparador from "../../components/renderizadores/PedidoPreparador";
 import { AuthContext } from "../../store/auth-context";
 import Sizes_ from "../../util/Sizes";
+import LoadingOverlay from "../../components/ui/LoadingOverlay";
 
 export default function PedidosScreen() {
   const miPerfil = useContext(AuthContext).perfil;
   const db = getFirestore();
-  const [pedidos, setPedidos] = useState([]);
+  const [pedidos, setPedidos] = useState();
 
   useEffect(() => {
     const q = query(collection(db, "pedidos"), orderBy("fecha", "desc"));
@@ -43,6 +45,10 @@ export default function PedidosScreen() {
     ) {
       return <PedidoPreparador item={item} />;
     }
+  }
+
+  if (!pedidos) {
+    return <LoadingOverlay message={"Cargando pedidos..."} />;
   }
 
   return (
@@ -79,11 +85,11 @@ export default function PedidosScreen() {
               color: Colors.primary500,
             }}
           >
-            Sin Pedidos aun ...
+            Sin pedidos aún...
           </Text>
         </View>
       )}
-      {pedidos.length > 0 && (
+      {pedidos.length > 0 && ( // No funciona si es cocinero o bartender
         <FlatList
           contentContainerStyle={{ alignItems: "center" }}
           data={pedidos}
