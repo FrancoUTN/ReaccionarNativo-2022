@@ -22,7 +22,7 @@ export default function AnimatedSplashScreen({ onFinish }) {
   const animate = () => {
     Animated.timing(scaleValue, {
       toValue: 1,
-      duration: 3000,
+      duration: 2000,
       easing: Easing.linear,
       useNativeDriver: true,
     }).start(() => onFinish());

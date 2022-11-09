@@ -1,6 +1,17 @@
 import { useEffect, useState } from 'react';
 import { StyleSheet, View, TextInput, FlatList, Text } from 'react-native';
-import { addDoc, doc, getDoc, getFirestore, onSnapshot, orderBy, query } from 'firebase/firestore';
+import {
+  addDoc,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  getFirestore,
+  onSnapshot,
+  orderBy,
+  query,
+  where,
+ } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 
 import { Colors } from '../../constants/styles';
@@ -77,6 +88,37 @@ export default function ChatScreen({ route }) {
       };
   
       await addDoc(referencia, mensaje);
+
+      if (!soyMozo) {
+        sendPushNotification().catch(
+          console.log
+        );
+      }
+    }
+  }
+
+  const sendPushNotification = async () => {
+    const coleccion = collection(getFirestore(), 'usuarios');
+    const consulta = query(coleccion, where('perfil', "==", 'mozo'));
+    const querySnapshot = await getDocs(consulta);
+    if (!querySnapshot.empty) {
+      querySnapshot.docs.forEach(async doc => {
+        if (doc.exists()) {
+          console.log(`Token del mozo ${doc.data().correo}: ${doc.data().token}`);
+          fetch('https://exp.host/--/api/v2/push/send', {
+            body: JSON.stringify({
+              to: doc.data().token,
+              title: "Nuevo mensaje",
+              body: "Tienes un nuevo mensaje de la mesa " + miMesa,
+              data: { action: "MENSAJE_NUEVO" }
+            }),
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            method: 'POST',
+          });
+        }
+      });
     }
   }
 

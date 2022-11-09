@@ -1,4 +1,4 @@
-import { doc, updateDoc, getFirestore } from "firebase/firestore";
+import { doc, updateDoc, getFirestore, query, collection, where, getDocs } from "firebase/firestore";
 import { createContext, useState, useRef, useEffect } from 'react';
 import { Platform } from 'react-native';
 import * as Device from 'expo-device';
@@ -12,7 +12,6 @@ export const AuthContext = createContext({
   authenticate: (email, perfil, uid, foto) => { },
   logout: () => { },
   alternarSonidos: () => { },
-  updateNotificationToken: (uid) => { },
 });
 
 function AuthContextProvider({ children }) {
@@ -40,6 +39,7 @@ function AuthContextProvider({ children }) {
   function logout() {
     setEmail(null);
     setPerfil(null);
+    deleteNotificationToken();
   }
 
   function alternarSonidos() {
@@ -66,6 +66,19 @@ function AuthContextProvider({ children }) {
     });
   }
 
+  async function deleteNotificationToken() {
+    const coleccion = collection(getFirestore(), 'usuarios');
+    const consulta = query(coleccion, where('correo', "==", email));
+    const querySnapshot = await getDocs(consulta);
+    if (!querySnapshot.empty) {
+      const uid = querySnapshot.docs[0].id;
+      const docRef = doc(getFirestore(), "usuarios", uid);
+      updateDoc(docRef, {
+        token: "N/A"
+      });
+    }
+  }
+
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
@@ -75,14 +88,13 @@ async function registerForPushNotificationsAsync() {
   let token;
 
   if (Platform.OS === 'android') {
-    console.log("Es Android");
+    // console.log("Es Android");
     await Notifications.setNotificationChannelAsync('default', {
       name: 'default',
       importance: Notifications.AndroidImportance.MAX,
       vibrationPattern: [0, 250, 250, 250],
       lightColor: '#FF231F7C',
-      // sound: "smileringtone.mp3"
-      sound: "default"
+      sound: "smileringtone.mp3"
     });
   }
 
@@ -98,8 +110,7 @@ async function registerForPushNotificationsAsync() {
       return;
     }
     token = (await Notifications.getExpoPushTokenAsync()).data;
-    console.log("Token: ");
-    console.log(token);
+    console.log("Token: " + token);
   } else {
     console.log('Must use physical device for Push Notifications');
   }

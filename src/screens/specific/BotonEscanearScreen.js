@@ -7,7 +7,6 @@ import {
   collection,
   onSnapshot,
   query,
-  where,
 } from "firebase/firestore";
 import { useState, useEffect } from "react";
 import { StyleSheet, View, Text, Pressable } from "react-native";
@@ -49,13 +48,11 @@ export default function BotonEscanearScreen({ navigation }) {
     });
   }, []);
 
-  const sendPushNotification = async (token, tittle, body, data) => {
-    //obtener el token
-
+  const sendPushNotification = async (token, title, body, data) => {
     return fetch("https://exp.host/--/api/v2/push/send", {
       body: JSON.stringify({
         to: token,
-        title: tittle,
+        title: title,
         body: body,
         data: data,
       }),
@@ -72,11 +69,9 @@ export default function BotonEscanearScreen({ navigation }) {
         (await sendPushNotification(
           metre.token,
           " ❗️❗️ Un cliente ha solicitado una mesa ❗️❗️ ",
-          `el Cliente ${usuario.email} ha solicitado una mesa.`,
+          `El cliente ${usuario.email} ha solicitado una mesa.`,
           { data: "" }
-        ).then((response) => {
-          console.log("todo ok");
-        }));
+        ));
     });
   };
 

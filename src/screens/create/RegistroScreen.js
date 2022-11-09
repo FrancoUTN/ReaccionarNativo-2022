@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { doc, getFirestore, setDoc, getDoc } from 'firebase/firestore';
+import { doc, getFirestore, setDoc, getDoc, collection, query, getDocs, where } from 'firebase/firestore';
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 
 import Camara from '../../components/altas/Camara';
@@ -65,9 +65,7 @@ export default function RegistroScreen({ navigation }) {
 
 		await setDoc(doc(getFirestore(), 'usuarios', user.uid), usuario);
 		setIsAuthenticating(false);
-		sendPushNotification().then(data => {
-			console.log(JSON.stringify(data));
-		}).catch(error => {
+		sendPushNotification().catch(error => {
 			console.log("Error al enviar notificación: ", JSON.stringify(error));
 		});
 
@@ -361,20 +359,26 @@ const styles = StyleSheet.create({
 	}
 });
 
-export const sendPushNotification = async () => {
-	const docRef = doc(getFirestore(), "usuarios", "Uo9hvdF3KaaAZzYzzxqqVrnUDID3");
-	const docSnap = await getDoc(docRef);
-	console.log("uid admin: ", docSnap.data().token)
-	return fetch('https://exp.host/--/api/v2/push/send', {
-		body: JSON.stringify({
-			to: docSnap.data().token,
-			title: "Nuevo cliente",
-			body: "Se registró un nuevo cliente.",
-			data: { action: "CLIENTE_NUEVO" }
-		}),
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		method: 'POST',
-	});
+const sendPushNotification = async () => {
+    const coleccion = collection(getFirestore(), 'usuarios');
+    const consulta = query(coleccion, where('perfil', "==", 'admin'));
+    const querySnapshot = await getDocs(consulta);
+    if (!querySnapshot.empty) {
+		const uid = querySnapshot.docs[0].id;
+		const docRef = doc(getFirestore(), "usuarios", uid);
+		const docSnap = await getDoc(docRef);
+		console.log("Token del admin: ", docSnap.data().token);
+		return fetch('https://exp.host/--/api/v2/push/send', {
+			body: JSON.stringify({
+				to: docSnap.data().token,
+				title: "Nuevo cliente",
+				body: "Se registró un nuevo cliente.",
+				data: { action: "CLIENTE_NUEVO" }
+			}),
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			method: 'POST',
+		});
+	}
 }

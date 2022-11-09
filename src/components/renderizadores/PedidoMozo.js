@@ -33,12 +33,6 @@ export default function PedidoMozo({ item }) {
         };
         usuariosTraidos.push(objeto);
       });
-      console.log(
-        "usuarios",
-        usuariosTraidos.filter((user) => {
-          return user.perfil === "bartender" || user.perfil === "cocinero";
-        })
-      );
       setUsersCocina(
         usuariosTraidos.filter((user) => {
           return user.perfil === "bartender" || user.perfil === "cocinero";
@@ -48,8 +42,6 @@ export default function PedidoMozo({ item }) {
   }, []);
 
   const sendPushNotification = async (token, title, body, data) => {
-    //obtener el token
-
     return fetch("https://exp.host/--/api/v2/push/send", {
       body: JSON.stringify({
         to: token,
@@ -71,10 +63,8 @@ export default function PedidoMozo({ item }) {
           metre.token,
           " ❗️❗️ Nuevo pedido confirmado ❗️❗️ ",
           "Tienes un nuevo pedido pendiente de elaboración.",
-          { data: "" }
-        ).then((response) => {
-          console.log("todo ok");
-        }));
+          { action: "PEDIDO_NUEVO" }
+        ));
     });
   };
   let textoBoton = "";
@@ -123,11 +113,7 @@ export default function PedidoMozo({ item }) {
         nuevosDatosPedido = {
           estado: "confirmado",
         };
-        enviarPushCocina().then((value) => {
-          {
-            console.log("enviado");
-          }
-        });
+        enviarPushCocina();
         break;
       case "cobrado":
         const docUsuarioRef = doc(getFirestore(), "usuarios", item.idCliente);
