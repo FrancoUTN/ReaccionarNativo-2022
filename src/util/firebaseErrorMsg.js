@@ -10,8 +10,6 @@ const errors = {
 }
 
 function getFirebaseErrorMsg(error) {
-
-  console.log(JSON.stringify(error))
   if (!error) {
     return "";
   }

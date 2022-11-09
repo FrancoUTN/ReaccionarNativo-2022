@@ -34,7 +34,8 @@ function LoginScreen({ navigation }) {
         if (!authCtx.sonidosDesactivados) {
           playSound();
         }
-        authCtx.authenticate(usuario.email, docSnap.data().perfil, usuario.uid);
+        console.log('logenado: ', docSnap.data());
+        authCtx.authenticate(usuario.email, docSnap.data().perfil, usuario.uid, docSnap.data().foto);
       } else {
         console.log("Error en Login: No existe el documento.");
       }

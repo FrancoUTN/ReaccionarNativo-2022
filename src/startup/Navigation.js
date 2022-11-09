@@ -25,6 +25,7 @@ import AltaProductoScreen from "../screens/create/AltaProductoScreen";
 import MenuScreen from "../screens/specific/MenuScreen";
 import PedidoAgregadoScreen from "../screens/specific/PedidoAgregadoScreen";
 import PedidosScreen from "../screens/specific/PedidosScreen";
+import ProfileScreen from "../screens/generic/ProfileScreen";
 import PreRegistroScreen from "../screens/specific/PreRegistroScreen";
 import EncuestaScreen from "../screens/specific/EncuestaScreen";
 import EstadisticaEncuestasScreen from "../screens/specific/EstadisticaEncuestasScreen";
@@ -34,6 +35,7 @@ import CuentaScreen from "../screens/specific/CuentaScreen";
 import { getAuth } from 'firebase/auth';
 import { doc, getDoc, getFirestore } from "firebase/firestore";
 import { logOut } from '../util/authentication';
+import { useNavigation } from "@react-navigation/native";
 
 const auth = getAuth();
 const Stack = createNativeStackNavigator();
@@ -52,7 +54,7 @@ export default function Navigation() {
           const docSnap = await getDoc(docRef);
           console.log("data: " + JSON.stringify(docSnap.data()));
           if (docSnap.exists()) {
-            authCtx.authenticate(docSnap.data().correo, docSnap.data().perfil, authenticatedUser.uid);
+            authCtx.authenticate(docSnap.data().correo, docSnap.data().perfil, authenticatedUser.uid, docSnap.data().foto);
           }
         }
       } catch (error) {
@@ -142,6 +144,7 @@ function AuthStack() {
 }
 
 function AuthenticatedStack() {
+  const navigation = useNavigation();
   async function playSound() {
     const { sound } = await Audio.Sound.createAsync(
       require("../../assets/sounds/logout.mp3")
@@ -150,6 +153,12 @@ function AuthenticatedStack() {
     setTimeout(() => {
       sound.unloadAsync();
     }, 2500);
+  }
+
+  const editarPerfil = () => {
+    navigation.navigate({
+      name: "Profile",
+    });
   }
 
   const authCtx = useContext(AuthContext);
@@ -183,6 +192,14 @@ function AuthenticatedStack() {
       onPress={authCtx.alternarSonidos}
     />
   );
+  const profileIcon = (
+    <IconButton
+      icon="person-circle-outline"
+      color="white"
+      size={24}
+      onPress={editarPerfil}
+    />
+  );
   const opcionesTipicas = {
     headerRight: () => (
       <View
@@ -192,6 +209,7 @@ function AuthenticatedStack() {
           justifyContent: "space-between",
         }}
       >
+        {profileIcon}
         {authCtx.sonidosDesactivados ? soundOffIcon : soundOnIcon}
         {logoutIcon}
       </View>
@@ -251,6 +269,10 @@ function AuthenticatedStack() {
               title: "Estadísticas",
             }}
           />
+          <Stack.Screen
+            name="Profile"
+            component={ProfileScreen}
+          />
         </>
       );
       break;
@@ -261,6 +283,10 @@ function AuthenticatedStack() {
             name="Metre"
             component={MetreScreen}
             options={opcionesTipicas}
+          />
+          <Stack.Screen
+            name="Profile"
+            component={ProfileScreen}
           />
         </>
       );
@@ -282,6 +308,10 @@ function AuthenticatedStack() {
             name="Pedidos"
             component={PedidosScreen}
             options={opcionesTipicas}
+          />
+          <Stack.Screen
+            name="Profile"
+            component={ProfileScreen}
           />
         </>
       );
@@ -308,6 +338,10 @@ function AuthenticatedStack() {
             name="Pedidos"
             component={PedidosScreen}
             options={opcionesTipicas}
+          />
+          <Stack.Screen
+            name="Profile"
+            component={ProfileScreen}
           />
         </>
       );
@@ -389,6 +423,10 @@ function AuthenticatedStack() {
               title: "La cuenta",
             }}
           />
+          <Stack.Screen
+            name="Profile"
+            component={ProfileScreen}
+          />
         </>
       );
       break;
@@ -460,6 +498,10 @@ function AuthenticatedStack() {
               ...opcionesTipicas,
               title: "La cuenta",
             }}
+          />
+          <Stack.Screen
+            name="Profile"
+            component={ProfileScreen}
           />
         </>
       );
