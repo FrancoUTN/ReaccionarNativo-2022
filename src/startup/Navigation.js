@@ -53,7 +53,6 @@ export default function Navigation() {
               authenticatedUser.uid
             );
             const docSnap = await getDoc(docRef);
-            console.log("data: " + JSON.stringify(docSnap.data()));
             if (docSnap.exists()) {
               authCtx.authenticate(
                 docSnap.data().correo,
