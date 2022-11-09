@@ -21,7 +21,6 @@ export default function PedidosScreen() {
   const [pedidos, setPedidos] = useState();
 
   useEffect(() => {
-    console.log("entre?", miPerfil);
     const q = query(collection(db, "pedidos"), orderBy("fecha", "desc"));
     return onSnapshot(q, (qs) => {
       const pedidosTraidos = [];
@@ -44,8 +43,6 @@ export default function PedidosScreen() {
       item.estado == "en preparación" ||
       item.estado == "listo"
     ) {
-      return <PedidoPreparador item={item} />;
-    } else {
       return <PedidoPreparador item={item} />;
     }
   }
@@ -98,7 +95,6 @@ export default function PedidosScreen() {
           data={pedidos}
           renderItem={renderizar}
           keyExtractor={(item) => item.id}
-          ListEmptyComponent={<View> vacio?? </View>}
         />
       )}
     </View>

@@ -166,7 +166,6 @@ const EncuestaScreen = ({ navigation }) => {
       verifyComentary() &&
       verifyRecommendation()
     ) {
-      console.log("entro if");
       let objValues = {
         rangeService: valueRange,
         recommendation: recommendation,

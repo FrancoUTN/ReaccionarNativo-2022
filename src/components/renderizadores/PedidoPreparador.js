@@ -1,6 +1,14 @@
-import { doc, getFirestore, updateDoc } from "firebase/firestore";
 import { useContext, useEffect, useState } from "react";
 import { ActivityIndicator, Image, Pressable, StyleSheet, Text, View } from "react-native";
+import {
+    doc,
+    getFirestore,
+    updateDoc,
+    collection,
+    getDocs,
+    query,
+    where,
+   } from 'firebase/firestore';
 
 import { Colors } from "../../constants/styles";
 import { AuthContext } from "../../store/auth-context";
@@ -114,6 +122,7 @@ export default function PedidoPreparador({ item }) {
                     demoraRealUnivoco: 10, // Provisorio
                     estado: 'listo'
                 };
+                sendPushNotification();
                 break;
             case 'finalizarPlatos':
                 if (item.demoraRealBebidas) {
@@ -121,6 +130,7 @@ export default function PedidoPreparador({ item }) {
                         demoraRealPlatos: 20, // Provisorio
                         estado: 'listo'
                     };
+                    sendPushNotification();
                 }
                 else {
                     nuevosDatos = {
@@ -134,6 +144,7 @@ export default function PedidoPreparador({ item }) {
                         demoraRealBebidas: 5, // Provisorio
                         estado: 'listo'
                     };
+                    sendPushNotification();
                 }
                 else {
                     nuevosDatos = {
@@ -150,6 +161,31 @@ export default function PedidoPreparador({ item }) {
         updateDoc(docRef, nuevosDatos);
     }
 
+    const sendPushNotification = async () => {
+        const coleccion = collection(getFirestore(), 'usuarios');
+        const consulta = query(coleccion, where('perfil', "==", 'mozo'));
+        const querySnapshot = await getDocs(consulta);
+        if (!querySnapshot.empty) {
+            querySnapshot.docs.forEach(async doc => {
+            if (doc.exists()) {
+                console.log(`Token del mozo ${doc.data().correo}: ${doc.data().token}`);
+                fetch('https://exp.host/--/api/v2/push/send', {
+                body: JSON.stringify({
+                    to: doc.data().token,
+                    title: "¡Pedido listo!",
+                    body: "Hay un pedido listo para servir.",
+                    data: { action: "PEDIDO_LISTO" }
+                }),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                method: 'POST',
+                });
+            }
+            });
+        }
+    }
+      
     let boton = <></>
     switch(funcionDelBoton) {
         case 'tomarUnivoco':
