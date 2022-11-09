@@ -134,16 +134,15 @@ export default function PedidoMozo({ item }) {
 
         // Libero la mesa ANTES:
         const docUsuario = await getDoc(docUsuarioRef);
-        updateDoc(
-          doc(getFirestore(), "mesas", docUsuario.data().mesa),
-          { cliente: "" }
-        );
+        updateDoc(doc(getFirestore(), "mesas", docUsuario.data().mesa), {
+          cliente: "",
+        });
 
         // Y luego, dejo al usuario sin mesa:
         const nuevosDatosUsuario = {
           estado: "libre",
           encuestado: false,
-          mesa: ""
+          mesa: "",
         };
         updateDoc(docUsuarioRef, nuevosDatosUsuario);
 

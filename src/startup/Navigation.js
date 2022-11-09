@@ -32,7 +32,7 @@ import EstadisticaEncuestasScreen from "../screens/specific/EstadisticaEncuestas
 import EstadoPedidoScreen from "../screens/specific/EstadoPedidoScreen";
 import { View } from "react-native";
 import CuentaScreen from "../screens/specific/CuentaScreen";
-import { getAuth } from 'firebase/auth';
+import { getAuth } from "firebase/auth";
 import { doc, getDoc, getFirestore } from "firebase/firestore";
 import { logOut } from '../util/authentication';
 import { useNavigation } from "@react-navigation/native";
@@ -40,9 +40,7 @@ import { useNavigation } from "@react-navigation/native";
 const auth = getAuth();
 const Stack = createNativeStackNavigator();
 
-
 export default function Navigation() {
-
   const authCtx = useContext(AuthContext);
   const [hasLoaded, setHasLoaded] = useState(false);
 
@@ -61,7 +59,8 @@ export default function Navigation() {
         console.log(error);
       }
       setHasLoaded(true);
-    });
+    }
+    );
     return unsubscribeAuth;
   }, []);
 

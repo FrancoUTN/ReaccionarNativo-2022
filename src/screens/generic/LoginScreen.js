@@ -34,8 +34,10 @@ function LoginScreen({ navigation }) {
         if (!authCtx.sonidosDesactivados) {
           playSound();
         }
-        console.log('logenado: ', docSnap.data());
-        authCtx.authenticate(usuario.email, docSnap.data().perfil, usuario.uid, docSnap.data().foto);
+
+        // authCtx.authenticate(usuario.email, docSnap.data().perfil, usuario.uid);
+        // (Ya lo manejo en Navigation.js)
+
       } else {
         console.log("Error en Login: No existe el documento.");
       }
