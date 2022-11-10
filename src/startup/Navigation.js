@@ -36,6 +36,7 @@ import { getAuth } from "firebase/auth";
 import { doc, getDoc, getFirestore } from "firebase/firestore";
 import { logOut } from '../util/authentication';
 import { useNavigation } from "@react-navigation/native";
+import ExitoScreen from "../screens/generic/ExitoScreen";
 
 const auth = getAuth();
 const Stack = createNativeStackNavigator();
@@ -119,6 +120,14 @@ function AuthStack() {
         options={{
           ...opcionesTipicas,
           title: "Registro",
+        }}
+      />
+      <Stack.Screen
+        name="Exito"
+        component={ExitoScreen}
+        options={{
+          ...opcionesTipicas,
+          title: "Éxito",
         }}
       />
       <Stack.Group
@@ -530,6 +539,14 @@ function AuthenticatedStack() {
       }}
     >
       {retorno}
+      <Stack.Screen
+        name="Exito"
+        component={ExitoScreen}
+        options={{
+          ...opcionesTipicas,
+          title: "Éxito",
+        }}
+      />
       <Stack.Group
         screenOptions={{
           presentation: "modal",

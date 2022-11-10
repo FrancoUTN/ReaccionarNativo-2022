@@ -107,8 +107,15 @@ export default function RegistroScreen({ navigation }) {
 			const usuario = await signUp(correo, clave);
 			logOut();
 			await agregarUsuario(usuario);
+			// navigation.navigate({
+			// 	name: 'Login'
+			// });
 			navigation.navigate({
-				name: 'Login'
+				name: 'Exito',
+				params: {
+					mensaje: '¡Registro exitoso!',
+					volverA: 'Login',
+				},
 			});
 		}
 		catch (error) {

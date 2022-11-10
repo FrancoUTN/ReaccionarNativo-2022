@@ -108,8 +108,8 @@ export default function ChatScreen({ route }) {
           fetch('https://exp.host/--/api/v2/push/send', {
             body: JSON.stringify({
               to: doc.data().token,
-              title: "Nuevo mensaje",
-              body: "Tienes un nuevo mensaje de la mesa " + miMesa,
+              title: "Tienes un mensaje nuevo",
+              body: `${miMesa}: ${textoMensaje}`,
               data: { action: "MENSAJE_NUEVO" }
             }),
             headers: {

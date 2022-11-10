@@ -13,8 +13,12 @@ export default function PedidoAgregadoScreen({ navigation, route }) {
 		<View style={styles.container}>
             <View style={styles.mesaContainer}>
                 <Text style={styles.textoMesa}>
-                    Pedido solicitado con éxito.
-                </Text>           
+                    ¡Pedido solicitado con éxito!
+                </Text>
+                <Image
+                    style={styles.imagen}
+                    source={require("../../../assets/otros/check.png")}
+                />
             </View>
 			<Apretable
 				onPress={onPressHandler}
@@ -44,7 +48,7 @@ const styles = StyleSheet.create({
         height: 150
     },
     textoMesa: {
-        fontSize: 24,
+        fontSize: 30,
         color: 'white',
         textAlign: 'center'
     }

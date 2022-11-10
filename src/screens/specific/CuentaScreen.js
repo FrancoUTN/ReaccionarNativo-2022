@@ -197,7 +197,12 @@ export default function CuentaScreen() {
                                 </View>
                                 <View style={styles.viewSuma}>
                                     <Text style={styles.textoSubtotales}>
-                                        ${item.importe * item.porcentajePropina / 100}
+                                        $
+                                        {
+                                            Math.round(
+                                                item.importe * item.porcentajePropina / 100
+                                            )
+                                        }
                                     </Text>
                                 </View>
                             </View>
@@ -205,8 +210,10 @@ export default function CuentaScreen() {
                                 <Text style={styles.textoTotal}>
                                     TOTAL: $
                                     {
-                                        item.importe + 
-                                        (item.importe * item.porcentajePropina / 100)
+                                        Math.round(
+                                            item.importe + 
+                                            (item.importe * item.porcentajePropina / 100)
+                                        )
                                     }
                                 </Text>
                             </View>

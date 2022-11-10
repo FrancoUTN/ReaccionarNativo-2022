@@ -171,7 +171,35 @@ export default function PedidoMozo({ item }) {
               {metaProducto.cantidad}x {metaProducto.producto.nombre}
             </Text>
           ))}
-          <Text style={styles.textImporte}>Total: $ {item.importe}</Text>
+          <View style={styles.viewTotales}>
+            {
+              item.porcentajePropina ? // Ignoro propina del 0% a propósito
+              <>
+                <Text style={styles.textImporte}>
+                    Subtotal: ${item.importe}
+                </Text>
+                <Text style={styles.textImporte}>                                        
+                  {
+                    `Propina (${item.porcentajePropina}%): $` +
+                    Math.round(item.importe * item.porcentajePropina / 100)
+                  }
+                </Text>
+                <Text style={styles.textTotal}>
+                    TOTAL: $
+                    {
+                      Math.round(
+                        item.importe + 
+                        (item.importe * item.porcentajePropina / 100)
+                      )
+                    }
+                </Text>
+              </>
+              :
+              <Text style={styles.textTotal}>
+                  TOTAL: ${item.importe}
+              </Text>
+            }
+          </View>
         </View>
       </View>
       {botonApretable ? (
@@ -245,6 +273,9 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 10,
   },
+  viewTotales: {
+    marginTop: 20,
+  },
   textDetallesTitulo: {
     color: "white",
     fontWeight: "500",
@@ -256,9 +287,14 @@ const styles = StyleSheet.create({
   },
   textImporte: {
     color: "white",
+    fontWeight: "300",
+    fontSize: 14,
+    textAlign: "right",
+  },
+  textTotal: {
+    color: "white",
     fontWeight: "500",
-    fontSize: 16,
-    marginTop: 20,
+    fontSize: 18,
     textAlign: "right",
   },
   textMesa: {

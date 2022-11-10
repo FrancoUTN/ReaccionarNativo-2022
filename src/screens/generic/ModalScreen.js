@@ -16,7 +16,7 @@ export default function ModalScreen({ route, navigation }) {
 
 const styles = StyleSheet.create({
   texto: {
-    fontSize: 20,
+    fontSize: 30,
     color: Colors.primary800,
     margin: 20
   }
