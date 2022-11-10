@@ -8,6 +8,7 @@ export default function Camara({ fotoTomada }) {
     const [hasPermission, setHasPermission] = useState(null);
     const [vistaPrevia, setVistaPrevia] = useState(false);
     const [foto, setFoto] = useState();
+    const [sacandoFoto, setSacandoFoto] = useState(false);
     const camaraRef = useRef();
 
     useEffect(() => {
@@ -19,7 +20,9 @@ export default function Camara({ fotoTomada }) {
 
     function sacarFoto() {
         if (camaraRef) {
+            setSacandoFoto(true);
             camaraRef.current.takePictureAsync().then( foto => {
+                setSacandoFoto(false);                
                 setFoto(foto);
                 setVistaPrevia(!vistaPrevia);
             });
@@ -48,12 +51,21 @@ export default function Camara({ fotoTomada }) {
                 ref={camara => camaraRef.current = camara}
             >
                 <View style={styles.buttonContainer}>
-                    <IconButton
-                        icon='camera-outline'
-                        color='white'
-                        size={50}
-                        onPress={sacarFoto}
-                    />
+                    {
+                        sacandoFoto ?
+                        <IconButton
+                            icon='time'
+                            color='white'
+                            size={40}
+                        />
+                        :
+                        <IconButton
+                            icon='camera-outline'
+                            color='white'
+                            size={50}
+                            onPress={sacarFoto}
+                        />
+                    }
                 </View>
             </Camera>
         );
