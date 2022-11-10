@@ -7,4 +7,5 @@ export const Colors = {
   error500: '#B00000',
   cancelar: '#FF0A0A',
   success: '#157F1F',
+  terciary: '#3D348B'
 }

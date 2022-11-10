@@ -127,6 +127,12 @@ export default function AnonimoScreen({ navigation }) {
 	}
 	return (
 		<ScrollView>
+			<View style={styles.iconContainer}>
+				<Image
+					style={styles.imagen}
+					source={require("../../../assets/otros/intruder.png")}
+				/>
+			</View>
 			<View style={styles.fotoContainer}>
 				{
 					credentialsInvalid.foto ?
@@ -206,6 +212,13 @@ const styles = StyleSheet.create({
 		marginHorizontal: 40,
 		marginTop: 20,
 		borderRadius: 4,
+	},
+	iconContainer: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+		marginHorizontal: 40,
+		marginTop: 20,
 	},
 	fotoErrorText: {
 		fontSize: 20,
