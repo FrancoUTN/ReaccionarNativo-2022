@@ -22,6 +22,7 @@ import { Colors } from "../../constants/styles";
 export default function PedidoMozo({ item }) {
   const [cargandoImagen, setCargandoImagen] = useState(true);
   const [usersCocina, setUsersCocina] = useState([]);
+
   useEffect(() => {
     const db = getFirestore();
     const q = query(collection(db, "usuarios"));
@@ -56,17 +57,43 @@ export default function PedidoMozo({ item }) {
     });
   };
 
-  const enviarPushCocina = async () => {
-    usersCocina.forEach(async (metre) => {
-      metre.token &&
-        (await sendPushNotification(
-          metre.token,
-          " ❗️❗️ Nuevo pedido confirmado ❗️❗️ ",
-          "Tienes un nuevo pedido pendiente de elaboración.",
-          { action: "PEDIDO_NUEVO" }
-        ));
-    });
+  const enviarPushCocina = () => {
+    const enviar = token => {
+      sendPushNotification(
+        token,
+        " ❗️❗️ Nuevo pedido confirmado ❗️❗️ ",
+        "Tienes un nuevo pedido pendiente de elaboración.",
+        { action: "PEDIDO_NUEVO" }
+      );
+    };
+
+    if (item.contenido == 'mixto') {
+      usersCocina.forEach(preparador => enviar(preparador.token));
+    }
+    else if (item.contenido == 'platos') {
+      usersCocina.forEach(async preparador => {
+        if (preparador.perfil != 'cocinero') {
+          return;
+        }
+        if (!preparador.token) {
+          return;
+        }
+        enviar(preparador.token);
+      });
+    }
+    else if (item.contenido == 'bebidas') {
+      usersCocina.forEach(async preparador => {
+        if (preparador.perfil != 'bartender') {
+          return;
+        }
+        if (!preparador.token) {
+          return;
+        }
+        enviar(preparador.token);
+      });
+    }
   };
+
   let textoBoton = "";
   let botonApretable = false;
   let puedoRechazar = false;
