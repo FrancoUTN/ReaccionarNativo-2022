@@ -51,7 +51,6 @@ export default function Navigation() {
         if (authenticatedUser) {
           const docRef = doc(getFirestore(), "usuarios", authenticatedUser.uid);
           const docSnap = await getDoc(docRef);
-          console.log("data: " + JSON.stringify(docSnap.data()));
           if (docSnap.exists()) {
             authCtx.authenticate(docSnap.data().correo, docSnap.data().perfil, authenticatedUser.uid, docSnap.data().foto);
           }
@@ -362,7 +361,18 @@ function AuthenticatedStack() {
             name="Anonimo"
             component={AnonimoScreen}
             options={{
-              ...opcionesTipicas,
+              headerRight: () => (
+                <View
+                  style={{
+                    flexDirection: "row",
+                    width: 80,
+                    justifyContent: "space-between",
+                  }}
+                >
+                  {authCtx.sonidosDesactivados ? soundOffIcon : soundOnIcon}
+                  {logoutIcon}
+                </View>
+              ),
               title: "Ingreso anónimo",
             }}
           />
@@ -372,6 +382,7 @@ function AuthenticatedStack() {
             options={{
               ...opcionesTipicas,
               title: "Escáner",
+              headerBackVisible: false,
             }}
           />
           <Stack.Screen

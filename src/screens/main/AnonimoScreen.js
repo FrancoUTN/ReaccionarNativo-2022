@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { doc, getFirestore, updateDoc } from 'firebase/firestore';
+import { collection, doc, DocumentReference, getDoc, getFirestore, updateDoc } from 'firebase/firestore';
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 
 import Camara from '../../components/altas/Camara';
@@ -10,8 +10,12 @@ import { Colors } from '../../constants/styles';
 import Input from '../../components/Auth/Input';
 import { getAuth } from 'firebase/auth';
 import getFirebaseErrorMsg from "../../util/firebaseErrorMsg";
+import { AuthContext } from '../../store/auth-context';
 
 export default function AnonimoScreen({ navigation }) {
+	const miUsuario = getAuth().currentUser;
+	const authCtx = useContext(AuthContext);
+	const [cargando, setCargando] = useState(true);
 	const [tomarFoto, setTomarFoto] = useState(false);
 	const [nombre, setNombre] = useState('');
 	const [foto, setFoto] = useState();
@@ -20,6 +24,24 @@ export default function AnonimoScreen({ navigation }) {
 		foto: false
 	});
 	const [isAuthenticating, setIsAuthenticating] = useState(false);
+
+	useEffect(() => {
+		async function obtener() {
+			const docRef = doc(getFirestore(), 'usuarios', miUsuario.uid);
+			const docSnap = await getDoc(docRef);
+			if (docSnap.exists()) {
+				const miEstado = docSnap.data().estado;
+				if (miEstado != 'libre') {
+					navigation.navigate({
+						name: 'BotonEscanear'
+					});
+				}
+			}
+			setCargando(false);
+		}
+
+		obtener();
+	}, []);
 
 	async function modificarUsuario(user) {
 		const nombreEnStorage = `usuarios/${user.email}.jpg`;
@@ -46,7 +68,17 @@ export default function AnonimoScreen({ navigation }) {
 			foto: url
 		}
 
-		await updateDoc(doc(getFirestore(), 'usuarios', user.uid), usuario);
+		const docRef = doc(getFirestore(), 'usuarios', user.uid);
+		await updateDoc(docRef, usuario);
+				
+		// Actualizo la foto de perfil en context:
+		const docSnap = await getDoc(docRef);
+		if (docSnap.exists()) {
+			const miPerfil = docSnap.data().perfil;
+			const miFoto = docSnap.data().foto;
+			authCtx.authenticate(user.email, miPerfil, user.uid, miFoto);
+		}
+
 		setIsAuthenticating(false);
 		return;
 	}
@@ -68,8 +100,7 @@ export default function AnonimoScreen({ navigation }) {
 
 		setIsAuthenticating(true);
 		try {
-			const usuario = getAuth().currentUser;
-			await modificarUsuario(usuario);
+			await modificarUsuario(miUsuario);
 			navigation.navigate({
 				name: 'BotonEscanear'
 			});
@@ -115,12 +146,13 @@ export default function AnonimoScreen({ navigation }) {
 			</View>
 		</View>
 	);
+
+	
+	if (cargando) {
+		return <LoadingOverlay message="Accediendo..." />;
+	}
 	if (tomarFoto) {
-		return (
-			<Camara
-				fotoTomada={fotoTomadaHandler}
-			/>
-		)
+		return <Camara fotoTomada={fotoTomadaHandler}/>;
 	}
 	if (isAuthenticating) {
 		return <LoadingOverlay message="Registrando..." />;

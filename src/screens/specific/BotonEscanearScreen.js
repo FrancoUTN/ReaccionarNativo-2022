@@ -9,7 +9,7 @@ import {
   query,
 } from "firebase/firestore";
 import { useState, useEffect } from "react";
-import { StyleSheet, View, Text, Pressable } from "react-native";
+import { StyleSheet, View, Text, Pressable, BackHandler } from "react-native";
 
 import { Colors } from "../../constants/styles";
 import Apretable from "../../components/shared/Apretable";
@@ -46,6 +46,15 @@ export default function BotonEscanearScreen({ navigation }) {
         })
       );
     });
+  }, []);
+
+  useEffect(() => {    
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      () => true // Así no hace nada (y no puede volver al registro si es anónimo)
+    );
+
+    return () => backHandler.remove();
   }, []);
 
   const sendPushNotification = async (token, title, body, data) => {
