@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { collection, doc, DocumentReference, getDoc, getFirestore, updateDoc } from 'firebase/firestore';
+import { doc, getDoc, getFirestore, updateDoc } from 'firebase/firestore';
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 
 import Camara from '../../components/altas/Camara';
@@ -32,12 +32,12 @@ export default function AnonimoScreen({ navigation }) {
 			if (docSnap.exists()) {
 				const miEstado = docSnap.data().estado;
 				if (miEstado != 'libre') {
-					navigation.navigate({
-						name: 'BotonEscanear'
-					});
+					navigation.replace('BotonEscanear');
+				}
+				else {
+					setCargando(false);
 				}
 			}
-			setCargando(false);
 		}
 
 		obtener();
@@ -101,9 +101,7 @@ export default function AnonimoScreen({ navigation }) {
 		setIsAuthenticating(true);
 		try {
 			await modificarUsuario(miUsuario);
-			navigation.navigate({
-				name: 'BotonEscanear'
-			});
+			navigation.replace('BotonEscanear');
 		}
 		catch (error) {
 			let message = getFirebaseErrorMsg(error);

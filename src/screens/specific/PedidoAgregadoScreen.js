@@ -9,7 +9,7 @@ export default function PedidoAgregadoScreen({ navigation }) {
         const backHandler = BackHandler.addEventListener(
           "hardwareBackPress",
           () => {
-            navigation.navigate({ name: 'Admin' });
+            navigation.navigate({ name: 'Cliente' });
             return true;
 		  }
         );

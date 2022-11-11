@@ -382,7 +382,6 @@ function AuthenticatedStack() {
             options={{
               ...opcionesTipicas,
               title: "Escáner",
-              headerBackVisible: false,
             }}
           />
           <Stack.Screen
