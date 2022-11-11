@@ -213,7 +213,7 @@ function AuthenticatedStack() {
       <View
         style={{
           flexDirection: "row",
-          width: 80,
+          width: 120,
           justifyContent: "space-between",
         }}
       >
