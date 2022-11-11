@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { StyleSheet, View, TextInput, FlatList, Text } from 'react-native';
+import { StyleSheet, View, TextInput, FlatList, Pressable } from 'react-native';
 import {
   addDoc,
   collection,
@@ -13,12 +13,11 @@ import {
   where,
  } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
+import moment from 'moment';
+import { Ionicons } from '@expo/vector-icons';
 
 import { Colors } from '../../constants/styles';
-import IconButton from '../../components/ui/IconButton';
-
 import referencia from '../../util/firestore';
-import moment from 'moment';
 import Mensaje from '../../components/ui/Mensaje';
 import LoadingOverlay from '../../components/ui/LoadingOverlay';
 
@@ -31,7 +30,6 @@ export default function ChatScreen({ route }) {
   const [textoMensaje, setTextoMensaje] = useState('');
   const [mensajes, setMensajes] = useState([]);
   const [cargando, setCargando] = useState(true);
-  const [error, setError] = useState(false);
   const [miMesa, setMiMesa] = useState('');
   
   useEffect(() => {
@@ -74,12 +72,8 @@ export default function ChatScreen({ route }) {
   }
 
   async function onSendHandler() {
-    if (textoMensaje.length > 21) {
-      error || setError(true);
-    }
-    else if (textoMensaje != '') {
+    if (textoMensaje != '') {
       setTextoMensaje('');
-      error && setError(false);
 
       const mensaje = {
         texto: textoMensaje,
@@ -181,45 +175,45 @@ export default function ChatScreen({ route }) {
         >
         </FlatList>
       </View>
-      <View style={styles.errorContainer}>
-      {
-        error &&
-        <Text style={styles.error}>
-          Error: 21 caracteres máximo.
-        </Text>
-      }
-      </View>
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
           value={textoMensaje}
           onChangeText={onChangeTextHandler}
         />
-        <IconButton
-          icon="send"
-          color={'white'}
-          size={30}
-          onPress={onSendHandler}
-        />
+      <Pressable
+        style={({ pressed }) => [styles.button, pressed && styles.pressed]}
+        onPress={onSendHandler}
+      >
+        <Ionicons name={"send-outline"} color={'white'} size={34} />
+      </Pressable>
       </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  button: {
+    margin: -10,
+    padding: 10,
+    marginRight: -5,
+  },
+  pressed: {
+    opacity: 0.7,
+  },
   rootContainer: {
     flex: 1
   },
   listaContainer: {
-    flex: 7,
-    padding: 5
+    flex: 1,
+    paddingHorizontal: 5
   },
   inputContainer: {
-    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     paddingLeft: 10,
     paddingRight: 10,
+    minHeight: 50,
   },
   input: {
     flex: 1,
@@ -230,13 +224,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     fontSize: 16,
     height: 40,
+    borderColor: Colors.primary800,
+    borderWidth: .5,
   },
-  errorContainer: {
-    // minHeight: 15,
-  },
-  error: {
-    color: Colors.error500,
-    marginBottom: 4,
-    textAlign: 'center'
-  }
 });
