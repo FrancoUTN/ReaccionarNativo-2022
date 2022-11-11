@@ -259,6 +259,7 @@ function AuthenticatedStack() {
             options={{
               ...opcionesTipicas,
               title: "Mesa agregada",
+              headerBackVisible: false,
             }}
           />
           <Stack.Screen
@@ -392,6 +393,7 @@ function AuthenticatedStack() {
             options={{
               ...opcionesTipicas,
               title: "Pedido realizado",
+              headerBackVisible: false,
             }}
           />
           <Stack.Screen
@@ -468,6 +470,7 @@ function AuthenticatedStack() {
             options={{
               ...opcionesTipicas,
               title: "Pedido realizado",
+              headerBackVisible: false,
             }}
           />
           <Stack.Screen

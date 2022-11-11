@@ -1,10 +1,22 @@
-import { Image, StyleSheet, Text, View} from 'react-native';
+import { useEffect } from 'react';
+import { BackHandler, Image, StyleSheet, Text, View} from 'react-native';
 
 import Apretable from '../../components/shared/Apretable';
 import { Colors } from '../../constants/styles';
 
+export default function PedidoAgregadoScreen({ navigation }) {
+    useEffect(() => {    
+        const backHandler = BackHandler.addEventListener(
+          "hardwareBackPress",
+          () => {
+            navigation.navigate({ name: 'Admin' });
+            return true;
+		  }
+        );
+    
+        return () => backHandler.remove();
+    }, []);
 
-export default function PedidoAgregadoScreen({ navigation, route }) {
     function onPressHandler() {
 		navigation.navigate({ name: 'Cliente' });
 	}

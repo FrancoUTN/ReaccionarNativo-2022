@@ -1,11 +1,23 @@
-import { Image, StyleSheet, Text, View} from 'react-native';
+import { useEffect } from 'react';
+import { BackHandler, Image, StyleSheet, Text, View } from 'react-native';
 
 import Apretable from '../../components/shared/Apretable';
 import { Colors } from '../../constants/styles';
 
-
 export default function MesaAgregadaScreen({ navigation, route }) {
 	const qrEnBase64 = route.params.qrEnBase64;
+
+    useEffect(() => {    
+        const backHandler = BackHandler.addEventListener(
+          "hardwareBackPress",
+          () => {
+            navigation.navigate({ name: 'Admin' });
+            return true;
+		  }
+        );
+    
+        return () => backHandler.remove();
+    }, []);
 
     function onPressHandler() {
 		navigation.navigate({ name: 'Admin' });
