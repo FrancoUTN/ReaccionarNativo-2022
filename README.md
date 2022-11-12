@@ -84,22 +84,33 @@ Además, vas a poder chatear con el mozo, pedir la cuenta, y compartirnos tu opi
   - Push a cada sector cuando el mozo confirma un pedido :heavy_check_mark:
   - Vibraciones al detectarse un error :heavy_check_mark:
 
-### :calendar: Semana 4 (5/11 - 12/11): (A definir)
+### :calendar: Semana 4 (5/11 - 12/11):
 
 - **Catania Franco**
-  - ???
-  - ???
-  - ???
+  - Generar pedidos escaneando Qr's de productos :x:
+  - Push a todos los mozos cuando el pedido está listo :heavy_check_mark:
+  - Push a todos los mozos cuando el cliente hace una consulta :heavy_check_mark:
+  - Correcciones generales :heavy_check_mark:
 
 - **Cantero Agustín**
-  - ???
-  - ???
-  - ???
+  - Sonido de las notificaciones :x:
+  - Sección "Perfil" para todos los usuarios :heavy_check_mark:
+  - Alta de empleados: ahora se puede subir después la foto :heavy_check_mark:
 
 - **Arismendy Herik**
-  - ???
-  - ???
-  - ???
+  - ABML de productos :x:
+  - Corrección de todas las pantallas en blanco :heavy_check_mark:
+
+## :printer: Códigos Qr's
+
+### Ingreso:
+![Qr de ingreso al local](./C%C3%B3digos%20Qr's/propinas.jpeg)
+
+### Mesas:
+![Qr's de mesas](./C%C3%B3digos%20Qr's/Mesas.png)
+
+### Propinas:
+![Qr's de propinas](./C%C3%B3digos%20Qr's/Ingreso.jpeg)
 
 ## :pencil2: Diagramas
 
