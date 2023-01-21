@@ -14,6 +14,50 @@ Además, vas a poder chatear con el mozo, pedir la cuenta, y compartirnos tu opi
 <br/>
 <br/>
 
+## :arrow_forward: Demo
+
+### Realizar un pedido:
+
+![GIF: celular del cliente](./gifs/order.gif)
+<br/>
+<br/>
+
+### Preparar pedido (3 celulares en simultáneo):
+
+![GIF: cliente, mozo y preparadores](./gifs/prepare.gif)
+<br/>
+<br/>
+
+### Pedir la cuenta y pagar (2 celulares en simultáneo):
+
+![GIF: cliente y mozo](./gifs/payment.gif)
+<br/>
+<br/>
+
+## :pencil2: Diagramas
+
+#### Clientes:
+![Estados del cliente](./images/states-client.png)
+
+#### Pedidos:
+![Estados del pedido](./images/states-order.png)
+
+#### Elaboración:
+![Elaboración del pedido](./images/diagram-order.png)
+<br/>
+<br/>
+
+## :printer: Códigos Qr's
+
+#### Ingreso:
+![QR de ingreso al local](./images/qr-entrance.jpeg)
+
+#### Mesas:
+![QR de mesas](./images/qr-tables.png)
+
+#### Propinas:
+![QR de propinas](./images/qr-tips.jpeg)
+
 ## :clipboard: Objetivos
 
 ### Guía:
@@ -100,25 +144,3 @@ Además, vas a poder chatear con el mozo, pedir la cuenta, y compartirnos tu opi
 - **Arismendy Herik**
   - ABML de productos :x:
   - Corrección de todas las pantallas en blanco :heavy_check_mark:
-
-## :printer: Códigos Qr's
-
-### Ingreso:
-![Qr de ingreso al local](./C%C3%B3digos%20Qr's/propinas.jpeg)
-
-### Mesas:
-![Qr's de mesas](./C%C3%B3digos%20Qr's/Mesas.png)
-
-### Propinas:
-![Qr's de propinas](./C%C3%B3digos%20Qr's/Ingreso.jpeg)
-
-## :pencil2: Diagramas
-
-### Clientes:
-![Estados del cliente](./Diagramas/Estados%20del%20cliente-4.drawio.png)
-
-### Pedidos:
-![Estados del pedido](./Diagramas/Estados%20del%20pedido-3.drawio.png)
-
-### Elaboración:
-![Elaboración del pedido](./Diagramas/Elaboraci%C3%B3n%20del%20pedido.drawio.png)
